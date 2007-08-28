@@ -1,0 +1,39 @@
+require '../build.rb'
+import "md5"
+import "autoclean"
+require "yaml"
+
+src = Rant::FileList[ "test_*.cpp" ] 
+
+mycconf = CompilerConfig.new
+mycconf.add_incdirs( Rant::FileList[ '..', "." ] )
+
+objs = %w(
+          ../sphere.o
+         )
+
+gen AutoClean
+
+task :default => %w( testrunner.cpp testrunner run_test )
+
+#build the unit test runner
+# "Generate the unittest implementation"
+file 'testrunner.cpp' => src do |task_info|
+    cxxtestgen = var['cxxtestgen']
+    sys "#{cxxtestgen} --error-printer -o #{task_info.name} #{src}"
+end
+
+desc "Build the unittest executable"
+file 'testrunner' => ["testrunner.cpp"] do |task_info|
+    cconf = var['cconf']
+    sys "#{cconf.cxx} -D_UNITTEST #{cconf.cflags} -I/opt/cxxtest -o #{task_info.name} #{mycconf.libdirs} #{mycconf.libs} #{task_info.prerequisites} #{objs}"
+end
+
+desc "Run the unittests"
+task :run_test => ['testrunner.cpp', 'testrunner'] do |task_info|
+    begin
+        sys "./testrunner"
+    rescue Exception => exception
+        puts "Tests failed!"
+    end
+end

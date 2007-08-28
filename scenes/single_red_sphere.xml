@@ -1,0 +1,22 @@
+<scene>
+    <meta>
+        <width  pixels="512" />
+        <file name="renders/single_red_sphere.ppm" />
+        <height pixels="512" />
+        <subpixels square_of='2'/>
+    </meta>
+
+    <camera x='0.0' y='0.0' z='-100' />
+
+    <light_sources>
+        <color name='white'  red='0xff' green='0xff' blue='0xff' />
+
+        <sphere x='20.0' y='-25' z='-50' radius='0.1' color='white' />
+    </light_sources>
+
+    <objects>
+        <color name='red'   red='0xff' green='0x00' blue='0x00' />
+
+        <sphere x='  0' y='  0' z='  0' radius='8' color='red' />
+    </objects>
+</scene>

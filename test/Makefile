@@ -1,0 +1,2 @@
+all:
+	rant autoclean testrunner
