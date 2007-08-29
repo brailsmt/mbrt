@@ -1,7 +1,6 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include "raytrace_defs.h"
 #include <iostream>
 
 typedef unsigned char uchar;

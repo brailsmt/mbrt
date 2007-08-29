@@ -3,6 +3,7 @@
 /// @date Sat Aug 18 02:43:49 -0500 2007
 /// &copy; 2007 Michael Brailsford
 
+#include "raytrace_defs.h"
 #include "imagewriter.h"
 #include "color.h"
 #include "scene.h"

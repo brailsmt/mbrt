@@ -1,7 +1,9 @@
 require 'rant/filelist'
 require 'build.rb'
 
-import %w(md5 autoclean c/dependencies)
+import "md5"
+import %w(autoclean c/dependencies)
+#import %w(md5 autoclean c/dependencies)
 gen C::Dependencies
 gen Action do source "c_dependencies" end
 

@@ -5,8 +5,10 @@
 ///
 /// This file contains definitions for XML parsing of scene defintions.
 
+#if 0
 #ifndef XML_DEFS_H
 #define XML_DEFS_H
+
 
 #include <sigc++/sigc++.h>
 
@@ -21,5 +23,6 @@ class ObjectAbstractFactory {
     static virtual Primitive * build_from_xml(xmlXPathObjectPtr xpath) = 0;
 }
 
+#endif
 #endif
 
