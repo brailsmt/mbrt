@@ -19,28 +19,30 @@ class Primitive {
         virtual bool collides_with(const Ray &ray, float &t) const = 0;
 
         /// Returns the color of the Primitive.
-        virtual Color get_color() const = 0;
+        virtual Color get_color() const ;
 
         /// Returns the diffusion factor of the primitive.
-        virtual float get_diffuse() const = 0;
+        virtual float get_diffuse() const;
 
         /// Returns the reflection coefficient.  This is a number between 0 and 1.
-        virtual float get_reflection() const = 0;
+        virtual float get_reflection() const;
 
         /// Returns the specular coefficient.  This is a number between 0 and 1.
-        virtual float get_specular() const = 0;
+        virtual float get_specular() const ;
 
         /// Returns the shinyness factor of the object.  The higher the number the shinier.
-        virtual float get_reflectivity() const = 0;
+        virtual float get_reflectivity() const ;
 
         /// Returns the opacity level of this object.
-        virtual float get_opacity() const = 0;
+        virtual float get_opacity() const ;
 
-        /// Returns the color of the Primitive.
-        virtual bool is_light() const = 0;
+        /// Returns if the primitive emits light 
+        virtual bool is_light() const ;
+
+        virtual bool set_is_light(bool ) ;
 
         /// Returns the surface normal at point p.
-        virtual Vector get_normal(Point3D &p) const = 0;
+        virtual Ray get_normal(const Point3D &p)  = 0;
 
         /// Determine the contribution to lighting/color of the pixel based on the incoming
         /// ray and the intersection point.
@@ -72,6 +74,8 @@ class Primitive {
 
             return (prim != NULL && !prim->is_light());
         }
+    public:
+        Material * m_material ;
 };
 
 #endif

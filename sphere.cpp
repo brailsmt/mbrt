@@ -43,30 +43,12 @@ bool Sphere::collides_with(const Ray &ray, float &t) const {
 }
 //}}}
 //{{{
-Vector Sphere::get_normal(Point3D &p) const {
-    Vector v(p - m_center);
-    return v * m_radius;
-}
-//}}}
-//{{{
-float Sphere::get_diffuse() const {
-    float diffuse = m_material->get_diffuse();
-    return (diffuse <= 0.0f)? 0.0f:
-           (diffuse >= 1.0f)? 1.0f:
-                                 diffuse;
-}
-//}}}
-//{{{
-float Sphere::get_reflection() const {
-    float reflection = m_material->get_reflection();
-    return (reflection <= 0.0f)? 0.0f:
-           (reflection >= 1.0f)? 1.0f:
-                                 reflection;
-}
-//}}}
-//{{{
-float Sphere::get_reflectivity() const {
-    return m_material->get_reflectivity();
+Ray Sphere::get_normal(const Point3D &p) 
+{
+    //Vector v(p - m_center);
+    Ray r(p, p - m_center);
+    r.normalize();
+    return r; // v * m_radius;
 }
 //}}}
 //{{{
@@ -91,8 +73,8 @@ Color Sphere::get_color_contribution(const Point3D &intersection_point, const Ra
                     // Calculate the ray to the light source (rtl).
                     Ray rtl(intersection_point, light->get_center() - intersection_point);
 
-                    // Calculate the normal of the sruface at the point of intersection.
-                    Ray normal(intersection_point, intersection_point - m_center);
+                    // Calculate the normal of the surface at the point of intersection.
+                    Ray normal(get_normal(intersection_point ) ); //, intersection_point - m_center ) );
 
                     // Determine the angle, in radians, between the normal and the ray to the light source.
                     float theta = dot_product(rtl.direction(), normal.direction());

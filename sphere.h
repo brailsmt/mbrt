@@ -15,7 +15,7 @@ using std::vector;
 /// A Sphere is defined by its m_center point and its radius.
 class Sphere : public Primitive {
     protected:
-        Material * m_material;
+//        Material * m_material;
 
         /// The m_center point of the sphere.
         Point3D m_center;
@@ -25,28 +25,42 @@ class Sphere : public Primitive {
 
     public:
         Sphere()
-            : m_material(new Material(false)),
+            :// m_material(new Material(false)),
               m_center(Point3D()),
               m_radius(1)
         {
+            m_material = new Material(false);
         }
 
         /// Create a sphere with the default m_material.
         template<class _T>
         Sphere( _T x, _T y, _T z, _T r) 
-             : m_material(new Material(false)),
+             : //m_material(new Material(false)),
                m_center(x, y, z),
                m_radius((float)r)
         {
+            m_material = new Material(false);
         }
 
         /// Create a sphere.
         template<class _T>
         Sphere( Material * m, _T x, _T y, _T z, _T r) 
-             : m_material(m),
+             : //
                m_center(x, y, z),
                m_radius((float)r)
         {
+            if(m)
+            {
+                m_material = m;
+            }
+            else
+            {
+                // TODO: if a null material is passed in, this
+                // may be an error condition. Consider bailing
+                // app.
+                m_material = new Material(false);
+            }
+
         }
 
         /// Clean up the sphere's resources.
@@ -121,29 +135,12 @@ class Sphere : public Primitive {
         //// @f[ R(t) = R_0 + \hat{R_d} * t @f]
         ////
 
-        /// Returns the color of this object.
-        ///
-        /// @return The color of the m_material from which this object is made.
-        virtual Color get_color() const { return m_material == NULL? Color(): *(m_material->get_color()); }
-
-        virtual bool is_light() const { return m_material == NULL? false: m_material->is_light(); }
-        virtual bool set_is_light(bool v) { if(m_material != NULL) m_material->set_is_light(v); }
-
         const Point3D get_center() const { return m_center; }
 
-        virtual Vector get_normal(Point3D &p) const;
-
-        virtual float get_diffuse() const;
-
-        virtual float get_reflection() const;
-
-        virtual float get_reflectivity() const;
-
-        virtual float get_specular() const { return 1.0f; }
+        virtual Ray get_normal(const Point3D &p) ;
 
         virtual Color get_color_contribution(const Point3D &itersection, const Ray &ray, Vector &reflect, Vector &refract);
 
-        virtual float get_opacity() const { return m_material->get_opacity(); }
 };
 
 #endif
