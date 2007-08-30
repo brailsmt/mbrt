@@ -2,8 +2,6 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "primitive.h"
-
 /// This class defines various properties of materials from which primitives are made.
 class Material {
     protected:
