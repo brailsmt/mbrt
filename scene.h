@@ -91,11 +91,11 @@ class Scene {
 
         Primitive * find_collision(const Ray &ray, float &dist) const;
 
-        Point3D get_camera ()             const { return camera;          } 
-        std::string get_output_filename() const { return output_filename; } 
-        int get_viewport_pixel_width()    const { return pixel_width;     } 
-        int get_viewport_pixel_height()   const { return pixel_height;    } 
-        int get_subpixel_sqrt()           const { return subpixels;       }
+        Point3D get_camera () const { return camera; }
+        std::string get_output_filename() const { return output_filename; }
+        int get_viewport_pixel_width() const { return pixel_width; }
+        int get_viewport_pixel_height() const { return pixel_height; }
+        int get_subpixel_sqrt() const { return subpixels; }
 };
 //}}}
 

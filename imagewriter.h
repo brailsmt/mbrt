@@ -39,7 +39,7 @@ class PpmImageWriter : public ImageWriter {
 
     public:
         PpmImageWriter(std::string _filename, int _height, int _width);
-        
+
         /// Write the image data to a ppm file.
         ///
         /// @param data Image imformation that will be written.
@@ -62,15 +62,15 @@ class ImageWriterFactory {
 
             // Use PPM as the default.
             ImageTypes type = PPM_IMAGE;
-            if(extension_list.find(ext) != extension_list.end()) {
+            if (extension_list.find(ext) != extension_list.end()) {
                 type = extension_list[ext];
             }
 
-            switch(type) {
-                case PPM_IMAGE:
-                    return new PpmImageWriter(scene->get_output_filename(), scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
-                default:
-                    return NULL;
+            switch (type) {
+            case PPM_IMAGE:
+                return new PpmImageWriter(scene->get_output_filename(), scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
+            default:
+                return NULL;
             }
         }
 

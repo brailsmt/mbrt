@@ -15,8 +15,6 @@ using std::vector;
 /// A Sphere is defined by its m_center point and its radius.
 class Sphere : public Primitive {
     protected:
-//        Material * m_material;
-
         /// The m_center point of the sphere.
         Point3D m_center;
 
@@ -25,36 +23,31 @@ class Sphere : public Primitive {
 
     public:
         Sphere()
-            :// m_material(new Material(false)),
-              m_center(Point3D()),
-              m_radius(1)
-        {
+                : // m_material(new Material(false)),
+                m_center(Point3D()),
+        m_radius(1) {
             m_material = new Material(false);
         }
 
         /// Create a sphere with the default m_material.
-        template<class _T>
-        Sphere( _T x, _T y, _T z, _T r) 
-             : //m_material(new Material(false)),
-               m_center(x, y, z),
-               m_radius((float)r)
-        {
+        template <class _T>
+        Sphere( _T x, _T y, _T z, _T r)
+                :  //m_material(new Material(false)),
+                m_center(x, y, z),
+        m_radius((float)r) {
             m_material = new Material(false);
         }
 
         /// Create a sphere.
-        template<class _T>
-        Sphere( Material * m, _T x, _T y, _T z, _T r) 
-             : //
-               m_center(x, y, z),
-               m_radius((float)r)
-        {
-            if(m)
-            {
+        template <class _T>
+        Sphere( Material * m, _T x, _T y, _T z, _T r)
+                :  //
+                m_center(x, y, z),
+        m_radius((float)r) {
+            if (m) {
                 m_material = m;
             }
-            else
-            {
+            else {
                 // TODO: if a null material is passed in, this
                 // may be an error condition. Consider bailing
                 // app.
@@ -81,7 +74,7 @@ class Sphere : public Primitive {
         /// @f$I@f$, yielding:
         ///
         /// @f[ |(u + dt) - C|^2 = r^2  @f]
-        /// 
+        ///
         /// We can safely drop the absolute value, since it will be squared anyway.  Simplifying, we
         /// arrive at:
         ///
@@ -96,7 +89,7 @@ class Sphere : public Primitive {
         ///
         /// Arranging in a form more suitable for the quadratic equation:
         /// - @f$ d^2t^2 + 2Vdt + (V^2 - r^2) = 0 @f$
-        /// 
+        ///
         /// Solving for @f$t@f$ using the quadratic equation @f$ t = \frac{-B \pm \sqrt{ B^2 - 4AC}}{2A} @f$:
         /// - @f$ A = d^2 @f$
         /// - @f$ B = 2Vd @f$

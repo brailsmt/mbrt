@@ -16,10 +16,10 @@ class Point3D {
 
         Point3D() : x(0.0f), y(0.0f), z(0.0f) {}
 
-        template<class _T>
+        template <class _T>
         Point3D(_T _x, _T _y) : x((float)_x), y((float)_y), z(0.0f) {}
 
-        template<class _T>
+        template <class _T>
         Point3D(_T _x, _T _y, _T _z) : x((float)_x), y((float)_y), z((float)_z) {}
 
         Point3D(const Point3D &other) : x(other.x), y(other.y), z(other.z) {}
@@ -39,16 +39,16 @@ class Point3D {
             return rv.str();
         }
 
-        template<class _T>
+        template <class _T>
         void set(_T x, _T y, _T z) {
             this->x = (float)x;
             this->y = (float)y;
             this->z = (float)z;
         }
 
-/// Calculate the normalized vector from the origin to the destination.
+        /// Calculate the normalized vector from the origin to the destination.
         void normalize() {
-            float norm = sqrtf(x*x + y*y + z*z);
+            float norm = sqrtf(x * x + y * y + z * z);
             x /= norm;
             y /= norm;
             z /= norm;
@@ -76,19 +76,19 @@ inline Vector operator-(const Vector &A, const Vector &B) {
 /// Unary negation.
 //{{{
 inline Vector operator-(const Vector &A) {
-    return Vector(-A.x, -A.y, -A.z);
+    return Vector( -A.x, -A.y, -A.z);
 }
 //}}}
 
 /// Add the two vectors and return the new Vector.
 //{{{
 inline Vector operator+(const Vector &A, const Vector &B) {
-     return Vector(A.x + B.x, A.y + B.y, A.z + B.z);
+    return Vector(A.x + B.x, A.y + B.y, A.z + B.z);
 }
 //}}}
 //{{{
 inline Vector operator*(const Vector &A, float factor) {
-     return Vector(A.x * factor, A.y * factor, A.z * factor);
+    return Vector(A.x * factor, A.y * factor, A.z * factor);
 }
 //}}}
 
@@ -109,11 +109,11 @@ inline float dot_product(const Vector &A, const Vector &B) {
     return (A.x * B.x) + (A.y * B.y) + (A.z * B.z);
 }
 //}}}
-        //{{{
-        template<class _T>
-        inline Vector operator*(Vector &v, const _T n) {
-            return Vector(v.x * (float)n, v.y * (float)n, v.z * (float)n);
-        }
-        //}}}
+//{{{
+template <class _T>
+inline Vector operator*(Vector &v, const _T n) {
+    return Vector(v.x * (float)n, v.y * (float)n, v.z * (float)n);
+}
+//}}}
 
 #endif

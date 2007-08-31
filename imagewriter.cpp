@@ -16,17 +16,18 @@ using std::endl;
 
 //{{{
 PpmImageWriter::PpmImageWriter(std::string _filename, int _height, int _width)
-  : filename(_filename),
-    px_height(_height),
-    px_width(_width)
+        : filename(_filename),
+          px_height(_height),
+          px_width(_width) 
 {
 }
 //}}}
 
 //{{{
 void PpmImageWriter::write_image(Color * data) {
+
     FILE * _file = fopen(filename.c_str(), "w+");
-    if( _file == NULL ) {
+    if ( _file == NULL ) {
         cout << "Could not open " << filename << "!  Aborting save!";
         exit(EXIT_FAILURE);
     }
@@ -39,12 +40,12 @@ void PpmImageWriter::write_image(Color * data) {
     // Write the ppm header.
     fwrite(header, sizeof(char), strlen(header), _file);
     // Write the data.
-    for( int i = 0; i < (px_width * px_height); ++i) {
+    for ( int i = 0; i < (px_width * px_height); ++i) {
         uchar rgbdata[] = {
-            data[i].get_rgb_red(),
-            data[i].get_rgb_green(),
-            data[i].get_rgb_blue()
-        };
+                              data[i].get_rgb_red(),
+                              data[i].get_rgb_green(),
+                              data[i].get_rgb_blue()
+                          };
         fwrite(rgbdata, sizeof(rgbdata), 1, _file);
     }
 

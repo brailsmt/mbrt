@@ -43,7 +43,7 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
 }
 //}}}
 
-#ifndef _UNITTEST
+#ifndef _UNITTEST 
 //{{{
 int main(int argc, char ** argv) {
     initscr();
@@ -56,17 +56,17 @@ int main(int argc, char ** argv) {
     extern int optind, opterr, optopt;
     int option_index = 0;
     static struct option long_options[] = {
-        {"scene", 1, NULL, 0},
-        {0, 0, 0, 0}
-    };
+                                              {"scene", 1, NULL, 0},
+                                              {0, 0, 0, 0}
+                                          };
 
     int opt_val = -2;
-    while( (opt_val = getopt_long (argc, argv, "", long_options, &option_index)) != -1 ) {
-        switch(opt_val) {
-            case 0:
-                memset(filename, 0x0, 256);
-                memcpy(filename, optarg, strlen(optarg));
-                break;
+    while ( (opt_val = getopt_long (argc, argv, "", long_options, &option_index)) != -1 ) {
+        switch (opt_val) {
+        case 0:
+            memset(filename, 0x0, 256);
+            memcpy(filename, optarg, strlen(optarg));
+            break;
         }
     }
 
@@ -80,7 +80,7 @@ int main(int argc, char ** argv) {
     unsigned long traced_rays;
     int x, y;
     getmaxyx(stdscr, y, x);
-    mvprintw(y-1, 0, "Tracing %s...", filename);
+    mvprintw(y - 1, 0, "Tracing %s...", filename);
     traced_rays = trace_rays(data, scene->get_camera());
 
     ImageWriterFactory factory;

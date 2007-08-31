@@ -36,17 +36,17 @@ class Primitive {
         /// Returns the opacity level of this object.
         virtual float get_opacity() const ;
 
-        /// Returns if the primitive emits light 
+        /// Returns if the primitive emits light
         virtual bool is_light() const ;
 
         virtual bool set_is_light(bool ) ;
 
         /// Returns the surface normal at point p.
-        virtual Ray get_normal(const Point3D &p)  = 0;
+        virtual Ray get_normal(const Point3D &p) = 0;
 
         /// Determine the contribution to lighting/color of the pixel based on the incoming
         /// ray and the intersection point.
-        /// 
+        ///
         /// @pre If this method is called the ray <b>does</b> intersect with the surface.
         ///
         /// @param intersection_point This is Point3D that describes the intersection point of ray and
@@ -68,7 +68,7 @@ class Primitive {
 
             prim = scene->find_collision(ray_to_light, dist);
 
-            if( this == prim ) {
+            if ( this == prim ) {
                 return false;
             }
 

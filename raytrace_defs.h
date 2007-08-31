@@ -15,10 +15,10 @@ typedef unsigned char uchar;
 static const int HEIGHT = 512;
 
 /// The default width in pixels for the image.
-static const int WIDTH  = 512;
+static const int WIDTH = 512;
 
 /// Inifinity for our purposes.
-const float INF         = 1000000000.0f;
+const float INF = 1000000000.0f;
 
 /// This determines how many iterations pass before reporting progress.
 const int REPORT_FACTOR = 5000;
@@ -27,13 +27,13 @@ const int REPORT_FACTOR = 5000;
 const int SUBPIXEL_SQRT = 2;
 
 /// The max value for a color triplet in the ppm output file.
-const int PPM_MAX_VAL   = 255;
+const int PPM_MAX_VAL = 255;
 
 /// The max depth to which we will bounce rays.  After MAX_DEPTH reflections/refractions, stop.
-const int MAX_DEPTH     = 15;
+const int MAX_DEPTH = 15;
 
 /// Defines a completely opaque substance.
-const float OPAQUE      = 0.0f;
+const float OPAQUE = 0.0f;
 
 /// Defines a completely transparent substance.
 const float TRANSPARENT = 1.0f;
@@ -64,14 +64,13 @@ struct raytrace_info {
 
     /// Initialize the info struct.
     raytrace_info() :
-        traced_rays(0),
-        primary_rays(0),
-        secondary_rays(0),
-        total_primary_rays(0),
-        start_time(time(NULL))
-    {
-    }
-};
+            traced_rays(0),
+            primary_rays(0),
+            secondary_rays(0),
+            total_primary_rays(0),
+    start_time(time(NULL)) {}
+}
+;
 
 /// Trace a ray for each pixel in image.
 ///

@@ -16,11 +16,11 @@
 typedef sigc::slot<Primitive *, xmlXPathObjectPtr> parse_handler_t;
 
 static parse_handlers_t object_factories[] = {
-};
+        };
 
 /// AbstractFactory class for constructing Primitives from an XML definition of the primitive.
 class ObjectAbstractFactory {
-    static virtual Primitive * build_from_xml(xmlXPathObjectPtr xpath) = 0;
+        static virtual Primitive * build_from_xml(xmlXPathObjectPtr xpath) = 0;
 }
 
 #endif

@@ -20,9 +20,9 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
     float dist = INF;
     Scene * scene = Scene::get_instance();
 
-    if(depth <= MAX_DEPTH) {
+    if (depth <= MAX_DEPTH) {
 
-        if( depth == 0 ) {
+        if ( depth == 0 ) {
             rt_info.primary_rays++;
         }
 
@@ -32,14 +32,14 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
             int x, y;
             getyx(stdscr, y, x);
             long t = (long)difftime(time(NULL), rt_info.start_time);
-            mvprintw(y-1, 0, "Elapsed time:  %02i:%02i:%02i", t/3600, (t/60)%60, t%60);
-            mvprintw(y, x+2, "%02.2f%% done", 100 * (float)rt_info.primary_rays / (float)rt_info.total_primary_rays);
+            mvprintw(y - 1, 0, "Elapsed time:  %02i:%02i:%02i", t / 3600, (t / 60) % 60, t % 60);
+            mvprintw(y, x + 2, "%02.2f%% done", 100 * (float)rt_info.primary_rays / (float)rt_info.total_primary_rays);
             move(y, x);
             refresh();
         }
         //}}}
 
-        if((primitive = scene->find_collision(ray, dist)) != NULL) {
+        if ((primitive = scene->find_collision(ray, dist)) != NULL) {
             Vector dir = ray.direction();
             Point3D intersection_point = ray.origin() + (dir * dist);
             Vector reflect;
@@ -50,14 +50,14 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
             //}}}
             // Reflect the ray, if the surface is reflective.   {{{
             float reflection_coefficient = primitive->get_reflection();
-            if(reflection_coefficient > 0.0f) {
+            if (reflection_coefficient > 0.0f) {
                 depth++;
                 trace_ray(pixel, Ray(intersection_point, reflect), depth);
                 depth--;
             }
             //}}}
             // Trace the refracted ray, if the primitive is transparent.    {{{
-            if(primitive->get_opacity() > OPAQUE) {
+            if (primitive->get_opacity() > OPAQUE) {
                 depth++;
                 trace_ray(pixel, Ray(intersection_point, refract), depth);
                 depth--;
@@ -107,7 +107,7 @@ unsigned long trace_rays(Color * data, Point3D eye) {
             // dy/2 divided by the number of y subpixels.  This determines the center of the top
             // most subpixel.  From that point, add dx/number of x subpixels to reach each
             // successive pixel.
-            
+
             // Determine the subpixel dx and dy values, these are used to
             // shift the screen intersection within each pixel
             float sdx = dx / (2 * scene->get_subpixel_sqrt());
@@ -116,11 +116,11 @@ unsigned long trace_rays(Color * data, Point3D eye) {
             vector<Color> colors;
             // Determine the y-coordinate for the top most subpixel.
             float sy = screen_intersection.y - (dy * 0.5) + (sdy * 0.5);
-            for(int i = 0; i < scene->get_subpixel_sqrt(); i++) {
+            for (int i = 0; i < scene->get_subpixel_sqrt(); i++) {
 
                 // Determine the x-coordinate for the left most subpixel.
                 float sx = screen_intersection.x - (dx * 0.5) + (sdx * 0.5);
-                for(int j = 0; j < scene->get_subpixel_sqrt(); j++) {
+                for (int j = 0; j < scene->get_subpixel_sqrt(); j++) {
                     float sy_jitter = sy + jitter(sdy);
                     float sx_jitter = sx + jitter(sdx);
 
@@ -140,12 +140,12 @@ unsigned long trace_rays(Color * data, Point3D eye) {
             float red, green, blue;
             red = green = blue = 0.0f;
             vector<Color>::iterator iter, end;
-            for(iter = colors.begin(), end = colors.end(); iter != end; iter++) {
-                red   += iter->red;
+            for (iter = colors.begin(), end = colors.end(); iter != end; iter++) {
+                red += iter->red;
                 green += iter->green;
-                blue  += iter->blue;
+                blue += iter->blue;
             }
-            data[(y*scene->get_viewport_pixel_width()) + x] = Color((red/colors.size()), (green/colors.size()), (blue/colors.size()));
+            data[(y*scene->get_viewport_pixel_width()) + x] = Color((red / colors.size()), (green / colors.size()), (blue / colors.size()));
 
             screen_intersection.x += dx;
         }
