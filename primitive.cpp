@@ -8,7 +8,6 @@ float Primitive::get_diffuse() const {
                                  diffuse;
 }
 //}}}
-
 //{{{
 float Primitive::get_reflection() const {
     float reflection = m_material->get_reflection();
@@ -22,29 +21,29 @@ float Primitive::get_reflectivity() const {
     return m_material->get_reflectivity();
 }
 //}}}
-
-float Primitive::get_specular() const 
-{ 
+//{{{
+float Primitive::get_specular() const { 
     // Really? 
     return 1.0f; 
 }
-
-float Primitive::get_opacity() const 
-{ 
+//}}}
+//{{{
+float Primitive::get_opacity() const { 
     return m_material->get_opacity(); 
 }
-
-Color Primitive::get_color() const 
-{ 
+//}}}
+//{{{
+Color Primitive::get_color() const { 
     return m_material == NULL? Color(): *(m_material->get_color()); 
 }
-
-bool Primitive::is_light() const 
-{ 
+//}}}
+//{{{
+bool Primitive::is_light() const { 
     return m_material == NULL? false: m_material->is_light(); 
 }
-
-bool Primitive::set_is_light(bool v) 
-{ 
+//}}}
+//{{{
+bool Primitive::set_is_light(bool v) { 
     if(m_material != NULL) m_material->set_is_light(v); 
 }
+//}}}

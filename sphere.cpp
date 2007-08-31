@@ -43,12 +43,8 @@ bool Sphere::collides_with(const Ray &ray, float &t) const {
 }
 //}}}
 //{{{
-Ray Sphere::get_normal(const Point3D &p) 
-{
-    //Vector v(p - m_center);
-    Ray r(p, p - m_center);
-    r.normalize();
-    return r; // v * m_radius;
+Ray Sphere::get_normal(const Point3D &p) {
+    return Ray(p, p - m_center);
 }
 //}}}
 //{{{
