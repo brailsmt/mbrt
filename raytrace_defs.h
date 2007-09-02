@@ -18,7 +18,7 @@ static const int HEIGHT = 512;
 static const int WIDTH = 512;
 
 /// Inifinity for our purposes.
-const float INF = 1000000000.0f;
+const double INF = 1000000000.0;
 
 /// This determines how many iterations pass before reporting progress.
 const int REPORT_FACTOR = 5000;
@@ -33,10 +33,10 @@ const int PPM_MAX_VAL = 255;
 const int MAX_DEPTH = 15;
 
 /// Defines a completely opaque substance.
-const float OPAQUE = 0.0f;
+const double OPAQUE = 0.0;
 
 /// Defines a completely transparent substance.
-const float TRANSPARENT = 1.0f;
+const double TRANSPARENT = 1.0;
 
 /// The fields in this enum describe the sequence of color bytes in a color row
 enum {
@@ -87,8 +87,8 @@ void trace_ray( Color &pixel, const Ray &ray, int depth);
 
 /// Generate a jitter within the range [-limit, limit).
 //{{{
-inline float jitter(float limit) {
-    float rv = -limit;
+inline double jitter(double limit) {
+    double rv = -limit;
     rv += drand48() * (2 * limit);
     return rv;
 }

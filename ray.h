@@ -61,7 +61,7 @@ class Ray {
 
 //{{{
 void Ray::normalize() {
-    float norm = sqrtf(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
+    double norm = sqrtf(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
     _direction.x /= norm;
     _direction.y /= norm;
     _direction.z /= norm;

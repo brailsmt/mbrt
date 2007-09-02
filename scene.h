@@ -89,7 +89,7 @@ class Scene {
 
         inline std::vector<Primitive *> * get_scene() { return &scene; }
 
-        Primitive * find_collision(const Ray &ray, float &dist) const;
+        Primitive * find_collision(const Ray &ray, double &dist) const;
 
         Point3D get_camera () const { return camera; }
         std::string get_output_filename() const { return output_filename; }

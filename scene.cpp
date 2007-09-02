@@ -52,12 +52,12 @@ Scene::~Scene() {
 //}}}
 
 //{{{
-Primitive * Scene::find_collision(const Ray &ray, float &dist) const {
+Primitive * Scene::find_collision(const Ray &ray, double &dist) const {
     vector<Primitive *>::const_iterator iter, end;
     Primitive * rv = NULL;
 
     for (iter = scene.begin(), end = scene.end(); iter != end; ++iter) {
-        float d = dist;
+        double d = dist;
         if ((*iter)->collides_with(ray, d)) {
             if ( d < dist + 0.00001 && d > -0.00001) {
                 rv = *iter;
@@ -160,11 +160,11 @@ std::vector<Sphere *> Scene::parse_spheres(xmlXPathObjectPtr sphere_nodes, std::
         map<string, string> properties = get_properties(node_ptr->properties);
 
         if ( properties.empty() == false ) {
-            float x       = (float)strtod(properties["x"       ].c_str(), NULL);
-            float y       = (float)strtod(properties["y"       ].c_str(), NULL);
-            float z       = (float)strtod(properties["z"       ].c_str(), NULL);
-            float radius  = (float)strtod(properties["radius"  ].c_str(), NULL);
-            float opacity = (float)strtod(properties["opacity" ].c_str(), NULL);
+            double x       = (double)strtod(properties["x"       ].c_str(), NULL);
+            double y       = (double)strtod(properties["y"       ].c_str(), NULL);
+            double z       = (double)strtod(properties["z"       ].c_str(), NULL);
+            double radius  = (double)strtod(properties["radius"  ].c_str(), NULL);
+            double opacity = (double)strtod(properties["opacity" ].c_str(), NULL);
 
             Color * clr = NULL;
             if ( colors.find(properties["color"]) != colors.end() ) {
@@ -242,9 +242,9 @@ void Scene::parse_camera(xmlDocPtr root) {
 
     xmlXPathObjectPtr nodes = get_xpath_nodes(root, camera_xpath);
     map<string, string> properties = get_properties(nodes->nodesetval->nodeTab[0]->properties);
-    camera.x = (float)strtod(properties["x"].c_str(), NULL);
-    camera.y = (float)strtod(properties["y"].c_str(), NULL);
-    camera.z = (float)strtod(properties["z"].c_str(), NULL);
+    camera.x = (double)strtod(properties["x"].c_str(), NULL);
+    camera.y = (double)strtod(properties["y"].c_str(), NULL);
+    camera.z = (double)strtod(properties["z"].c_str(), NULL);
 }
 //}}}
 //{{{

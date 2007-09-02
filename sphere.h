@@ -16,45 +16,47 @@ using std::vector;
 class Sphere : public Primitive {
     protected:
         /// The m_center point of the sphere.
-        Point3D m_center;
+        //Point3D m_center;
 
         /// The radius of the sphere.
-        float m_radius;
+        double m_radius;
 
     public:
         Sphere()
-                : // m_material(new Material(false)),
-                m_center(Point3D()),
-        m_radius(1) {
-            m_material = new Material(false);
-        }
+            : // m_material(new Material(false)),
+                //m_center(Point3D()),
+                m_radius(1) {
+                    m_material = new Material(false);
+                    
+                }
 
         /// Create a sphere with the default m_material.
         template <class _T>
-        Sphere( _T x, _T y, _T z, _T r)
-                :  //m_material(new Material(false)),
-                m_center(x, y, z),
-        m_radius((float)r) {
-            m_material = new Material(false);
-        }
+            Sphere( _T x, _T y, _T z, _T r)
+            :  //m_material(new Material(false)),
+                m_radius((double)r) {
+                    m_material = new Material(false);
+                    m_center = Point3D(x, y, z);
+                }
 
         /// Create a sphere.
         template <class _T>
-        Sphere( Material * m, _T x, _T y, _T z, _T r)
-                :  //
-                m_center(x, y, z),
-        m_radius((float)r) {
-            if (m) {
-                m_material = m;
-            }
-            else {
-                // TODO: if a null material is passed in, this
-                // may be an error condition. Consider bailing
-                // app.
-                m_material = new Material(false);
-            }
+            Sphere( Material * m, _T x, _T y, _T z, _T r)
+            :  //
+                m_radius((double)r) 
+                {
+                    m_center = Point3D(x, y, z);
+                    if (m) {
+                        m_material = m;
+                    }
+                    else {
+                        // TODO: if a null material is passed in, this
+                        // may be an error condition. Consider bailing
+                        // app.
+                        m_material = new Material(false);
+                    }
 
-        }
+                }
 
         /// Clean up the sphere's resources.
         virtual ~Sphere();
@@ -113,7 +115,7 @@ class Sphere : public Primitive {
         /// @param ray The ray we are testing to determine collision.
         /// @param t The z-depth where the ray collides with this sphere.
         /// @return True if the ray collides with this sphere.
-        virtual bool collides_with(const Ray &ray, float &t) const;
+        virtual bool collides_with(const Ray &ray, double &t) const;
         //// @f[ a = (\overrightarrow{R_o} \cdot \overrightarrow{R_o}) @f]
         //// @f[ b = 2 (\overrightarrow{R_o} \cdot \overrightarrow{m_center}) @f]
         //// @f[ c = (\overrightarrow{m_center} \cdot \overrightarrow{m_center}) - r^2 @f]
@@ -128,11 +130,11 @@ class Sphere : public Primitive {
         //// @f[ R(t) = R_0 + \hat{R_d} * t @f]
         ////
 
-        const Point3D get_center() const { return m_center; }
+        //const Point3D get_center() const { return m_center; }
 
         virtual Ray get_normal(const Point3D &p) ;
 
-        virtual Color get_color_contribution(const Point3D &itersection, const Ray &ray, Vector &reflect, Vector &refract);
+        //virtual Color get_color_contribution(const Point3D &itersection, const Ray &ray, Vector &reflect, Vector &refract);
 
 };
 

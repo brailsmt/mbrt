@@ -16,25 +16,28 @@ class Primitive {
         /// @param ray The ray which is being traced.
         /// @param t This is z-depth at which the ray collides with this object.
         /// @return True if the ray collides with this object.
-        virtual bool collides_with(const Ray &ray, float &t) const = 0;
+        virtual bool collides_with(const Ray &ray, double &t) const = 0;
 
         /// Returns the color of the Primitive.
         virtual Color get_color() const ;
 
         /// Returns the diffusion factor of the primitive.
-        virtual float get_diffuse() const;
+        virtual double get_diffuse() const;
 
         /// Returns the reflection coefficient.  This is a number between 0 and 1.
-        virtual float get_reflection() const;
+        virtual double get_reflection() const;
 
         /// Returns the specular coefficient.  This is a number between 0 and 1.
-        virtual float get_specular() const ;
+        virtual double get_specular() const ;
 
         /// Returns the shinyness factor of the object.  The higher the number the shinier.
-        virtual float get_reflectivity() const ;
+        virtual double get_reflectivity() const ;
 
         /// Returns the opacity level of this object.
-        virtual float get_opacity() const ;
+        virtual double get_opacity() const ;
+
+        /// Returns the refraction index of this object.
+        virtual double get_refraction_index() const ;
 
         /// Returns if the primitive emits light
         virtual bool is_light() const ;
@@ -59,10 +62,10 @@ class Primitive {
         ///
         /// @return The color which is the result of applying diffuse and specular lighting the the
         /// primitive.
-        virtual Color get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) = 0;
+        virtual Color get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) ;
 
         bool is_in_shadow(const Ray &ray_to_light) {
-            float dist = INF;
+            double dist = INF;
             Primitive * prim = NULL;
             Scene * scene = Scene::get_instance();
 
@@ -74,8 +77,22 @@ class Primitive {
 
             return (prim != NULL && !prim->is_light());
         }
-    public:
+
+        /// Return the center of the primitive.
+        virtual const Point3D get_center() const
+        {
+            return m_center;
+        }
+
+    protected:
         Material * m_material ;
+
+        /// "Center" of object.  Some objects do not have a true
+        /// center, such as a plane, but to simplify the lighting
+        /// algorithm we need to move this to Primitive.  This
+        /// might also be useful in the future for centering textures
+        /// or materials around.
+        Point3D m_center;
 };
 
 #endif

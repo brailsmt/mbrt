@@ -37,9 +37,9 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
 
     cout.setf(cout.fixed);
     cout.precision(5);
-    cout << "Average rays per primary ray      :  " << (float)traced_rays / (float)primary_rays << endl;
-    cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((float)elapsed / (float)primary_rays) * REPORT_FACTOR << "s" << endl;
-    cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((float)elapsed / (float)traced_rays ) * REPORT_FACTOR << "s" << endl;
+    cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
+    cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
+    cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
 }
 //}}}
 
