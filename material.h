@@ -2,6 +2,9 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include "color.h"
+#include "raytrace_defs.h"
+
 /// This class defines various properties of materials from which primitives are made.
 class Material {
     protected:
@@ -33,7 +36,7 @@ class Material {
         double m_refraction_index; 
 
         /// Ensure m_opacity remains within the range of 0.0f to 1.0f.
-        void normalize_opacity() {
+        virtual void normalize_opacity() {
             m_opacity = m_opacity > TRANSPARENT ? TRANSPARENT
                         : m_opacity < OPAQUE ? OPAQUE
                         : m_opacity;
@@ -84,23 +87,23 @@ class Material {
                 m_reflectivity(other.m_reflectivity),
         m_opacity(other.m_opacity) {}
 
-        ~Material() {
+        virtual ~Material() {
             delete m_color;
         }
 
-        Color * get_color() const { return m_color; }
+        virtual Color * get_color() const ; //{ return m_color; }
 
-        bool is_light() const { return m_is_light_source; }
-        void set_is_light(bool v) { m_is_light_source = v; }
+        virtual bool is_light() const ; //{ return m_is_light_source; }
+        virtual void set_is_light(bool v); // { m_is_light_source = v; }
 
-        double get_diffuse() const { return m_diffusion_factor; }
-        void set_diffuse(double diffuse) { m_diffusion_factor = diffuse; }
+        virtual double get_diffuse() const ; //{ return m_diffusion_factor; }
+        virtual void set_diffuse(double diffuse); // { m_diffusion_factor = diffuse; }
 
-        double get_reflection() const { return m_reflection_coefficient; }
-        double get_reflectivity() const { return m_reflectivity; }
-        double get_refraction_index() const { return m_refraction_index; }
+        virtual double get_reflection() const; // { return m_reflection_coefficient; }
+        virtual double get_reflectivity() const ; //{ return m_reflectivity; }
+        virtual double get_refraction_index() const; // { return m_refraction_index; }
 
-        double get_opacity() const { return m_opacity; }
-        void set_opacity(double opacity) { m_opacity = opacity; normalize_opacity(); }
+        virtual double get_opacity() const ; //{ return m_opacity; }
+        virtual void set_opacity(double opacity) ; //{ m_opacity = opacity; normalize_opacity(); }
 };
 #endif
