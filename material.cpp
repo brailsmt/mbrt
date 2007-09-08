@@ -1,5 +1,10 @@
 #include "material.h"
 
+Color * Material::get_color() const 
+{ 
+    return m_color; 
+}
+
 bool Material::is_light() const 
 { 
     return m_is_light_source; 
