@@ -49,7 +49,7 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
             pixel += primitive->get_color_contribution(intersection_point, ray, reflect, refract);
             //}}}
             // Reflect the ray, if the surface is reflective.   {{{
-            double reflection_coefficient = primitive->get_reflection();
+            double reflection_coefficient = primitive->get_reflection(intersection_point);
             if (reflection_coefficient > 0.0) {
                 depth++;
                 trace_ray(pixel, Ray(intersection_point, reflect), depth);
@@ -57,7 +57,7 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
             }
             //}}}
             // Trace the refracted ray, if the primitive is transparent.    {{{
-            if (primitive->get_opacity() > OPAQUE) {
+            if (primitive->get_opacity(intersection_point) > OPAQUE) {
                 depth++;
                 trace_ray(pixel, Ray(intersection_point, refract), depth);
                 depth--;

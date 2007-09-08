@@ -19,28 +19,28 @@ class Primitive {
         virtual bool collides_with(const Ray &ray, double &t) const = 0;
 
         /// Returns the color of the Primitive.
-        virtual Color get_color() const ;
+        virtual Color get_color(const Point3D& intersection_point) const ;
 
         /// Returns the diffusion factor of the primitive.
-        virtual double get_diffuse() const;
+        virtual double get_diffuse(const Point3D& intersection_point) const;
 
         /// Returns the reflection coefficient.  This is a number between 0 and 1.
-        virtual double get_reflection() const;
+        virtual double get_reflection(const Point3D& intersection_point) const;
 
         /// Returns the specular coefficient.  This is a number between 0 and 1.
-        virtual double get_specular() const ;
+        virtual double get_specular(const Point3D& intersection_point) const ;
 
         /// Returns the shinyness factor of the object.  The higher the number the shinier.
-        virtual double get_reflectivity() const ;
+        virtual double get_reflectivity(const Point3D& intersection_point) const ;
 
         /// Returns the opacity level of this object.
-        virtual double get_opacity() const ;
+        virtual double get_opacity(const Point3D& intersection_point) const ;
 
         /// Returns the refraction index of this object.
-        virtual double get_refraction_index() const ;
+        virtual double get_refraction_index(const Point3D& intersection_point) const ;
 
         /// Returns if the primitive emits light
-        virtual bool is_light() const ;
+        virtual bool is_light(const Point3D& intersection_point) const ;
 
         virtual bool set_is_light(bool ) ;
 
@@ -64,7 +64,7 @@ class Primitive {
         /// primitive.
         virtual Color get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) ;
 
-        bool is_in_shadow(const Ray &ray_to_light) {
+        bool is_in_shadow(const Ray &ray_to_light, const Point3D intersection_point) {
             double dist = INF;
             Primitive * prim = NULL;
             Scene * scene = Scene::get_instance();
@@ -75,7 +75,7 @@ class Primitive {
                 return false;
             }
 
-            return (prim != NULL && !prim->is_light());
+            return (prim != NULL && !prim->is_light(intersection_point));
         }
 
         /// Return the center of the primitive.

@@ -14,10 +14,10 @@ class Point3D {
         double y;
         double z;
 
-        Point3D() : x(0.0f), y(0.0f), z(0.0f) {}
+        Point3D() : x(0.0), y(0.0), z(0.0) {}
 
         template <class _T>
-        Point3D(_T _x, _T _y) : x((double)_x), y((double)_y), z(0.0f) {}
+        Point3D(_T _x, _T _y) : x((double)_x), y((double)_y), z(0.0) {}
 
         template <class _T>
         Point3D(_T _x, _T _y, _T _z) : x((double)_x), y((double)_y), z((double)_z) {}

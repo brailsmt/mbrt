@@ -91,19 +91,19 @@ class Material {
             delete m_color;
         }
 
-        virtual Color * get_color() const ; //{ return m_color; }
+        virtual Color * get_color(const Point3D& intersesction_point) const ; //{ return m_color; }
 
-        virtual bool is_light() const ; //{ return m_is_light_source; }
+        virtual bool is_light(const Point3D& intersesction_point) const ; //{ return m_is_light_source; }
         virtual void set_is_light(bool v); // { m_is_light_source = v; }
 
-        virtual double get_diffuse() const ; //{ return m_diffusion_factor; }
+        virtual double get_diffuse(const Point3D& intersesction_point) const ; //{ return m_diffusion_factor; }
         virtual void set_diffuse(double diffuse); // { m_diffusion_factor = diffuse; }
 
-        virtual double get_reflection() const; // { return m_reflection_coefficient; }
-        virtual double get_reflectivity() const ; //{ return m_reflectivity; }
-        virtual double get_refraction_index() const; // { return m_refraction_index; }
+        virtual double get_reflection(const Point3D& intersesction_point) const; // { return m_reflection_coefficient; }
+        virtual double get_reflectivity(const Point3D& intersesction_point) const ; //{ return m_reflectivity; }
+        virtual double get_refraction_index(const Point3D& intersesction_point) const; // { return m_refraction_index; }
 
-        virtual double get_opacity() const ; //{ return m_opacity; }
+        virtual double get_opacity(const Point3D& intersesction_point) const ; //{ return m_opacity; }
         virtual void set_opacity(double opacity) ; //{ m_opacity = opacity; normalize_opacity(); }
 };
 #endif
