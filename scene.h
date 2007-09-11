@@ -14,6 +14,7 @@ class Primitive;
 class Point3D;
 class Color;
 class Sphere;
+class Material;
 
 /// @todo The xML parsing needs to be completely reworked.  As it is currently written, this class
 /// will not scale well and will be tightly coupled with the objects in the ray tracer.  This should
@@ -29,6 +30,8 @@ class Scene {
 
         std::vector<Primitive *> scene;
 
+        //
+        std::map<std::string, Material *> parse_materials(xmlXPathObjectPtr material_nodes, std::map<std::string, Color *>& color_map);
         /// Parse the XML document whose root is passed in.
         ///
         /// @param root The root of the document to parse.
@@ -56,7 +59,7 @@ class Scene {
         /// @return The content of the node, or NULL.
         char * get_xpath_content(const xmlXPathObjectPtr xpath, int idx = 0);
 
-        std::vector<Sphere *> parse_spheres(xmlXPathObjectPtr sphere_nodes, std::map<std::string, Color *> colors);
+        std::vector<Sphere *> parse_spheres(xmlXPathObjectPtr sphere_nodes, std::map<std::string, Color *> colors, std::map<std::string, Material *> materials);
 
         void parse_objects(xmlDocPtr root);
         void parse_meta(xmlDocPtr root);

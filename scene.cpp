@@ -3,6 +3,7 @@
 #include "primitive.h"
 #include "sphere.h"
 #include "scene.h"
+#include "material.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -105,7 +106,8 @@ void Scene::parse_light_sources(xmlDocPtr root) {
 
     // Parse all colors and spheres which are the children of the <light_sources> tag.
     map<string, Color *> color_map = parse_colors(color_nodes);
-    vector<Sphere *> spheres = parse_spheres(sphere_nodes, color_map);
+    map<string, Material *> material_map;
+    vector<Sphere *> spheres = parse_spheres(sphere_nodes, color_map, material_map);
 
     // Make the sphere light sources since they are in the <light_sources> tag.
     vector<Sphere *>::iterator iter, end = spheres.end();
@@ -151,7 +153,7 @@ map<string, Color *> Scene::parse_colors(xmlXPathObjectPtr color_nodes) {
 }
 //}}}
 //{{{
-std::vector<Sphere *> Scene::parse_spheres(xmlXPathObjectPtr sphere_nodes, std::map<std::string, Color *> colors) {
+std::vector<Sphere *> Scene::parse_spheres(xmlXPathObjectPtr sphere_nodes, std::map<std::string, Color *> colors, std::map<std::string,Material *> materials) {
     vector<Sphere *> rv;
     xmlNodeSetPtr nodes = sphere_nodes->nodesetval;
 
@@ -166,19 +168,29 @@ std::vector<Sphere *> Scene::parse_spheres(xmlXPathObjectPtr sphere_nodes, std::
             double radius  = (double)strtod(properties["radius"  ].c_str(), NULL);
             double opacity = (double)strtod(properties["opacity" ].c_str(), NULL);
 
-            Color * clr = NULL;
-            if ( colors.find(properties["color"]) != colors.end() ) {
-                clr = colors[properties["color"]];
+            Material * material = NULL; //new Material(clr);
+            if ( materials.find(properties["material"]) != materials.end()) 
+            {
+                material = materials[properties["material"]];
             }
-            else {
-                clr = new Color();
+            else 
+            {
+                Color * clr = NULL;
+                if ( colors.find(properties["color"]) != colors.end() ) {
+                    clr = colors[properties["color"]];
+                }
+                else 
+                {
+                    clr = new Color();
+                }
+                material = new Material(clr);
+                clr = NULL;
             }
 
-            Material * m = new Material(clr);
-            m->set_opacity(opacity);
-            rv.push_back(new Sphere(m, x, y, z, radius));
+            material->set_opacity(opacity);
+            rv.push_back(new Sphere(material, x, y, z, radius));
 
-            clr = NULL;
+            material = NULL;
         }
     }
 
@@ -186,15 +198,55 @@ std::vector<Sphere *> Scene::parse_spheres(xmlXPathObjectPtr sphere_nodes, std::
 }
 //}}}
 //{{{
+//
+
+map<string, Material *> Scene::parse_materials(xmlXPathObjectPtr material_nodes, std::map<string, Color *>& color_map)
+{
+    map<string, Material *> rv;
+
+    xmlNodeSetPtr nodes = material_nodes->nodesetval;
+    for (int x = 0; x < nodes->nodeNr; ++x) 
+    {
+        xmlNodePtr node_ptr = nodes->nodeTab[x];
+        map<string, string> properties = get_properties(node_ptr->properties);
+
+        if ( properties.empty() == false ) 
+        {
+            string name = properties["name"] ;
+            string type = properties["type"] ;
+            Material * material = NULL;
+            if(type == "solid")
+            {
+                rv[name] = new Material( color_map[ properties["color"] ], false );
+
+            }
+            if(material != NULL)
+            {
+                rv[name] = material;
+            }
+
+        }
+    }
+
+    return rv;
+}
+
+
+//}}}
+//{{{
 void Scene::parse_objects(xmlDocPtr root) {
-    char * colors_xpath = "//scene/objects/color";
+    char * colors_xpath = "//scene/colors/color";
     char * sphere_xpath = "//scene/objects/sphere";
+    char * materials_xpath = "//scene/materials/material";
+
     xmlXPathObjectPtr sphere_nodes = get_xpath_nodes(root, sphere_xpath);
     xmlXPathObjectPtr color_nodes  = get_xpath_nodes(root, colors_xpath);
+    xmlXPathObjectPtr material_nodes  = get_xpath_nodes(root, materials_xpath);
 
     // Parse all colors and spheres which are the children of the <light_sources> tag.
     map<string, Color *> color_map = parse_colors(color_nodes);
-    vector<Sphere *> spheres       = parse_spheres(sphere_nodes, color_map);
+    map<string, Material *> material_map = parse_materials(material_nodes, color_map);
+    vector<Sphere *> spheres       = parse_spheres(sphere_nodes, color_map, material_map);
 
     // Add the spheres to the scene.
     scene.insert(scene.end(), spheres.begin(), spheres.end());

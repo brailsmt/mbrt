@@ -2,6 +2,7 @@
 
 Color * Material::get_color(const Point3D& intersection_point) const 
 { 
+#if 0
     static Color col(1.0,1.0,1.0);
     int bit = 1;
     bit *= ( ( (int)(intersection_point.x) ) ) % 2 == 1 ? 1 : -1; 
@@ -9,12 +10,15 @@ Color * Material::get_color(const Point3D& intersection_point) const
     bit *= ( ( (int)(intersection_point.z) ) ) % 2 == 1 ? 1 : -1; 
     if(bit>0)
     {
+#endif
         return m_color; 
+#if 0
     }
     else
     {
         return &col;
     }
+#endif
 
 }
 
