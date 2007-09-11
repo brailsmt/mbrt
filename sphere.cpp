@@ -5,9 +5,12 @@
 
 #include "sphere.h"
 #include <iostream>
+#include <vector>
 
 using std::cout;
 using std::endl;
+using std::vector;
+using std::string;
 
 //{{{
 Sphere::~Sphere() {}

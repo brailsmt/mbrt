@@ -4,19 +4,15 @@
 #include "point3d.h"
 
 #include <vector>
-#include <map>
 #include <string>
-#include <libxml/parser.h>
-#include <libxml/xpath.h>
 
 class Ray;
 class Primitive;
 class Point3D;
 class Color;
 class Sphere;
-class Material;
 
-/// @todo The xML parsing needs to be completely reworked.  As it is currently written, this class
+/// @todo The XML parsing needs to be completely reworked.  As it is currently written, this class
 /// will not scale well and will be tightly coupled with the objects in the ray tracer.  This should
 /// be rewritten using function pointers/libsigc to call the correct function based on the XML tag
 /// found.  This class should delegate the actual parsing of the elements to the corresponding
@@ -28,56 +24,26 @@ class Scene {
         /// This is the instance of the Scene class.
         static Scene * inst;
 
+        /// This is the scene, which is a collection of Primitives.
         std::vector<Primitive *> scene;
 
-        //
-        std::map<std::string, Material *> parse_materials(xmlXPathObjectPtr material_nodes, std::map<std::string, Color *>& color_map);
-        /// Parse the XML document whose root is passed in.
-        ///
-        /// @param root The root of the document to parse.
-        void parse_document(xmlDocPtr root);
-
-        /// Get the nodes from the root which match the xpath passed in.
-        ///
-        /// @param root The root node to be searched with the xpath.
-        /// @param xpath The xpath to process.
-        xmlXPathObjectPtr get_xpath_nodes(xmlDocPtr root, char *xpath);
-
-        /// Parse the &lt;light_sources&gt; XML node.
-        ///
-        /// @param root The list of nodes contained within the &lt;light_sources&gt; node.
-        void parse_light_sources(xmlDocPtr root);
-
-        /// Parse a set of color nodes and return them in a map<char *, Color *>.
-        std::map<std::string, Color *> parse_colors(xmlXPathObjectPtr color_nodes);
-
-        /// Parse the properties and return them as a map<char *, char *>.
-        std::map<std::string, std::string> get_properties(struct _xmlAttr * props);
-
-        /// Return the node content from the xmlXPathObjectPtr, for node at index idx.
-        ///
-        /// @return The content of the node, or NULL.
-        char * get_xpath_content(const xmlXPathObjectPtr xpath, int idx = 0);
-
-        std::vector<Sphere *> parse_spheres(xmlXPathObjectPtr sphere_nodes, std::map<std::string, Color *> colors, std::map<std::string, Material *> materials);
-
-        void parse_objects(xmlDocPtr root);
-        void parse_meta(xmlDocPtr root);
-        void parse_camera(xmlDocPtr root);
-
-
+        /// This is the point which describes the camera or eye which is looking into the scene.
         Point3D camera;
-        int pixel_width, pixel_height;
+
+        /// This is the width, in pixels, of the rendered image.
+        int pixel_width;
+
+        /// This is the height, in pixels, of the rendered image.
+        int pixel_height;
+
+        /// This is the name of the rendered image file.
         std::string output_filename;
 
-        /// This number is squared and determines the number of subpixels will be in the render.
+        /// This number is squared and determines the number of subpixels to render.
         int subpixels;
 
         /// Loads a scene from the XML file named by scene_file_name.
-        ///
-        /// @param scene_file_name This is the name of the file that contains the XML specification
-        ///                        of the scene to be ray traced.
-        Scene(const char * scene_file_name);
+        Scene();
 
 
     public:
@@ -88,17 +54,44 @@ class Scene {
         ///                        get_intance().
         static Scene * get_instance(const char * scene_file_name = "");
 
+        /// Destructor.
         ~Scene();
 
+        /// Return the scene's collection of Primitives.
         inline std::vector<Primitive *> * get_scene() { return &scene; }
 
+        /// Determine which Primitive in the scene is intersected by the ray, if any.
+        ///
+        /// @param ray The ray that is being traced into the scene.
+        /// @param dist [out] This is the distance along ray that the intersection occurs.
+        ///
+        /// @return The primitive intersected at distance indicated by dist.  If no Primitive is
+        ///         intersected, this method returns NULL.
         Primitive * find_collision(const Ray &ray, double &dist) const;
 
+        /// Return the point from which all rays originate.
+        ///
+        /// @return The point which all rays originate.
         Point3D get_camera () const { return camera; }
+        void set_camera (double x, double y, double z) { camera = Point3D(x, y, z); }
+
+        /// Return the filename for the rendered image.
+        ///
+        /// @return The rendered image filename.
         std::string get_output_filename() const { return output_filename; }
+        void set_output_filename(std::string fname) { output_filename = fname; }
+
+        /// Get the viewport width in pixels.
         int get_viewport_pixel_width() const { return pixel_width; }
+        void set_pixel_width(int pxwidth) { pixel_width = pxwidth; }
+
+        /// Get the viewport height in pixels.
         int get_viewport_pixel_height() const { return pixel_height; }
+        void set_pixel_height(int pxheight) { pixel_height = pxheight; }
+
+        /// Get the square root of the number of sibpixels in the image.
         int get_subpixel_sqrt() const { return subpixels; }
+        void set_subpixel_sqrt(int subpx_sqrt) { subpixels = subpx_sqrt; }
 };
 //}}}
 

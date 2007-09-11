@@ -8,9 +8,7 @@
 
 #include "primitive.h"
 #include "xml_defs.h"
-#include <vector>
-
-using std::vector;
+#include <string>
 
 /// A Sphere is defined by its m_center point and its radius.
 class Sphere : public Primitive {
@@ -21,40 +19,45 @@ class Sphere : public Primitive {
         /// The radius of the sphere.
         double m_radius;
 
+        std::string material_name;
+        std::string color_name;
+
     public:
         Sphere()
             : // m_material(new Material(false)),
                 //m_center(Point3D()),
                 m_radius(1) {
                     m_material = new Material(false);
-                    
                 }
 
         /// Create a sphere with the default m_material.
         template <class _T>
-            Sphere( _T x, _T y, _T z, _T r)
-            :  //m_material(new Material(false)),
-                m_radius((double)r) {
-                    m_material = new Material(false);
-                    m_center = Point3D(x, y, z);
-                }
+        Sphere( _T x, _T y, _T z, _T r, std::string color_name = "", std::string material_name = "") 
+            : //m_center(x, y, z),
+              m_radius((double)r),
+              material_name(material_name),
+              color_name(color_name)
+        {
+            m_material = new Material(false);
+        }
 
         /// Create a sphere.
         template <class _T>
-            Sphere( Material * m, _T x, _T y, _T z, _T r)
-            :  //
-                m_radius((double)r) 
-                {
-                    m_center = Point3D(x, y, z);
-                    if (m) {
-                        m_material = m;
-                    }
-                    else {
-                        // TODO: if a null material is passed in, this
-                        // may be an error condition. Consider bailing
-                        // app.
-                        m_material = new Material(false);
-                    }
+        Sphere( Material * m, _T x, _T y, _T z, _T r, std::string color_name = "", std::string material_name = "") 
+            : //m_center(x, y, z),
+              m_radius((double)r),
+              material_name(material_name),
+              color_name(color_name)
+        {
+            if (m) {
+                m_material = m;
+            }
+            else {
+                // TODO: if a null material is passed in, this
+                // may be an error condition. Consider bailing
+                // app.
+                m_material = new Material(false);
+            }
 
                 }
 
@@ -135,7 +138,6 @@ class Sphere : public Primitive {
         virtual Ray get_normal(const Point3D &p) ;
 
         //virtual Color get_color_contribution(const Point3D &itersection, const Ray &ray, Vector &reflect, Vector &refract);
-
 };
 
 #endif

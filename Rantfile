@@ -15,15 +15,18 @@ cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
 cconf.add_cflags( "-g" )
 cconf.add_cflags( `pkg-config libxml-2.0 --cflags` )
+cconf.add_cflags( `pkg-config sigc++-2.0 --cflags` ) 
 
 #Add our compiler flags for libnetpbm
 cconf.add_libs( "-lm" ) 
 cconf.add_libs( "-lncurses" )
 cconf.add_libs( `pkg-config libxml-2.0 --libs-only-l` )
+cconf.add_libs( `pkg-config sigc++-2.0 --libs-only-l` )
 
 #cconf.add_libs( SUBDIRS )
 #cconf.add_libdirs( SUBDIRS )
 cconf.add_libdirs( `pkg-config libxml-2.0 --libs-only-L` )
+cconf.add_libdirs( `pkg-config sigc++-2.0 --libs-only-L` )
 
 #store the compiler config in var
 var['cconf'] = cconf

@@ -56,14 +56,14 @@ int main(int argc, char ** argv) {
     extern int optind, opterr, optopt;
     int option_index = 0;
     static struct option long_options[] = {
-                                              {"scene", 1, NULL, 0},
+                                              {"scene", 1, NULL, 's'},
                                               {0, 0, 0, 0}
                                           };
 
     int opt_val = -2;
-    while ( (opt_val = getopt_long (argc, argv, "", long_options, &option_index)) != -1 ) {
+    while ( (opt_val = getopt_long (argc, argv, "s:", long_options, &option_index)) != -1 ) {
         switch (opt_val) {
-        case 0:
+        case 's':
             memset(filename, 0x0, 256);
             memcpy(filename, optarg, strlen(optarg));
             break;

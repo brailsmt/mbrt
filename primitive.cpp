@@ -6,16 +6,16 @@ using std::vector;
 //{{{
 double Primitive::get_diffuse(const Point3D& intersection_point) const {
     double diffuse = m_material->get_diffuse(intersection_point);
-    return (diffuse <= 0.0f) ? 0.0f :
-           (diffuse >= 1.0f) ? 1.0f :
+    return (diffuse <= 0.0) ? 0.0 :
+           (diffuse >= 1.0) ? 1.0 :
            diffuse;
 }
 //}}}
 //{{{
 double Primitive::get_reflection(const Point3D& intersection_point) const {
     double reflection = m_material->get_reflection(intersection_point);
-    return (reflection <= 0.0f) ? 0.0f :
-           (reflection >= 1.0f) ? 1.0f :
+    return (reflection <= 0.0) ? 0.0 :
+           (reflection >= 1.0) ? 1.0 :
            reflection;
 }
 //}}}
@@ -27,7 +27,7 @@ double Primitive::get_reflectivity(const Point3D& intersection_point) const {
 //{{{
 double Primitive::get_specular(const Point3D& intersection_point) const {
     // Really?
-    return 1.0f;
+    return 1.0;
 }
 //}}}
 //{{{

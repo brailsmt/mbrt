@@ -44,29 +44,29 @@ class Material {
 
     public:
         Material()
-                : m_reflection_coefficient(1.0f),
+                : m_reflection_coefficient(1.0),
                 m_diffusion_factor(0.25),
                 m_color(new Color()),
                 m_is_light_source(false),
-                m_reflectivity(35.0f),
+                m_reflectivity(35.0),
                 m_refraction_index(1.35),
         m_opacity(OPAQUE) {}
 
         Material(bool is_light)
-                : m_reflection_coefficient(1.0f),
+                : m_reflection_coefficient(1.0),
                 m_diffusion_factor(0.25f),
                 m_color(new Color()),
                 m_is_light_source(is_light),
-                m_reflectivity(35.0f),
+                m_reflectivity(35.0),
                 m_refraction_index(1.35),
         m_opacity(OPAQUE) {}
 
         Material(Color * m_color, bool is_light)
-                : m_reflection_coefficient(1.0f),
+                : m_reflection_coefficient(1.0),
                 m_diffusion_factor(0.25f),
                 m_color(m_color),
                 m_is_light_source(is_light),
-                m_reflectivity(35.0f),
+                m_reflectivity(35.0),
                 m_refraction_index(1.35),
         m_opacity(OPAQUE) {}
 
@@ -75,7 +75,7 @@ class Material {
                 m_diffusion_factor(diffuse),
                 m_color(m_color),
                 m_is_light_source(is_light),
-                m_reflectivity(35.0f),
+                m_reflectivity(35.0),
                 m_refraction_index(1.35),
         m_opacity(opacity) {}
 
