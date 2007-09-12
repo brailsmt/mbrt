@@ -221,6 +221,7 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
 
             // Make the primitive a light sources since it was in the <light_sources> tag.
             prim->set_is_light(true);
+            cout << "setting light source" << endl;
 
             // Add the primitive to the scene
             scene->get_scene()->push_back(prim);

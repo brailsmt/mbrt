@@ -3,10 +3,10 @@ all:
 rt:
 	rant rt
 
-renders/reflection_test.png:
+renders/reflection_test.png: all
 	./trace.sh scenes/test_reflection.xml
 
-sample: all renders/reflection_test.png
+sample: renders/reflection_test.png
 
 #TODO- make this platform independant
 #TODO- figure out how to do that
