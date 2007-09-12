@@ -32,6 +32,10 @@ class SceneParser : public sigc::trackable {
         Primitive * parse_camera(Scene * scene, xmlNode * node);
         Primitive * noop(Scene * scene, xmlNode * node);
 
+        /// Parse a set of color nodes and return them in a map<char *, Color *>.
+        Primitive * parse_colors(Scene * scene, xmlNode * node);
+
+
     protected:
         /// This is our map of node names to node handlers.
         std::map<std::string, nodehandler_t> m_node_handlers;
@@ -56,11 +60,8 @@ class SceneParser : public sigc::trackable {
         /// @param xpath The xpath to process.
         xmlXPathObjectPtr get_xpath_nodes(xmlDocPtr root, char *xpath);
 
-        /// Parse a set of color nodes and return them in a map<char *, Color *>.
-        std::map<std::string, Color *> parse_colors(xmlNode * node);
-
-        /// Parse the properties and return them as a map<char *, char *>.
-        std::map<std::string, std::string> get_properties(struct _xmlAttr * props);
+        /// Parse the properties and return them as a map<string, string>.
+        std::map<std::string, std::string> get_properties(xmlNode * node);
 
         /// Return the node content from the xmlXPathObjectPtr, for node at index idx.
         ///

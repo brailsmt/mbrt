@@ -51,6 +51,7 @@ void SceneParser::register_default_handlers() {
     m_node_handlers["light_sources"].connect(sigc::mem_fun(this, &SceneParser::parse_light_sources));
     m_node_handlers["objects"      ].connect(sigc::mem_fun(this, &SceneParser::parse_objects));
     m_node_handlers["sphere"       ].connect(sigc::mem_fun(this, &SceneParser::parse_sphere));
+    m_node_handlers["colors"       ].connect(sigc::mem_fun(this, &SceneParser::parse_colors));
 }
 //}}}
 //{{{
@@ -82,7 +83,8 @@ xmlXPathObjectPtr SceneParser::get_xpath_nodes(xmlDocPtr root, char *xpath) {
 }
 //}}}
 //{{{
-map<string, string> SceneParser::get_properties(struct _xmlAttr * props) {
+map<string, string> SceneParser::get_properties(xmlNode * node) {
+    xmlAttr * props = node->properties;
     map<string, string> rv;
     _xmlAttr * cur = props;
     while ( cur != NULL ) {
@@ -94,28 +96,27 @@ map<string, string> SceneParser::get_properties(struct _xmlAttr * props) {
 }
 //}}}
 //{{{
-map<string, Color *> SceneParser::parse_colors(xmlNode * node) {
+Primitive * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
     xmlNode * child = node->children;
-    map<string, Color *> colors;
 
     // Parse all colors and spheres which are the children of the node passed in.
     while(child != node->last) {
         if(strcmp((char *)child->name, "color") == 0) {
-            map<string, string> props = get_properties(child->properties);
+            map<string, string> props = get_properties(child);
 
             if ( props.empty() == false ) {
                 int red   = strtol(props["red" ].c_str(), NULL, 0);
                 int green = strtol(props["green"].c_str(), NULL, 0);
                 int blue  = strtol(props["blue" ].c_str(), NULL, 0);
 
-                colors[props["name"]] = new Color(red, green, blue);
+                scene->add_color(props["name"], new Color(red, green, blue));
             }
         }
 
         child = child->next;
     }
 
-    return colors;
+    return NULL;
 }
 //}}}
 //{{{
@@ -128,7 +129,7 @@ Primitive * SceneParser::parse_sphere(Scene * scene, xmlNode * node) {
     cout << "Entering SceneParser::parse_sphere()" << endl;
     Sphere * rv = NULL;
 
-    map<string, string> props = get_properties(node->properties);
+    map<string, string> props = get_properties(node);
 
     if ( props.empty() == false ) {
         double x        = (double)strtod(props["x"        ].c_str(), NULL);
@@ -150,7 +151,6 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
     cout << "Entering SceneParser::parse_objects()" << endl;
     /// @todo This is a near duplicate of parse_light_sources()
     xmlNode * child = node->children;
-    map<string, Color *> colors = parse_colors(node);
 
     child = node->children;
     while(child != node->last) {
@@ -174,7 +174,7 @@ Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
 
     xmlNode * child = node->children;
     while(child != node->last) {
-        map<string, string> props = get_properties(child->properties);
+        map<string, string> props = get_properties(child);
 
         if(strcmp((char *)child->name, "width") == 0) {
             scene->set_pixel_width(strtol(props["pixels"].c_str(), NULL, 0));
@@ -199,7 +199,7 @@ Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
 //{{{
 Primitive * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
     cout << "Entering SceneParser::parse_camera()" << endl;
-    map<string, string> props = get_properties(node->properties);
+    map<string, string> props = get_properties(node);
     scene->set_camera((double)strtod(props["x"].c_str(), NULL),
                       (double)strtod(props["y"].c_str(), NULL),
                       (double)strtod(props["z"].c_str(), NULL));
@@ -213,7 +213,6 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
     cout << "Entering SceneParser::parse_light_sources()" << endl;
     /// @todo This is a near duplicate of parse_objects()
     xmlNode * child = node->children;
-    map<string, Color *> colors = parse_colors(node);
 
     child = node->children;
     while(child != node->last) {

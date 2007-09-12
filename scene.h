@@ -3,8 +3,10 @@
 #define SCENE_H
 #include "point3d.h"
 
+#include <map>
 #include <vector>
 #include <string>
+#include "color.h"
 
 class Ray;
 class Primitive;
@@ -26,6 +28,9 @@ class Scene {
 
         /// This is the scene, which is a collection of Primitives.
         std::vector<Primitive *> scene;
+
+        /// This is a map of all colors available for the scene.
+        std::map<std::string, Color *> m_colors;
 
         /// This is the point which describes the camera or eye which is looking into the scene.
         Point3D camera;
@@ -92,6 +97,13 @@ class Scene {
         /// Get the square root of the number of sibpixels in the image.
         int get_subpixel_sqrt() const { return subpixels; }
         void set_subpixel_sqrt(int subpx_sqrt) { subpixels = subpx_sqrt; }
+
+        /// Return the color named by the parameter.  The color's name is
+        /// defined in the scene definition file.
+        Color * get_color(std::string name) { return m_colors[name]; }
+
+        /// Add a color to the available colors.
+        void add_color(std::string name, Color * color) { m_colors[name] = color; }
 };
 //}}}
 
