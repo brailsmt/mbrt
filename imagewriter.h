@@ -33,9 +33,9 @@ class ImageWriter {
 
 class PpmImageWriter : public ImageWriter {
     private:
-        std::string filename;
-        int px_height;
-        int px_width;
+        std::string m_filename;
+        int m_px_height;
+        int m_px_width;
 
     public:
         PpmImageWriter(std::string _filename, int _height, int _width);
@@ -49,10 +49,10 @@ class PpmImageWriter : public ImageWriter {
 class ImageWriterFactory {
     public:
         /// Map of extensions to the type of ImageWriter class sould be created.
-        ExtensionMap extension_list;
+        ExtensionMap m_extension_list;
 
-        ImageWriterFactory() : extension_list() {
-            extension_list["ppm"] = PPM_IMAGE;
+        ImageWriterFactory() : m_extension_list() {
+            m_extension_list["ppm"] = PPM_IMAGE;
         }
 
         /// This returns a pointer the right type of ImageWriter based on the extension of the filename passed in.
@@ -62,8 +62,8 @@ class ImageWriterFactory {
 
             // Use PPM as the default.
             ImageTypes type = PPM_IMAGE;
-            if (extension_list.find(ext) != extension_list.end()) {
-                type = extension_list[ext];
+            if (m_extension_list.find(ext) != m_extension_list.end()) {
+                type = m_extension_list[ext];
             }
 
             switch (type) {

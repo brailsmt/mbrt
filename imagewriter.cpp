@@ -16,9 +16,9 @@ using std::endl;
 
 //{{{
 PpmImageWriter::PpmImageWriter(std::string _filename, int _height, int _width)
-        : filename(_filename),
-          px_height(_height),
-          px_width(_width) 
+        : m_filename(_filename),
+          m_px_height(_height),
+          m_px_width(_width) 
 {
 }
 //}}}
@@ -26,21 +26,21 @@ PpmImageWriter::PpmImageWriter(std::string _filename, int _height, int _width)
 //{{{
 void PpmImageWriter::write_image(Color * data) {
 
-    FILE * _file = fopen(filename.c_str(), "w+");
+    FILE * _file = fopen(m_filename.c_str(), "w+");
     if ( _file == NULL ) {
-        cout << "Could not open " << filename << "!  Aborting save!";
+        cout << "Could not open " << m_filename << "!  Aborting save!";
         exit(EXIT_FAILURE);
     }
 
     int header_length = 32;
     char header[header_length];
     memset(header, 0x0, header_length);
-    snprintf(header, header_length, "P6 %i %i %i ", px_width, px_height, PPM_MAX_VAL);
+    snprintf(header, header_length, "P6 %i %i %i ", m_px_width, m_px_height, PPM_MAX_VAL);
 
     // Write the ppm header.
     fwrite(header, sizeof(char), strlen(header), _file);
     // Write the data.
-    for ( int i = 0; i < (px_width * px_height); ++i) {
+    for ( int i = 0; i < (m_px_width * m_px_height); ++i) {
         uchar rgbdata[] = {
                               data[i].get_rgb_red(),
                               data[i].get_rgb_green(),
@@ -53,7 +53,7 @@ void PpmImageWriter::write_image(Color * data) {
 
     int x, y;
     getyx(stdscr, y, x);
-    mvprintw(y, 0, "Saved rendered image to %s", filename.c_str());
+    mvprintw(y, 0, "Saved rendered image to %s", m_filename.c_str());
     refresh();
 }
 //}}}

@@ -9,9 +9,10 @@
 /// This class defines various properties of materials from which primitives are made.
 class CheckeredMaterial {
     protected:
-    Material * m_material_one;
-    Material * m_material_two;
-    int choose_material(const Point3D& intersection_point) const ;
+        Material * m_material_one;
+        Material * m_material_two;
+
+        int choose_material(const Point3D& intersection_point) const ;
 
     public:
         CheckeredMaterial(Material * one, Material * two)
@@ -28,7 +29,6 @@ class CheckeredMaterial {
 
 
         virtual ~CheckeredMaterial() {
-
             //delete m_color;
         }
 
