@@ -8,15 +8,16 @@
 
     <camera x='0.0' y='0.0' z='-100' />
 
-    <light_sources>
+    <colors>
         <color name='white'  red='0xff' green='0xff' blue='0xff' />
+        <color name='red'   red='0xff' green='0x00' blue='0x00' />
+    </colors>
 
+    <light_sources>
         <sphere x='20.0' y='-25' z='-50' radius='0.1' color='white' />
     </light_sources>
 
     <objects>
-        <color name='red'   red='0xff' green='0x00' blue='0x00' />
-
         <sphere x='  0' y='  0' z='  0' radius='8' color='red' />
     </objects>
 </scene>

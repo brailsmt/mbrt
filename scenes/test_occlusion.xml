@@ -7,11 +7,16 @@
 
     <camera x='0.0' y='0.0' z='-100' />
 
-    <light_sources>
+    <colors>
         <color name='blue_light' red='0x00' green='0x00' blue='0xff' />
         <color name='red_light'  red='0xff' green='0x00' blue='0x00' />
         <color name='white_light'  red='0xff' green='0xff' blue='0xff' />
 
+        <color name='clr' red='0xff' green='0xff' blue='0xff' />
+        <color name='blue' red='0x00' green='0x00' blue='0xff' />
+    </colors>
+
+    <light_sources>
         <sphere x='-10.0' y='0' z='0' radius='0.1' color='white_light' />
         <!--
         <sphere x=' 5.0' y='-5.0' z='0' radius='0.1' color='white_light' />
@@ -20,9 +25,6 @@
     </light_sources>
 
     <objects>
-        <color name='clr' red='0xff' green='0xff' blue='0xff' />
-        <color name='blue' red='0x00' green='0x00' blue='0xff' />
-
         <sphere x=' 10' y='  0' z='5' radius='0.75' color='clr' />
         <sphere x=' 10' y='  0' z='-2.1' radius='0.75' color='blue' />
         <sphere x='  0' y='  0' z='0'    radius='0.75' color='clr' />
