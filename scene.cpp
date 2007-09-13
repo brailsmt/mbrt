@@ -1,7 +1,6 @@
 
 #include "raytrace_defs.h"
 #include "primitive.h"
-#include "sphere.h"
 #include "scene.h"
 #include "material.h"
 #include "sceneparser.h"

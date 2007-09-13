@@ -4,7 +4,8 @@
 /// &copy; 2007 Michael Brailsford
 
 #include "sceneparser.h"
-#include "sphere.h"
+#include "primitive.h"
+#include "plugins/sphere.h"
 #include "scene.h"
 
 #include <iostream>
@@ -219,9 +220,8 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
         if(m_node_handlers.find((char *)child->name) != m_node_handlers.end()) {
             Primitive * prim = m_node_handlers[(char *)child->name].emit(scene, child);
 
-            // Make the primitive a light sources since it was in the <light_sources> tag.
+            // Make the primitive a light source since it was in the <light_sources> tag.
             prim->set_is_light(true);
-            cout << "setting light source" << endl;
 
             // Add the primitive to the scene
             scene->get_scene()->push_back(prim);

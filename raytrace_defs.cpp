@@ -3,7 +3,7 @@
 #include "primitive.h"
 #include "ray.h"
 #include <iostream>
-#include "sphere.h"
+#include "primitive.h"
 #include "scene.h"
 #include <ncurses.h>
 
