@@ -1,0 +1,23 @@
+require '../build.rb'
+import "md5"
+import "autoclean"
+
+src  = Rant::FileList[ '*.cpp' ] 
+
+objs = src.ext( 'o' )
+mycconf = CompilerConfig.new
+mycconf.add_incdirs( Rant::FileList[ "..", "." ] )
+
+gen AutoClean
+
+##default rule for .o files
+gen Rule, :o => :cpp do |task_info|
+    cconf = var['cconf']
+    sys "#{cconf.cxx} #{cconf.cflags} #{mycconf.incdirs} #{cconf.incdirs} -c -o #{task_info.name} #{task_info.source}"
+end
+
+#make the static library
+desc "Make the mbrt_plugin library"
+file "libplugins.a" => objs do |task_info|
+    sys "ar rcs #{task_info.name} #{task_info.prerequisites}"
+end
