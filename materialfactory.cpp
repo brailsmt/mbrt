@@ -36,9 +36,9 @@ bool MaterialFactory::registerFunction(std::string type, void * createFunction)
         return false;
     }
 
-    std::cout << "Adding function to map..." << std::endl;
+    std::cout << "Adding material of type '" << type << "' ..." ;
     m_createFunctions[type] = createFunction;
-    std::cout << "...done (adding function to map)" << std::endl;
+    std::cout << "...done" << std::endl;
 
 }
 

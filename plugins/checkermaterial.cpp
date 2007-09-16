@@ -1,11 +1,13 @@
 #include "checkermaterial.h"
 
+CheckeredMaterial::CheckeredMaterialStaticInit CheckeredMaterial::m_init;
+
 int CheckeredMaterial::choose_material(const Point3D& intersection_point) const
 {
     int bit = 1;
-    bit *= ( ( (int)(intersection_point.x) ) ) % 2 == 1 ? 1 : -1; 
-    bit *= ( ( (int)(intersection_point.y) ) ) % 2 == 1 ? 1 : -1; 
-    bit *= ( ( (int)(intersection_point.z) ) ) % 2 == 1 ? 1 : -1; 
+    bit *= ( ( ( (int)(intersection_point.x) ) ) % 2 ) == 1 ? 1 : -1; 
+    bit *= ( ( ( (int)(intersection_point.y) ) ) % 2 ) == 1 ? 1 : -1; 
+    bit *= ( ( ( (int)(intersection_point.z) ) ) % 2 )== 1 ? 1 : -1; 
     return bit;
 }
 
@@ -79,3 +81,14 @@ void CheckeredMaterial::set_opacity(double opacity)
     m_material_one->set_opacity(opacity);
     m_material_two->set_opacity(opacity);
 }
+
+
+Material * CheckeredMaterial::createCheckeredMaterial(std::map<std::string, std::string> props)
+{
+    Scene * scene = Scene::get_instance();
+    Material * one = scene->get_material(props["material1"]);
+    Material * two = scene->get_material(props["material2"]);
+    return new CheckeredMaterial(one, two);
+
+}
+

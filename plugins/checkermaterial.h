@@ -5,10 +5,25 @@
 #include "color.h"
 #include "raytrace_defs.h"
 #include "material.h"
+#include "materialfactory.h"
 
 /// This class defines various properties of materials from which primitives are made.
-class CheckeredMaterial {
+class CheckeredMaterial : public Material{
+
+    /// Dummy class to provide static initialization
+    class CheckeredMaterialStaticInit
+    {
+        public:
+            CheckeredMaterialStaticInit()
+            {
+                MaterialFactory::get_instance()->registerFunction("checkered", (void *) CheckeredMaterial::createCheckeredMaterial);
+            }
+    };
+
     protected:
+    /// Dummy variable to force static initialization
+        static CheckeredMaterialStaticInit m_init;
+
         Material * m_material_one;
         Material * m_material_two;
 
@@ -46,5 +61,8 @@ class CheckeredMaterial {
 
         virtual double get_opacity(const Point3D& intersesction_point) const ; 
         virtual void set_opacity(double opacity) ; 
+
+    public:
+        static Material * createCheckeredMaterial(std::map<std::string, std::string>);
 };
 #endif

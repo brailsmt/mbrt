@@ -3,7 +3,7 @@
         <width  pixels="512" />
         <height pixels="512" />
         <file name="renders/reflection_test.ppm" />
-        <subpixels square_of='5'/>
+        <subpixels square_of='2'/>
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />
@@ -18,7 +18,9 @@
     </colors>
 
     <materials>
-        <material name='solid1' type='solid' color='green'/>
+        <material name='solid1' type='solid' color='blue' />
+        <material name='solid2' type='solid' color='white' />
+        <material name='checkered' type='checkered' material1='solid1' material2='solid2' />
     </materials>
 
     <light_sources>
@@ -27,7 +29,7 @@
 
     <objects>
 
-        <sphere x='  0' y='  0' z='  0' radius='3' material='solid1' color='yellow' />
+        <sphere x='  0' y='  0' z='  0' radius='3' material='checkered' color='yellow' />
         <sphere x=' 10' y='  0' z=' 10' radius='3' color='blue'  />
         <sphere x='  0' y=' 10' z=' 15' radius='3' color='red'  />
         <sphere x='  0' y='-10' z='-15' radius='3' color='green'  />
