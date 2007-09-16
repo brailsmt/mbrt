@@ -8,6 +8,8 @@
 #include "plugins/sphere.h"
 #include "scene.h"
 
+#include "materialfactory.h"
+
 #include <iostream>
 
 using std::cout;
@@ -53,6 +55,7 @@ void SceneParser::register_default_handlers() {
     m_node_handlers["objects"      ].connect(sigc::mem_fun(this, &SceneParser::parse_objects));
     m_node_handlers["sphere"       ].connect(sigc::mem_fun(this, &SceneParser::parse_sphere));
     m_node_handlers["colors"       ].connect(sigc::mem_fun(this, &SceneParser::parse_colors));
+    m_node_handlers["materials"    ].connect(sigc::mem_fun(this, &SceneParser::parse_materials));
 }
 //}}}
 //{{{
@@ -94,6 +97,33 @@ map<string, string> SceneParser::get_properties(xmlNode * node) {
     }
 
     return rv;
+}
+//}}}
+//{{{
+Primitive * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
+    xmlNode * child = node->children;
+
+    // Parse all materials
+    while(child != node->last) {
+        if(strcmp((char *)child->name, "material") == 0) {
+            map<string, string> props = get_properties(child);
+
+            if ( props.empty() == false ) {
+                Material * material = MaterialFactory::get_instance()->create(props["type"], props);
+                if(material == NULL)
+                {
+                    std::cout << "ERROR: Material of type '" << props["type"] << "' unknown." << std::endl;
+                    exit(1);
+                }
+
+                scene->add_material(props["name"], material);
+            }
+        }
+
+        child = child->next;
+    }
+
+    return NULL;
 }
 //}}}
 //{{{

@@ -8,9 +8,6 @@
 
     <camera x='0.0' y='0.0' z='-100' />
 
-    <materials>
-        <material name='solid1' type='solid' color='green'/>
-    </materials>
 
     <colors>
         <color name='white' red='0xff' green='0xff' blue='0xff' />
@@ -19,6 +16,10 @@
         <color name='green' red='0x00' green='0xff' blue='0x00' />
         <color name='yellow' red='0xff' green='0xff' blue='0x00' />
     </colors>
+
+    <materials>
+        <material name='solid1' type='solid' color='green'/>
+    </materials>
 
     <light_sources>
         <sphere x='-10.0' y='0' z='0' radius='0.1' color='white' />

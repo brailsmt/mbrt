@@ -34,9 +34,13 @@ class Sphere : public Primitive {
         {
 
             m_center = Point3D(x,y,z);
-            Color * color = Scene::get_instance()->get_color(color_name);
-            color = color ? color : new Color(1.0,0.5,0.5);
-            m_material = new Material(color ,false);
+            m_material = Scene::get_instance()->get_material(material_name);
+            if(m_material == NULL)
+            {
+                Color * color = Scene::get_instance()->get_color(color_name);
+                color = color ? color : new Color(1.0,0.5,0.5);
+                m_material = new Material(color ,false);
+            }
         }
 
         /// Create a sphere.

@@ -13,6 +13,7 @@ class Primitive;
 class Point3D;
 class Color;
 class Sphere;
+class Material;
 
 /// @todo The XML parsing needs to be completely reworked.  As it is currently written, this class
 /// will not scale well and will be tightly coupled with the objects in the ray tracer.  This should
@@ -32,6 +33,9 @@ class Scene {
         /// This is a map of all colors available for the scene.
         std::map<std::string, Color *> m_colors;
 
+        /// This is a map of all materials available for the scene.
+        std::map<std::string, Material *> m_materials;
+        
         /// This is the point which describes the camera or eye which is looking into the scene.
         Point3D camera;
 
@@ -104,6 +108,13 @@ class Scene {
 
         /// Add a color to the available colors.
         void add_color(std::string name, Color * color) { m_colors[name] = color; }
+        
+        /// Return the material named by the parameter.  The material is
+        /// defined in the scene definition file.
+        Material * get_material(std::string name) { return m_materials[name]; }
+
+        /// Add a material to the available materials.
+        void add_material(std::string name, Material * material) { m_materials[name] = material; }
 };
 //}}}
 

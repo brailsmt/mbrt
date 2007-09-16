@@ -34,6 +34,7 @@ class SceneParser : public sigc::trackable {
 
         /// Parse a set of color nodes and return them in a map<char *, Color *>.
         Primitive * parse_colors(Scene * scene, xmlNode * node);
+        Primitive * parse_materials(Scene * scene, xmlNode * node); 
 
 
     protected:

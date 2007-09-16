@@ -13,7 +13,7 @@ class MaterialFactory
 {
     protected:
 
-        static std::map<std::string, void *>  m_createFunctions;
+        std::map<std::string, void *>  m_createFunctions;
     public:
         /** Creates a Material object based on the type and the passed in parameters
          *
@@ -21,7 +21,7 @@ class MaterialFactory
          * @param attributes    Attributes used to build materials
          * @return An initialized Material object
          */
-       static Material * create(std::string type, std::map<std::string, std::string> attributes);
+       Material * create(std::string type, std::map<std::string, std::string> attributes);
 
        /**
         * Registers the function to create materials of the given type.
@@ -32,7 +32,15 @@ class MaterialFactory
         *                           under the type name.  The first to register will always win, and a warning will
         *                           be logged that another attempt was made to register.
         */
-       static bool registerFunction(std::string type, void * createFunction);
+        bool registerFunction(std::string type, void * createFunction);
+
+
+        /**
+         * Return an instance of MaterialFactory.
+         */
+
+        static MaterialFactory * get_instance();
+
 };
 
 #endif

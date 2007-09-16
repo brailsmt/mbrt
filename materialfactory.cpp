@@ -6,7 +6,7 @@
 using std::map;
 using std::string;
 
-std::map<std::string, void *>  MaterialFactory::m_createFunctions;
+//std::map<std::string, void *>  MaterialFactory::m_createFunctions;
 
 
 Material * MaterialFactory::create(string type, map<string,string> attributes)
@@ -23,8 +23,8 @@ Material * MaterialFactory::create(string type, map<string,string> attributes)
     {
         return NULL;
     }
-
-    return call(attributes);
+    Material * ret = call(attributes);
+    return ret;
 }
     
 
@@ -36,6 +36,19 @@ bool MaterialFactory::registerFunction(std::string type, void * createFunction)
         return false;
     }
 
+    std::cout << "Adding function to map..." << std::endl;
     m_createFunctions[type] = createFunction;
+    std::cout << "...done (adding function to map)" << std::endl;
 
 }
+
+MaterialFactory * MaterialFactory::get_instance()
+{
+    static MaterialFactory * instance = NULL;
+    if(instance == NULL)
+    {
+        instance = new MaterialFactory();
+    }
+    return instance;
+}
+
