@@ -29,10 +29,11 @@
 
     <objects>
 
-        <sphere x='  0' y='  0' z='  0' radius='3' material='checkered' color='yellow' />
+        <sphere x='  0' y='  0' z='  0' radius='3' color='yellow' />
         <sphere x=' 10' y='  0' z=' 10' radius='3' color='blue'  />
         <sphere x='  0' y=' 10' z=' 15' radius='3' color='red'  />
-        <sphere x='  0' y='-10' z='-15' radius='3' color='green'  />
+        <!-- Specifying material overrides any color value. -->
+        <sphere x='  0' y='-10' z='-15' radius='3' material='checkered' color='green'  />
         <!--
         <sphere x='  0' y='  0' z='0  ' radius='0.75' color='clr' />
         <sphere x='  0' y='-10' z='0' radius='1.5' color='clr' />

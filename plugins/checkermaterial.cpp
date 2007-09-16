@@ -1,13 +1,13 @@
 #include "checkermaterial.h"
+#include <iostream>
 
 CheckeredMaterial::CheckeredMaterialStaticInit CheckeredMaterial::m_init;
 
 int CheckeredMaterial::choose_material(const Point3D& intersection_point) const
 {
-    int bit = 1;
-    bit *= ( ( ( (int)(intersection_point.x) ) ) % 2 ) == 1 ? 1 : -1; 
-    bit *= ( ( ( (int)(intersection_point.y) ) ) % 2 ) == 1 ? 1 : -1; 
-    bit *= ( ( ( (int)(intersection_point.z) ) ) % 2 )== 1 ? 1 : -1; 
+    int bit = ( ( ( (int)(intersection_point.x) ) ) % 2 ) == 0 ? 1 : -1; 
+    bit *= ( ( ( (int)(intersection_point.y) ) ) % 2 ) == 0 ? 1 : -1; 
+    bit *= ( ( ( (int)(intersection_point.z) ) ) % 2 )== 0 ? 1 : -1; 
     return bit;
 }
 
