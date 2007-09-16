@@ -62,10 +62,10 @@ file :dox => Rant::FileList[ '**/*.cpp', "**/*.h" ] do |task_info|
 end
 
 ## !!! Quick hack until .so loading is in place !!! ###
-## TODO: remove plugins/checkermaterial.o from link line! ###
+## TODO: remove plugins/* from link line! ###
 desc "Build the ray tracer (rt)"
 file :rt => [ SUBLIBS.map { |sd| "#{sd}/lib#{sd}.a" }, objs ].flatten do |task_info|
-    sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{objs.join(' ')} plugins/checkermaterial.o #{cconf.libdirs} #{cconf.libs}"
+    sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{objs.join(' ')} plugins/noisematerial.o plugins/checkermaterial.o #{cconf.libdirs} #{cconf.libs}"
 end
 
 desc "default rule for .o files"

@@ -18,9 +18,13 @@
     </colors>
 
     <materials>
-        <material name='solid1' type='solid' color='blue' />
-        <material name='solid2' type='solid' color='white' />
-        <material name='checkered' type='checkered' material1='solid1' material2='solid2' />
+        <material name='solidBlue' type='solid' color='blue' />
+        <material name='solidWhite' type='solid' color='white' />
+        <material name='solidYellow' type='solid' color='yellow' />
+        <material name='solidRed' type='solid' color='red' />
+
+        <material name='checkered' type='checkered' material1='solidBlue' material2='solidWhite' />
+        <material name='noise' type='noise' material1='solidBlue' material2='solidWhite' />
     </materials>
 
     <light_sources>
@@ -29,7 +33,7 @@
 
     <objects>
 
-        <sphere x='  0' y='  0' z='  0' radius='3' color='yellow' />
+        <sphere x='  0' y='  0' z='  0' radius='3' material='noise' color='yellow' />
         <sphere x=' 10' y='  0' z=' 10' radius='3' color='blue'  />
         <sphere x='  0' y=' 10' z=' 15' radius='3' color='red'  />
         <!-- Specifying material overrides any color value. -->

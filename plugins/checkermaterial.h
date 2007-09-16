@@ -7,7 +7,8 @@
 #include "material.h"
 #include "materialfactory.h"
 
-/// This class defines various properties of materials from which primitives are made.
+/// This class defines a checkered material that is a composite of
+/// two other materials.
 class CheckeredMaterial : public Material{
 
     /// Dummy class to provide static initialization
