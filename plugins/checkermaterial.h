@@ -25,21 +25,33 @@ class CheckeredMaterial : public Material{
     /// Dummy variable to force static initialization
         static CheckeredMaterialStaticInit m_init;
 
-        Material * m_material_one;
-        Material * m_material_two;
+        /// First material of composite
+        Material *  m_material_one;
+        
+        /// Second material of composite
+        Material *  m_material_two;
 
+        /// Scaling to apply to pattern
+        // TODO: deprecate this.  There are much better approaches to scaling
+        // things that could be utilized
+        double      m_scale;
+
+        /// Return 0 to use second material, nonzero to use first material
         int choose_material(const Point3D& intersection_point) const ;
 
     public:
-        CheckeredMaterial(Material * one, Material * two)
+        CheckeredMaterial(Material * one, Material * two, double scale)
         {
             m_material_one = one;
             m_material_two = two;
+            m_scale = scale;
         }
 
         CheckeredMaterial(const CheckeredMaterial &other)
                 :  m_material_one(other.m_material_one),
-                    m_material_two(other.m_material_two) 
+                    m_material_two(other.m_material_two),
+                    m_scale(other.m_scale)
+
         {
         }
 

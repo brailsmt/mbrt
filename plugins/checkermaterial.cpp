@@ -5,9 +5,9 @@ CheckeredMaterial::CheckeredMaterialStaticInit CheckeredMaterial::m_init;
 
 int CheckeredMaterial::choose_material(const Point3D& intersection_point) const
 {
-    int bit = ( ( ( (int)(intersection_point.x) ) ) % 2 ) == 0 ? 1 : -1; 
-    bit *= ( ( ( (int)(intersection_point.y) ) ) % 2 ) == 0 ? 1 : -1; 
-    bit *= ( ( ( (int)(intersection_point.z) ) ) % 2 )== 0 ? 1 : -1; 
+    int bit = ( ( ( (int)(intersection_point.x * m_scale) ) ) % 2 ) == 0 ? 1 : -1; 
+    bit *= ( ( ( (int)(intersection_point.y * m_scale) ) ) % 2 ) == 0 ? 1 : -1; 
+    bit *= ( ( ( (int)(intersection_point.z * m_scale) ) ) % 2 )== 0 ? 1 : -1; 
     return bit;
 }
 
@@ -88,7 +88,12 @@ Material * CheckeredMaterial::createCheckeredMaterial(std::map<std::string, std:
     Scene * scene = Scene::get_instance();
     Material * one = scene->get_material(props["material1"]);
     Material * two = scene->get_material(props["material2"]);
-    return new CheckeredMaterial(one, two);
+
+    // TODO: this is done so many times it really needs a helper function
+    double scale = props.count("scale") > 0 ?
+        (double)strtod(props["scale"].c_str(), NULL)       :  1.0;
+
+    return new CheckeredMaterial(one, two, scale);
 
 }
 

@@ -62,6 +62,7 @@ double NoiseMaterial::choose_material(const Point3D& intersection_point) const
 
 
     // TODO: replace with "double modf(double value, int* whole)"
+    //
     // Whole portion of coordinates, wraped to size of noise matrix
     int x = (int)floor(f_x) % MAX_NOISE;
     int y = (int)floor(f_y) % MAX_NOISE;
@@ -103,13 +104,6 @@ double NoiseMaterial::choose_material(const Point3D& intersection_point) const
     d = p1 - p0;
 
     return ((d * oz) + (p0 * 1.0)) / (RAND_MAX * 1.0);
-    /*
-    double bit = ( ( ( (int)(intersection_point.x) ) ) % 2 ) == 0 ? 0.15 : 0.0; 
-    bit += ( ( ( (int)(intersection_point.y) ) ) % 2 ) == 0 ? 0.15 : 0.0; 
-    bit += ( ( ( (int)(intersection_point.z) ) ) % 2 )== 0 ? 0.20 : 0.0; 
-    bit += (rand() / (RAND_MAX * 1.0) ) * 0.5;
-    return bit;
-    */
 }
 
 Color * NoiseMaterial::get_color(const Point3D& intersection_point) const 
