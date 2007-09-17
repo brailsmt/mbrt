@@ -1,0 +1,18 @@
+
+Release Notes
+-------------
+
+This is a pre-release version of mbrt.  It officially has no version number, but is probably best thought of simply as version 0.0, 
+with a build number of whatever revision you happen to have checked out.
+
+Building on Cygwin
+------------------
+
+1) You will need to download and build libsigc++ as Cygwin does not current install this library.  mbrt is known to work with version 2.0.18.
+2) Rant does not currently ship with Ruby, so you will need to obtain this from the rubygem or other package.
+3) The compiler will currently choke on a clean build because Cygwin's g++ creates rt.exe instead of rt for the final executable. The
+    simplest solution is to execute  'ln -s rt.exe rt' from the trunk before your first build.
+4) All other dependancies should be resolved from a full Cygwin install.  If you are not running a full cygwin install, please see
+    the Rantfile to determine what other dependencies will be needed.
+
+
