@@ -17,10 +17,13 @@ class Sphere : public Primitive {
         /// The radius of the sphere.
         double m_radius;
 
+        /// Material of this primitive.  Overrides any color value.
         std::string m_material_name;
+        /// Color of this primitive.  Overridden by material, if it exists.
         std::string m_color_name;
 
     public:
+        /// Create a default sphere with a radius of 1.
         Sphere() : m_radius(1) {
             m_material = new Material(false);
         }
@@ -44,6 +47,7 @@ class Sphere : public Primitive {
         }
 
         /// Create a sphere.
+        //TODO: verify that this constructor is used and remove it if not.
         template <class _T>
         Sphere( Material * m, _T x, _T y, _T z, _T r, std::string color_name = "", std::string material_name = "") 
             : m_radius((double)r),
@@ -121,6 +125,9 @@ class Sphere : public Primitive {
         /// @return True if the ray collides with this sphere.
         virtual bool collides_with(const Ray &ray, double &t) const;
 
+        /// Return the surface normal of the sphere.  A sphere's surface normal is the vector
+        /// from the center of the sphere to the intersection point, translated to the intersection
+        /// point and normalized.
         virtual Ray get_normal(const Point3D &p) ;
 };
 

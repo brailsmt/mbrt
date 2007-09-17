@@ -6,6 +6,16 @@
 #include "raytrace_defs.h"
 
 /// This class defines various properties of materials from which primitives are made.
+/// Each get_* method takes the point in which the ray intersected with the primitive. Note that
+/// the material has no concept of the actual shape of the primitive, and can only make
+/// a determination of each attribute based on where in space it is.  Therefore, what is rendered
+/// could be considered the intersection of the infinite space in which the material exists and
+/// the finite space in which the primitive exists.
+///
+/// Having said all that, it might make sense anyway in the future to pass in the surface normal
+/// as well, or some other generic data about the primitive, to facilitate materials such as
+/// texture-maps or allow for bizarre, abstract materials.
+
 class Material {
     protected:
         /// This is the percentage of light that is reflected off this material.  This value is
@@ -43,6 +53,12 @@ class Material {
         }
 
     public:
+        // You can never have too many constructors.
+        //
+        // Oh wait, yes you can.  TODO: find out where and
+        // how all these are used and get rid of the unnecessary ones.
+
+        // Default constructor to make std::map happy.
         Material()
                 : m_reflection_coefficient(1.0),
                   m_diffusion_factor(0.25),
@@ -79,6 +95,9 @@ class Material {
                   m_refraction_index(1.35),
                   m_opacity(opacity) {}
 
+        /// Fully construct a material with no defaults.
+        //
+        // Do not remove this constructor. Used in create... method of solidmaterial.cpp
         Material(Color * m_color, 
                 bool is_light , 
                 double reflection, 
@@ -94,6 +113,7 @@ class Material {
                   m_refraction_index(refraction),
                   m_opacity(opacity) {}
 
+        /// Copy constructor.
         Material(const Material &other)
                 : m_reflection_coefficient(other.m_reflection_coefficient),
                   m_diffusion_factor(other.m_diffusion_factor),
@@ -106,19 +126,42 @@ class Material {
             delete m_color;
         }
 
+        /// Calculate color at given point on the material.
         virtual Color * get_color(const Point3D& intersesction_point) const;
 
+        /// Determine if material emits light at given point.  Note: due to the
+        /// rendering algoritm currently being used, varying this value based
+        /// on position might have unexpected results.
         virtual bool is_light(const Point3D& intersesction_point) const;
+
+        /// Set whether or not object emits light.  Subclasses are not required
+        /// to do anything useful with this information.
         virtual void set_is_light(bool v);
 
+        /// Get the diffusion coefficient at the point.
         virtual double get_diffuse(const Point3D& intersesction_point) const;
+
+        /// Set the diffusion coefficient for the object.  Subclasses are not required
+        /// to do anything useful with this information.
         virtual void set_diffuse(double diffuse);
 
+        /// Get reflection coefficient at the point.
         virtual double get_reflection(const Point3D& intersesction_point) const;
+
+        /// Get reflectivity at the point.
         virtual double get_reflectivity(const Point3D& intersesction_point) const;
+
+        /// Get the index of refraction at the given point.  Note that varying the
+        /// index of refraction across the material will most likely return results
+        /// that are not accurate.
         virtual double get_refraction_index(const Point3D& intersesction_point) const;
 
+        /// Get the opacity of this material at the point.
         virtual double get_opacity(const Point3D& intersesction_point) const;
+
+        /// Set opacity for the object.  Subclasses are not required to do
+        /// anything useful with this information.
         virtual void set_opacity(double opacity);
 };
+
 #endif

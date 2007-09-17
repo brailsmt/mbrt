@@ -48,9 +48,16 @@ class Ray {
 
         bool is_normalized() { return _is_normalized; }
 
+        /// Returns the origin
+        /// @return the origin
         Point3D origin() const { return _origin; }
+
+        /// Get the direction of the ray.
+        /// @return the direction
         const Vector &direction() const { return _direction; }
 
+        /// Convert the ray to a printable representation
+        /// @return string that describes the ray
         std::string to_string() {
             std::ostringstream rv;
             rv << "origin = " << _origin.to_string() << ", direction = " << _direction.to_string();
@@ -60,6 +67,7 @@ class Ray {
 //}}}
 
 //{{{
+/// Normalize the ray.  A normalized ray has a length of 1.0 and the same direction as the nonnormalized ray.
 void Ray::normalize() {
     double norm = sqrtf(_direction.x * _direction.x + _direction.y * _direction.y + _direction.z * _direction.z);
     _direction.x /= norm;

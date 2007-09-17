@@ -8,20 +8,26 @@ class Point3D;
 typedef Point3D Vector;
 
 //{{{
+/// A three-dimensional point in space.
 class Point3D {
     public:
+        
         double x;
         double y;
         double z;
 
+        /// Default constructor.  Places point on the origin.
         Point3D() : x(0.0), y(0.0), z(0.0) {}
 
+        /// Creates a point on the XY plane
         template <class _T>
         Point3D(_T _x, _T _y) : x((double)_x), y((double)_y), z(0.0) {}
 
+        /// Creates a point in three dimenisional space.
         template <class _T>
         Point3D(_T _x, _T _y, _T _z) : x((double)_x), y((double)_y), z((double)_z) {}
 
+        /// Copy constructor
         Point3D(const Point3D &other) : x(other.x), y(other.y), z(other.z) {}
 
         /// Returns the distance between this point and the other point.  This is defined by the
@@ -39,6 +45,7 @@ class Point3D {
             return rv.str();
         }
 
+        /// Sets the coordinates of the point
         template <class _T>
         void set(_T x, _T y, _T z) {
             this->x = (double)x;
@@ -59,6 +66,7 @@ class Point3D {
 
 // This is inline, it must be defined in the header.
 //{{{
+/// Calculate the distant from this point to another point.
 double Point3D::distance_to(const Point3D &other) {
     double dx = x - other.x;
     double dy = y - other.y;

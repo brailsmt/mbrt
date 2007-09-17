@@ -6,11 +6,17 @@
 
 #include <iostream>
 
+/// This is the most basic material.  It has a single set of
+/// attributes that return the same value regardless of the
+/// intersection point.  Currently, this is the only material
+/// that can exist at the leaf nodes of a material tree.
 class SolidMaterial : public Material
 {
+    /// Static initialization.  Registers the material with the MaterialFactory.
     class SolidMaterialStaticInit
     {
         public:
+            /// Register this class with the factory.
             SolidMaterialStaticInit()
             {
                 MaterialFactory::get_instance()->registerFunction("solid", (void *) SolidMaterial::createSolidMaterial);
@@ -18,12 +24,11 @@ class SolidMaterial : public Material
     };
 
     private:
-        /**
-         * Dummy variable to run static initialization
-         */
+         /// Dummy variable to run static initialization
         static SolidMaterialStaticInit m_init;
 
     public:
+        /// Factory method to create a material from a set of attributes.
         static Material * createSolidMaterial(std::map<std::string, std::string>);
 
 };

@@ -12,12 +12,15 @@
 const int MAX_NOISE = 28;
 
 /// This class defines a composite material of two materials that are combined
-/// based on a noise function.
+/// based on a noise function. The result of the noise function is used to 
+/// base the return value of each attribute on a linear, weighted average of the 
+/// two materials.
 class NoiseMaterial : public Material{
-    /// Dummy class to provide static initialization
+    /// Helper class to provide static initialization
     class MaterialStaticInit
     {
         public:
+            /// Perform static initialization.  Registers class with material factory.
             MaterialStaticInit()
             {
                 MaterialFactory::get_instance()->registerFunction("noise", (void *) NoiseMaterial::createNoiseMaterial);
@@ -102,6 +105,7 @@ class NoiseMaterial : public Material{
         virtual void set_opacity(double opacity) ; 
 
     public:
+        /// Factory method to create noise material.
         static Material * createNoiseMaterial(std::map<std::string, std::string>);
 };
 

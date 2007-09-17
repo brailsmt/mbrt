@@ -9,10 +9,13 @@ class Material;
 /// Function pointer for create function within Material subclasses.
 typedef Material * (*MaterialCreateFunction)(std::map<std::string,std::string>);
 
+/// MaterialFactory allows materials to register themselves so that the
+/// parser can later create materials generically.
 class MaterialFactory
 {
     protected:
 
+        /// Map of function pointers to factory methods.
         std::map<std::string, void *>  m_createFunctions;
     public:
         /** Creates a Material object based on the type and the passed in parameters
