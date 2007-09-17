@@ -33,11 +33,17 @@ class ImageWriter {
 
 class PpmImageWriter : public ImageWriter {
     private:
+        /// path to save image to
         std::string m_filename;
+        
+        /// Height of image
         int m_px_height;
+        
+        /// Width of image
         int m_px_width;
 
     public:
+        /// Create image writter
         PpmImageWriter(std::string _filename, int _height, int _width);
 
         /// Write the image data to a ppm file.

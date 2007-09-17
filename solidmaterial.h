@@ -29,7 +29,9 @@ class SolidMaterial : public Material
 
     public:
         /// Factory method to create a material from a set of attributes.
-        static Material * createSolidMaterial(std::map<std::string, std::string>);
+        /// @param attributes A map of strings that determine the attributes of the material
+        /// @return A pointer to a SolidMaterial object.
+        static Material * createSolidMaterial(std::map<std::string, std::string> attributes);
 
 };
 

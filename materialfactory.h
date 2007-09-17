@@ -40,6 +40,8 @@ class MaterialFactory
 
         /**
          * Return an instance of MaterialFactory.
+         *
+         * @return instance of MaterialFactory
          */
 
         static MaterialFactory * get_instance();

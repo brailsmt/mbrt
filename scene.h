@@ -15,13 +15,16 @@ class Color;
 class Sphere;
 class Material;
 
-/// @todo The XML parsing needs to be completely reworked.  As it is currently written, this class
-/// will not scale well and will be tightly coupled with the objects in the ray tracer.  This should
-/// be rewritten using function pointers/libsigc to call the correct function based on the XML tag
-/// found.  This class should delegate the actual parsing of the elements to the corresponding
-/// classes.
+// @todo The XML parsing needs to be completely reworked.  As it is currently written, this class
+// will not scale well and will be tightly coupled with the objects in the ray tracer.  This should
+// be rewritten using function pointers/libsigc to call the correct function based on the XML tag
+// found.  This class should delegate the actual parsing of the elements to the corresponding
+// classes.
 
 //{{{
+/// Scene represents everything to be rendered.  This includes light sources,
+/// the camera, the objects to render, as well as a dictionary of colors and
+/// materials.
 class Scene {
     protected:
         /// This is the instance of the Scene class.

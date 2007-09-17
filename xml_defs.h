@@ -5,6 +5,8 @@
 ///
 /// This file contains definitions for XML parsing of scene defintions.
 
+// TODO: determine if this file still makes sense given the current direction of the project.
+
 #if 0
 #ifndef XML_DEFS_H
 #define XML_DEFS_H

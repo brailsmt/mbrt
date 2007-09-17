@@ -67,17 +67,25 @@ class Color {
         Color operator-(const Color &other) { return Color( m_red - other.m_red, m_green - other.m_green, m_blue - other.m_blue); }
 
         /// Set a new red value
+        /// @param new_red  The new value for the red component
         void set_red (double new_red) { m_red = (new_red < 1.0) ? new_red : 1.0; }
         /// Set a new green value
+        /// @param new_green  The new value for the green component
         void set_green (double new_green) { m_green = (new_green < 1.0) ? new_green : 1.0; }
         /// Set a new blue value
+        /// @param new_blue  The new value for the blue component
         void set_blue (double new_blue) { m_blue = (new_blue < 1.0) ? new_blue : 1.0; }
 
         /// Return red component scaled to 0..255
+        /// @return red component
         uchar get_rgb_red () const { return (uchar)(m_red * 255); }
+
         /// Return green component scaled to 0..255
+        /// @return green component
         uchar get_rgb_green() const { return (uchar)(m_green * 255); }
+        
         /// Return blue component scaled to 0..255
+        /// @return blue component
         uchar get_rgb_blue () const { return (uchar)(m_blue * 255); }
 };
 //}}}

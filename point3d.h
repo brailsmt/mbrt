@@ -12,8 +12,11 @@ typedef Point3D Vector;
 class Point3D {
     public:
         
+        /// Distance from origin on the x axis
         double x;
+        /// Distance from origin on the y axis
         double y;
+        /// Distance from origin on the z axis
         double z;
 
         /// Default constructor.  Places point on the origin.
@@ -38,7 +41,8 @@ class Point3D {
         /// @param other The other point to which we are determining the distance.
         inline double distance_to(const Point3D &other);
 
-
+        /// Convert to a string representation
+        /// @return string representation
         std::string to_string() {
             std::ostringstream rv;
             rv << "(" << x << ", " << y << ", " << z << ")";
@@ -67,6 +71,9 @@ class Point3D {
 // This is inline, it must be defined in the header.
 //{{{
 /// Calculate the distant from this point to another point.
+///
+/// @param other The point to find the distance to
+///@return distance to the point
 double Point3D::distance_to(const Point3D &other) {
     double dx = x - other.x;
     double dy = y - other.y;
@@ -76,6 +83,9 @@ double Point3D::distance_to(const Point3D &other) {
 //}}}
 
 /// Subtract the two vectors and return the new Vector.
+/// @param A First vector
+/// @param B Second vector
+/// @return result of operation
 //{{{
 inline Vector operator-(const Vector &A, const Vector &B) {
     return Vector(A.x - B.x, A.y - B.y, A.z - B.z);

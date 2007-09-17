@@ -127,40 +127,57 @@ class Material {
         }
 
         /// Calculate color at given point on the material.
-        virtual Color * get_color(const Point3D& intersesction_point) const;
+        /// @return Color at given point
+        virtual Color * get_color(const Point3D& intersection_point) const;
 
         /// Determine if material emits light at given point.  Note: due to the
         /// rendering algoritm currently being used, varying this value based
         /// on position might have unexpected results.
-        virtual bool is_light(const Point3D& intersesction_point) const;
+        ///
+        /// @return true if material emits light
+        virtual bool is_light(const Point3D& intersection_point) const;
 
         /// Set whether or not object emits light.  Subclasses are not required
         /// to do anything useful with this information.
+        ///
+        /// @param v True if material emits light
         virtual void set_is_light(bool v);
 
         /// Get the diffusion coefficient at the point.
-        virtual double get_diffuse(const Point3D& intersesction_point) const;
+        /// @param intersection_point Point in space where ray intersected an object
+        /// @return the diffusion coefficient at the given point.
+        virtual double get_diffuse(const Point3D& intersection_point) const;
 
         /// Set the diffusion coefficient for the object.  Subclasses are not required
         /// to do anything useful with this information.
         virtual void set_diffuse(double diffuse);
 
         /// Get reflection coefficient at the point.
-        virtual double get_reflection(const Point3D& intersesction_point) const;
+        /// @param intersection_point Point in space where ray intersected an object
+        /// @return the reflection coefficient at the given point
+        virtual double get_reflection(const Point3D& intersection_point) const;
 
         /// Get reflectivity at the point.
-        virtual double get_reflectivity(const Point3D& intersesction_point) const;
+        /// @param intersection_point Point in space where ray intersected an object
+        /// @return the reflectivity at the given point
+        virtual double get_reflectivity(const Point3D& intersection_point) const;
 
         /// Get the index of refraction at the given point.  Note that varying the
         /// index of refraction across the material will most likely return results
         /// that are not accurate.
-        virtual double get_refraction_index(const Point3D& intersesction_point) const;
+        /// @param intersection_point Point in space where ray intersected an object
+        /// @return refraction index at the given point
+        virtual double get_refraction_index(const Point3D& intersection_point) const;
 
         /// Get the opacity of this material at the point.
-        virtual double get_opacity(const Point3D& intersesction_point) const;
+        /// @param intersection_point Point in space where ray intersected an object
+        /// @return opacity at the given point
+        virtual double get_opacity(const Point3D& intersection_point) const;
 
         /// Set opacity for the object.  Subclasses are not required to do
         /// anything useful with this information.
+        ///
+        /// @param opacity The suggested opacity for the material
         virtual void set_opacity(double opacity);
 };
 

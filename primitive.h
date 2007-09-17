@@ -79,12 +79,17 @@ class Primitive {
         }
 
         /// Return the center of the primitive.
+        /// @return Center of the primitive
         virtual const Point3D get_center() const
         {
             return m_center;
         }
 
     protected:
+        /// Material of the object. Materials may be simple materials,
+        /// such as a solid color, or they may be complicated composites,
+        /// such as checkered marble, but one primitive only considers 
+        /// itself to have one material.
         Material * m_material ;
 
         /// "Center" of object.  Some objects do not have a true
