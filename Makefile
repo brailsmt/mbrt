@@ -8,9 +8,10 @@ renders/reflection_test.png: all
 
 sample: renders/reflection_test.png
 
-#TODO- make this platform independant
-#TODO- figure out how to do that
+#TODO: xv didn't work with png files on Cygwin. Determine
+# if this a Cygwin-specific issue or if a better viewer 
+# is available
 show-sample: sample 
-	cygstart renders/reflection_test.png
+	xv renders/reflection_test.ppm
 
 

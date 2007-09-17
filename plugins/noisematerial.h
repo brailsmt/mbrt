@@ -6,6 +6,11 @@
 #include "material.h"
 #include "materialfactory.h"
 
+/// Number of points along each axis in the noise
+/// matrix.  Increasing this value will reduce the
+/// number of times the noise has to wrap around.
+const int MAX_NOISE = 28;
+
 /// This class defines a composite material of two materials that are combined
 /// based on a noise function.
 class NoiseMaterial : public Material{
@@ -18,14 +23,27 @@ class NoiseMaterial : public Material{
                 MaterialFactory::get_instance()->registerFunction("noise", (void *) NoiseMaterial::createNoiseMaterial);
             }
     };
+
     protected:
-    /// Dummy variable to force static initialization
+        /// Dummy variable to force static initialization
         static MaterialStaticInit m_init;
 
+        /// First material element of composite.
         Material * m_material_one;
+        /// Second material element of composite.
         Material * m_material_two;
 
+        /// Calculate how much of first material contributes to
+        /// overall material.  This is a double ranging from 0.0 to 1.0.
+        /// The amount of the second material to use is (1.0 - choose_material() )
         double choose_material(const Point3D& intersection_point) const ;
+
+        /// Initialize noise matrix
+        void init_noise();
+
+        /// Noise matrix. Hold random values.  Exact noise
+        /// value is interpolated from the values in this matrix.
+        int m_noiseMatrix [MAX_NOISE][MAX_NOISE][MAX_NOISE];
 
     public:
         /// Create a noise-based material from two materials.
@@ -33,13 +51,16 @@ class NoiseMaterial : public Material{
         {
             m_material_one = one;
             m_material_two = two;
+            init_noise();
         }
 
         /// Copy construtor
         NoiseMaterial(const NoiseMaterial &other)
                 :  m_material_one(other.m_material_one),
-                    m_material_two(other.m_material_two) 
+                    m_material_two(other.m_material_two)
         {
+            // TODO: this should really just be a straight copy..
+            init_noise();
         }
 
 

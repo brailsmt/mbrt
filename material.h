@@ -79,6 +79,21 @@ class Material {
                   m_refraction_index(1.35),
                   m_opacity(opacity) {}
 
+        Material(Color * m_color, 
+                bool is_light , 
+                double reflection, 
+                double diffuse , 
+                double reflectivity,
+                double refraction,
+                double opacity) : 
+                  m_color(m_color),
+                  m_is_light_source(is_light),
+                  m_reflection_coefficient(reflection),
+                  m_diffusion_factor(diffuse),
+                  m_reflectivity(reflectivity),
+                  m_refraction_index(refraction),
+                  m_opacity(opacity) {}
+
         Material(const Material &other)
                 : m_reflection_coefficient(other.m_reflection_coefficient),
                   m_diffusion_factor(other.m_diffusion_factor),
