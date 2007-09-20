@@ -14,10 +14,6 @@ imgname=`grep 'file name=' $1 | gawk -F'"' '{ print $2 }' | xargs -i{} basename 
 
 export RET_VAL=$?
 
-# mbrt is trashing my terminal. Could be a Cygwin issue
-#
-reset
-
 if [[ $RET_VAL != "0" ]]; then
     exit $RET_VAL
 fi
