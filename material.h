@@ -17,40 +17,7 @@
 /// texture-maps or allow for bizarre, abstract materials.
 
 class Material {
-    protected:
-        /// This is the percentage of light that is reflected off this material.  This value is
-        /// between 0 and 1, 0 means the material reflects 0% of the light, a 1 means the material
-        /// reflects 100% of the light.
-        double m_reflection_coefficient;
-
-        /// This describes how much this material scatters the light off the surface.  This value is
-        /// between 0 and 1, 0 means the material scatters 0% of the light, a 1 means the material
-        /// scatters 100% of the light.
-        double m_diffusion_factor;
-
-        /// This number describes how reflective this material is.  Higher numbers mean shinier
-        /// objects.
-        double m_reflectivity;
-
-        /// This is the color of the material.
-        Color * m_color;
-
-        /// Is this material a light source?
-        bool m_is_light_source;
-
-        /// This is how opaque the object is, or more correctly how transparent the object.  A value
-        /// of 0 is fully opaque, a value of 1.0 is fully transparent.
-        double m_opacity;
-
-        /// This describes the amount of refraction occuring within the object
-        double m_refraction_index; 
-
         /// Ensure m_opacity remains within the range of 0.0f to 1.0f.
-        virtual void normalize_opacity() {
-            m_opacity = m_opacity > TRANSPARENT ? TRANSPARENT
-                      : m_opacity < OPAQUE      ? OPAQUE
-                      :                           m_opacity;
-        }
 
     public:
         // You can never have too many constructors.
@@ -58,8 +25,9 @@ class Material {
         // Oh wait, yes you can.  TODO: find out where and
         // how all these are used and get rid of the unnecessary ones.
 
-        // Default constructor to make std::map happy.
-        Material()
+        // Default constructor 
+        Material() {}; 
+#if 0
                 : m_reflection_coefficient(1.0),
                   m_diffusion_factor(0.25),
                   m_color(new Color()),
@@ -98,6 +66,8 @@ class Material {
         /// Fully construct a material with no defaults.
         //
         // Do not remove this constructor. Used in create... method of solidmaterial.cpp
+        // UPDATE: removing this constructor.
+#if 0
         Material(Color * m_color, 
                 bool is_light , 
                 double reflection, 
@@ -112,6 +82,7 @@ class Material {
                   m_reflectivity(reflectivity),
                   m_refraction_index(refraction),
                   m_opacity(opacity) {}
+#endif
 
         /// Copy constructor.
         Material(const Material &other)
@@ -121,64 +92,64 @@ class Material {
                   m_is_light_source(other.m_is_light_source),
                   m_reflectivity(other.m_reflectivity),
                   m_opacity(other.m_opacity) {}
+#endif
 
         virtual ~Material() {
-            delete m_color;
-        }
+        };
 
         /// Calculate color at given point on the material.
         /// @return Color at given point
-        virtual Color * get_color(const Point3D& intersection_point) const;
+        virtual Color * get_color(const Point3D& intersection_point) const =0;
 
         /// Determine if material emits light at given point.  Note: due to the
         /// rendering algoritm currently being used, varying this value based
         /// on position might have unexpected results.
         ///
         /// @return true if material emits light
-        virtual bool is_light(const Point3D& intersection_point) const;
+        virtual bool is_light(const Point3D& intersection_point) const =0;
 
         /// Set whether or not object emits light.  Subclasses are not required
         /// to do anything useful with this information.
         ///
         /// @param v True if material emits light
-        virtual void set_is_light(bool v);
+        virtual void set_is_light(bool v) =0;
 
         /// Get the diffusion coefficient at the point.
         /// @param intersection_point Point in space where ray intersected an object
         /// @return the diffusion coefficient at the given point.
-        virtual double get_diffuse(const Point3D& intersection_point) const;
+        virtual double get_diffuse(const Point3D& intersection_point) const =0;
 
         /// Set the diffusion coefficient for the object.  Subclasses are not required
         /// to do anything useful with this information.
-        virtual void set_diffuse(double diffuse);
+        virtual void set_diffuse(double diffuse) =0;
 
         /// Get reflection coefficient at the point.
         /// @param intersection_point Point in space where ray intersected an object
         /// @return the reflection coefficient at the given point
-        virtual double get_reflection(const Point3D& intersection_point) const;
+        virtual double get_reflection(const Point3D& intersection_point) const =0;
 
         /// Get reflectivity at the point.
         /// @param intersection_point Point in space where ray intersected an object
         /// @return the reflectivity at the given point
-        virtual double get_reflectivity(const Point3D& intersection_point) const;
+        virtual double get_reflectivity(const Point3D& intersection_point) const =0;
 
         /// Get the index of refraction at the given point.  Note that varying the
         /// index of refraction across the material will most likely return results
         /// that are not accurate.
         /// @param intersection_point Point in space where ray intersected an object
         /// @return refraction index at the given point
-        virtual double get_refraction_index(const Point3D& intersection_point) const;
+        virtual double get_refraction_index(const Point3D& intersection_point) const =0;
 
         /// Get the opacity of this material at the point.
         /// @param intersection_point Point in space where ray intersected an object
         /// @return opacity at the given point
-        virtual double get_opacity(const Point3D& intersection_point) const;
+        virtual double get_opacity(const Point3D& intersection_point) const =0;
 
         /// Set opacity for the object.  Subclasses are not required to do
         /// anything useful with this information.
         ///
         /// @param opacity The suggested opacity for the material
-        virtual void set_opacity(double opacity);
+        virtual void set_opacity(double opacity) =0;
 };
 
 #endif

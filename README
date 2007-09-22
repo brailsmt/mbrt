@@ -5,6 +5,12 @@ Release Notes
 This is a pre-release version of mbrt.  It officially has no version number, but is probably best thought of simply as version 0.0, 
 with a build number of whatever revision you happen to have checked out.
 
+Dependancies
+------------
+libsigc++-2.0
+libxml-2.0
+ncurses
+
 Building on Cygwin
 ------------------
 

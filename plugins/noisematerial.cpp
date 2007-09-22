@@ -98,8 +98,8 @@ double NoiseMaterial::choose_material(const Point3D& intersection_point) const
     d0 = p10 - p00;
     d1 = p11 - p01;
 
-    p0 = floor(d0 * oy) + p00;
-    p1 = floor(d1 * oy) + p01;
+    p0 = (int) floor(d0 * oy) + p00;
+    p1 = (int) floor(d1 * oy) + p01;
 
     d = p1 - p0;
 

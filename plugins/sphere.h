@@ -11,6 +11,8 @@
 #include "xml_defs.h"
 #include <string>
 
+#include "solidmaterial.h"
+
 /// A Sphere is defined by its m_center point and its radius.
 class Sphere : public Primitive {
     protected:
@@ -25,7 +27,7 @@ class Sphere : public Primitive {
     public:
         /// Create a default sphere with a radius of 1.
         Sphere() : m_radius(1) {
-            m_material = new Material(false);
+            m_material = new SolidMaterial(false);
         }
 
         /// Create a sphere with the default m_material.
@@ -38,11 +40,13 @@ class Sphere : public Primitive {
 
             m_center = Point3D(x,y,z);
             m_material = Scene::get_instance()->get_material(material_name);
+            
+            // TODO: should we really handle as a default, or should we trap this as an error?
             if(m_material == NULL)
             {
                 Color * color = Scene::get_instance()->get_color(color_name);
                 color = color ? color : new Color(1.0,0.5,0.5);
-                m_material = new Material(color ,false);
+                m_material = new SolidMaterial(color ,false);
             }
         }
 
@@ -58,10 +62,10 @@ class Sphere : public Primitive {
                 m_material = m;
             }
             else {
-                /// @todo: if a null material is passed in, this
+                /// @TODO: if a null material is passed in, this
                 /// may be an error condition. Consider bailing
                 /// app.
-                m_material = new Material(false);
+                m_material = new SolidMaterial(false);
             }
 
         }
