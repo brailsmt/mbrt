@@ -194,6 +194,22 @@ class SolidMaterial : public Material
         ///
         /// @param opacity The suggested opacity for the material
         virtual void set_opacity(double opacity);
+        
+ #if 0
+ // Stub out specular methods.
+        /// Get specular coefficient.  Specular coefficient determines how much
+        /// specular highlighting affects the overall color of the object.
+        ///
+        /// @return Specular coefficient
+        virtual double get_specular_coeffiecient() ;
+
+        /// Get specular power coefficient.  The power coefficient determines
+        /// the rate of fall-off of the specular highlight.
+        ///
+        /// @return Specular power coefficient
+        virtual double get_specular_power() ;
+#endif
+
 };
 
 #endif

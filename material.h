@@ -1,4 +1,3 @@
-
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
@@ -17,83 +16,14 @@
 /// texture-maps or allow for bizarre, abstract materials.
 
 class Material {
-        /// Ensure m_opacity remains within the range of 0.0f to 1.0f.
 
     public:
-        // You can never have too many constructors.
+
+        /// Default constructor 
         //
-        // Oh wait, yes you can.  TODO: find out where and
-        // how all these are used and get rid of the unnecessary ones.
+        //Material() {}; 
 
-        // Default constructor 
-        Material() {}; 
-#if 0
-                : m_reflection_coefficient(1.0),
-                  m_diffusion_factor(0.25),
-                  m_color(new Color()),
-                  m_is_light_source(false),
-                  m_reflectivity(35.0),
-                  m_refraction_index(1.35),
-                  m_opacity(OPAQUE) {}
-
-        Material(bool is_light)
-                : m_reflection_coefficient(1.0),
-                  m_diffusion_factor(0.25f),
-                  m_color(new Color()),
-                  m_is_light_source(is_light),
-                  m_reflectivity(35.0),
-                  m_refraction_index(1.35),
-                  m_opacity(OPAQUE) {}
-
-        Material(Color * m_color, bool is_light)
-                : m_reflection_coefficient(1.0),
-                  m_diffusion_factor(0.25f),
-                  m_color(m_color),
-                  m_is_light_source(is_light),
-                  m_reflectivity(35.0),
-                  m_refraction_index(1.35),
-                  m_opacity(OPAQUE) {}
-
-        Material(Color * m_color, double reflect = 1.0f, double diffuse = 0.25f, bool is_light = false, double opacity = OPAQUE)
-                : m_reflection_coefficient(reflect),
-                  m_diffusion_factor(diffuse),
-                  m_color(m_color),
-                  m_is_light_source(is_light),
-                  m_reflectivity(35.0),
-                  m_refraction_index(1.35),
-                  m_opacity(opacity) {}
-
-        /// Fully construct a material with no defaults.
-        //
-        // Do not remove this constructor. Used in create... method of solidmaterial.cpp
-        // UPDATE: removing this constructor.
-#if 0
-        Material(Color * m_color, 
-                bool is_light , 
-                double reflection, 
-                double diffuse , 
-                double reflectivity,
-                double refraction,
-                double opacity) : 
-                  m_color(m_color),
-                  m_is_light_source(is_light),
-                  m_reflection_coefficient(reflection),
-                  m_diffusion_factor(diffuse),
-                  m_reflectivity(reflectivity),
-                  m_refraction_index(refraction),
-                  m_opacity(opacity) {}
-#endif
-
-        /// Copy constructor.
-        Material(const Material &other)
-                : m_reflection_coefficient(other.m_reflection_coefficient),
-                  m_diffusion_factor(other.m_diffusion_factor),
-                  m_color(other.m_color),
-                  m_is_light_source(other.m_is_light_source),
-                  m_reflectivity(other.m_reflectivity),
-                  m_opacity(other.m_opacity) {}
-#endif
-
+	/// Virtual destructor.
         virtual ~Material() {
         };
 
@@ -150,6 +80,25 @@ class Material {
         ///
         /// @param opacity The suggested opacity for the material
         virtual void set_opacity(double opacity) =0;
+
+#if 0
+
+Stub out of specular methods
+
+        /// Get specular coefficient.  Specular coefficient determines how much
+        /// specular highlighting affects the overall color of the object.
+        ///
+        /// @return Specular coefficient
+        virtual double get_specular_coeffiecient() = 0;
+
+        /// Get specular power coefficient.  The power coefficient determines
+        /// the rate of fall-off of the specular highlight.
+        ///
+        /// @return Specular power coefficient
+        virtual double get_specular_power() = 0;
+#endif
+
+        
 };
 
 #endif

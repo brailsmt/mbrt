@@ -6,9 +6,6 @@
 using std::map;
 using std::string;
 
-//std::map<std::string, void *>  MaterialFactory::m_createFunctions;
-
-
 Material * MaterialFactory::create(string type, map<string,string> attributes)
 {
     if(m_createFunctions.count(type) == 0)

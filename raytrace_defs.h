@@ -23,6 +23,7 @@ const double INF = 1000000000.0;
 /// This determines how many iterations pass before reporting progress.
 const int REPORT_FACTOR = 5000;
 
+
 /// This is the square root for the the default number of subpixels.
 const int SUBPIXEL_SQRT = 2;
 
