@@ -3,7 +3,7 @@
         <width  pixels="800" />
         <height pixels="800" />
         <file name="renders/reflection_test.ppm" />
-        <subpixels square_of='1'/>
+        <subpixels square_of='3'/>
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />

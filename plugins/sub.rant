@@ -13,11 +13,17 @@ gen AutoClean
 ##default rule for .o files
 gen Rule, :o => :cpp do |task_info|
     cconf = var['cconf']
-    sys "#{cconf.cxx} #{cconf.cflags} #{mycconf.incdirs} #{cconf.incdirs} -c -o #{task_info.name} #{task_info.source}"
+    sys "#{cconf.cxx} -fPIC #{cconf.cflags} #{mycconf.incdirs} #{cconf.incdirs} -c -o #{task_info.name} #{task_info.source}"
 end
 
+task :default => %w(libmbrtplugins.so.0.0.1)
+
 #make the static library
-desc "Make the mbrt_plugin library"
-file "libplugins.a" => objs do |task_info|
-    sys "ar rcs #{task_info.name} #{task_info.prerequisites}"
+desc "Make the mbrtplugins.so library"
+file "libmbrtplugins.so.0.0.1" => objs do |task_info|
+    naked_soname="libmbrtplugins.so"
+    cconf = var['cconf']
+    sys "#{cconf.cxx} -shared -W1,-soname,#{naked_soname}.0 -o #{task_info.name} #{task_info.prerequisites}"
+    sys "sudo ldconfig -v -n ."
+    sys "ln -s #{task_info.name} #{naked_soname}"
 end

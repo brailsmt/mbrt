@@ -7,7 +7,7 @@ import %w(autoclean c/dependencies)
 gen C::Dependencies
 gen Action do source "c_dependencies" end
 
-SUBLIBS = %w( plugins )
+SUBLIBS = %w( mbrtplugins )
 SUBDIRS = %w( plugins )
 subdirs SUBDIRS
 
@@ -64,8 +64,8 @@ end
 ## !!! Quick hack until .so loading is in place !!! ###
 ## TODO: remove plugins/* from link line! ###
 desc "Build the ray tracer (rt)"
-file :rt => [ SUBLIBS.map { |sd| "#{sd}/lib#{sd}.a" }, objs ].flatten do |task_info|
-    sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{objs.join(' ')} plugins/noisematerial.o plugins/checkermaterial.o #{cconf.libdirs} #{cconf.libs}"
+file :rt => [ SUBLIBS.map { |sd| "plugins/lib#{sd}.so.0.0.1" }, objs ].flatten do |task_info|
+    sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{objs.join(' ')} #{cconf.libdirs} #{cconf.libs}"
 end
 
 desc "default rule for .o files"
