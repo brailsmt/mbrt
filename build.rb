@@ -2,13 +2,14 @@
 class CompilerConfig
     attr_accessor :cc, :cxx
     #{{{
-    def initialize
+    def initialize(var)
         @cflags  = Array.new
         @libs    = Array.new
         @libdirs = Array.new
         @incdirs = Array.new
         @cc      = "/usr/bin/gcc"
         @cxx     = "/usr/bin/g++"
+        @var     = var
     end
     #}}}
     #{{{
@@ -65,7 +66,28 @@ class CompilerConfig
         @libdirs.flatten!.uniq!
     end
     #}}}
+    #{{{
+    def pkg_exists(pkg)
+        if(`pkg-config #{pkg} --exists; echo $?` == "0\n")
+            return true;
+        else 
+            return false;
+        end
+    end
+    #}}}
+    #{{{
+    def add_pkg_config(pkg, define = nil)
+        if(pkg_exists(pkg))
+            self.add_cflags(  `pkg-config #{pkg} --silence-errors --cflags`      )
+            self.add_libs(    `pkg-config #{pkg} --silence-errors --libs-only-l` )
+            self.add_libdirs( `pkg-config #{pkg} --silence-errors --libs-only-L` )
 
+            if(define != nil)
+                self.add_cflags( "-D#{define}" )
+            end
+        end
+    end
+    #}}}
     #{{{
     def libs
         @libs.join(" ")
@@ -84,6 +106,23 @@ class CompilerConfig
     #{{{
     def incdirs
         @incdirs.join(" ")
+    end
+    #}}}
+    #{{{
+    def optional_config(option, default_enabled = true, args = nil)
+        if(default_enabled == true)
+            #If the option is by defualt enabled, then call the block if the
+            #option is anything other than 'no'
+            if(@var[option] != "no")
+                yield args
+            end
+        else
+            #If the option is by defualt disabled, then call the block only if the
+            #option is 'yes'
+            if(@var[option] == "yes")
+                yield args
+            end
+        end
     end
     #}}}
 end
