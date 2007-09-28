@@ -1,0 +1,59 @@
+<scene>
+    <meta>
+        <width  pixels="400" />
+        <height pixels="400" />
+        <file name="renders/reflection_test.ppm" />
+        <subpixels square_of='3'/>
+    </meta>
+
+    <camera x='0.0' y='0.0' z='-100' />
+
+
+    <colors>
+        <color name='white'         red='0xff' green='0xff' blue='0xff' />
+        <color name='blue'          red='0x00' green='0x00' blue='0xff' />
+        <color name='dark_blue'     red='0x00' green='0x00' blue='0x11' />
+        <color name='red'           red='0xff' green='0x00' blue='0x00' />
+        <color name='green'         red='0x00' green='0xff' blue='0x00' />
+        <color name='dark_green'    red='0x00' green='0x05' blue='0x00' />
+        <color name='yellow'        red='0xff' green='0xff' blue='0x00' />
+    </colors>
+
+    <materials>
+        <material name='solidBlue'   type='solid' color='blue' />
+        <material name='solidWhite'  type='solid' color='white' />
+        <material name='solidYellow' type='solid' color='yellow' />
+        <material name='solidRed'    type='solid' color='red' />
+        <material name='solidGreen'  type='solid' color='green' /> 
+
+        <material name='solid_dark_green' type='solid'  color='dark_green' /> 
+        <material name='solid_dark_blue'  type='solid'  color='dark_blue' reflectivity = '1.0' reflection='1.0'/>
+
+        <material name='blue_marble'  type='noise' material1='solid_dark_blue'  material2='solidBlue' />
+        <material name='green_marble' type='noise' material1='solid_dark_green' material2='solidGreen' />
+
+
+        <material name='checkered'  type='checkered' material1='solidBlue'  material2='solidWhite' />
+        <material name='noise'      type='noise'     material1='solidBlue'  material2='solidWhite' />
+
+        <material name='checkered_marble' 
+            type='checkered' 
+            material1='blue_marble' 
+            material2='green_marble' 
+            scale='0.80'/>
+    </materials>
+
+    <light_sources>
+        <sphere x='-10.0' y='0' z='0' radius='0.1' material='solidWhite' color='white' />
+    </light_sources>
+
+    <objects>
+
+        <sphere x='  0' y='  0' z='  0' radius='3'  color='white' />
+        <sphere x=' 10' y='  0' z=' 10' radius='3' material='noise' color='blue'  />
+        <sphere x='  0' y=' 10' z=' 15' radius='3' color='red'  />
+        <sphere x='-10' y=' 10.1' z=' 14' radius='3' material='checkered_marble'  />
+        <!-- Specifying material overrides any color value. -->
+        <sphere x='  0' y='-10' z='-15' radius='3' material='checkered' color='green'  />
+    </objects>
+</scene>
