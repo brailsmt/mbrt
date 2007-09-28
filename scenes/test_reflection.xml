@@ -2,7 +2,7 @@
     <meta>
         <width  pixels="800" />
         <height pixels="800" />
-        <file name="renders/reflection_test.ppm" />
+        <file name="renders/test_reflection.ppm" />
         <subpixels square_of='3'/>
     </meta>
 

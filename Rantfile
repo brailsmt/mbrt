@@ -11,23 +11,19 @@ SUBLIBS = %w( mbrtplugins )
 SUBDIRS = %w( plugins )
 subdirs SUBDIRS
 
-cconf = CompilerConfig.new
+cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
 cconf.add_cflags( "-g" )
-cconf.add_cflags( `pkg-config libxml-2.0 --cflags` )
-cconf.add_cflags( `pkg-config sigc++-2.0 --cflags` ) 
+cconf.add_pkg_config( "libxml-2.0" )
+cconf.add_pkg_config( "sigc++-2.0" ) 
 
 #Add our compiler flags for libnetpbm
 cconf.add_libs( SUBLIBS )
 cconf.add_libs( "-lm" ) 
 cconf.add_libs( "-lncurses" )
-cconf.add_libs( `pkg-config libxml-2.0 --libs-only-l` )
-cconf.add_libs( `pkg-config sigc++-2.0 --libs-only-l` )
 
 cconf.add_libdirs( SUBDIRS )
-cconf.add_libdirs( `pkg-config libxml-2.0 --libs-only-L` )
-cconf.add_libdirs( `pkg-config sigc++-2.0 --libs-only-L` )
 
 #store the compiler config in var
 var['cconf'] = cconf
@@ -53,7 +49,7 @@ gen AutoClean
 
 desc "Build the cscope database"
 file "cscope.out" => Rant::FileList[ '**/*.cpp', '**/*.h' ] do |task_info|
-    sys "cscope -R -I/usr/include -b `find . | grep '\.cpp\|\.h'`"
+    sys 'cscope -R -I/usr/include -b `find . | grep \'\.cpp$\|\.h$\'`'
 end
 
 desc "Build documentation"

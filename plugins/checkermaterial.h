@@ -6,6 +6,10 @@
 #include "raytrace_defs.h"
 #include "material.h"
 #include "materialfactory.h"
+#include "scene.h"
+
+Material * new_checker_material(std::map<std::string, std::string> props);
+void delete_checkermaterial(Material * checker_material);
 
 /// This class defines a checkered material that is a composite of
 /// two other materials.
@@ -18,7 +22,7 @@ class CheckeredMaterial : public Material{
             /// Register material with the factory
             CheckeredMaterialStaticInit()
             {
-                MaterialFactory::get_instance()->registerFunction("checkered", (void *) CheckeredMaterial::createCheckeredMaterial);
+                MaterialFactory::get_instance()->registerFunction("checkered", sigc::ptr_fun(new_checker_material));
             }
     };
 
@@ -100,4 +104,18 @@ class CheckeredMaterial : public Material{
         /// Factory method to create a checkered material from two other materials.
         static Material * createCheckeredMaterial(std::map<std::string, std::string>);
 };
+
+Material * new_checker_material(std::map<std::string, std::string> props) {
+    Scene * scene  = Scene::get_instance();
+    Material * one = scene->get_material(props["material1"]);
+    Material * two = scene->get_material(props["material2"]);
+
+    // TODO: this is done so many times it really needs a helper function
+    double scale = props.count("scale") > 0 ?
+        (double)strtod(props["scale"].c_str(), NULL)       :  1.0;
+
+    return new CheckeredMaterial(one, two, scale);
+
+}
+
 #endif

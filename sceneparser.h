@@ -41,6 +41,10 @@ class SceneParser : public sigc::trackable {
         /// This is our map of node names to node handlers.
         std::map<std::string, nodehandler_t> m_node_handlers;
 
+        /// This is the name of the XML file which contains the definition of
+        /// the scene.
+        std::string m_scene_filename;
+
     public:
         /// Loads a scene from the XML file named by scene_file_name.
         ///

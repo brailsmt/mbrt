@@ -49,14 +49,16 @@ int main(int argc, char ** argv) {
     initscr();
 
     time_t start_time = time(NULL);
-    char filename[256] = "scene->xml";
+    char filename[256] = "scene.xml";
+    char output[256] = "scene.ppm";
     srand(time(NULL));
 
     extern char *optarg;
     extern int optind, opterr, optopt;
     int option_index = 0;
     static struct option long_options[] = {
-                                              {"scene", 1, NULL, 's'},
+                                              {"scene",  1, NULL, 's'},
+                                              {"output", 1, NULL, 'o'},
                                               {0, 0, 0, 0}
                                           };
 
@@ -66,6 +68,10 @@ int main(int argc, char ** argv) {
         case 's':
             memset(filename, 0x0, 256);
             memcpy(filename, optarg, strlen(optarg));
+            break;
+        case 'o':
+            memset(output, 0x0, 256);
+            memcpy(output, optarg, strlen(optarg));
             break;
         }
     }
@@ -84,7 +90,7 @@ int main(int argc, char ** argv) {
     traced_rays = trace_rays(data, scene->get_camera());
 
     ImageWriterFactory factory;
-    ImageWriter * writer = factory(scene->get_output_filename());
+    ImageWriter * writer = factory(output);
     writer->write_image(data);
     delete writer, writer = NULL;
 

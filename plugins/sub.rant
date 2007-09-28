@@ -5,7 +5,7 @@ import "autoclean"
 src  = Rant::FileList[ '*.cpp' ] 
 
 objs = src.ext( 'o' )
-mycconf = CompilerConfig.new
+mycconf = CompilerConfig.new(var)
 mycconf.add_incdirs( Rant::FileList[ "..", "." ] )
 
 gen AutoClean

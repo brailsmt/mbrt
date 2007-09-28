@@ -2,7 +2,7 @@
     <meta>
         <width  pixels="512" />
         <height pixels="512" />
-        <file name="renders/refraction_test.ppm" />
+        <file name="renders/test_refraction.ppm" />
         <subpixels square_of="2" />
     </meta>
 

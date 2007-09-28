@@ -20,23 +20,25 @@ using std::vector;
 using std::string;
 
 //{{{
-SceneParser::SceneParser(const char * scene_file_name)
-    : m_node_handlers()
+SceneParser::SceneParser(const char * scene_filename)
+    : m_node_handlers(),
+      m_scene_filename(scene_filename)
+
 {
     cout << "SceneParser()" << endl;
     register_default_handlers();
 
-    cout << scene_file_name << endl;
-    xmlDoc * doc = xmlReadFile(scene_file_name, NULL, 0);
+    cout << m_scene_filename << endl;
+    xmlDoc * doc = xmlReadFile(m_scene_filename.c_str(), NULL, 0);
 
     if ( doc == NULL ) {
-        cerr << "Could not read and parse " << scene_file_name << "." << endl;
+        cerr << "Could not read and parse " << m_scene_filename << "." << endl;
         exit(EXIT_FAILURE);
     }
 
     xmlNode * root = xmlDocGetRootElement(doc);
     if ( root == NULL ) {
-        cerr << "Could not find root element in file " << scene_file_name << "." << endl;
+        cerr << "Could not find root element in file " << m_scene_filename << "." << endl;
         exit(EXIT_FAILURE);
     }
     parse(root);
@@ -202,6 +204,7 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 //{{{
 Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
     cout << "Entering SceneParser::parse_meta()" << endl;
+    scene->set_output_filename(m_scene_filename.replace(m_scene_filename.find(".xml"), 4, ".ppm"));
 
     xmlNode * child = node->children;
     while(child != node->last) {

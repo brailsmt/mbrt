@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+inline Material * new_solid_material(std::map<std::string, std::string> props);
+
 /// This is the most basic material.  It has a single set of
 /// attributes that return the same value regardless of the
 /// intersection point.  Currently, this is the only material
@@ -19,7 +21,7 @@ class SolidMaterial : public Material
             /// Register this class with the factory.
             SolidMaterialStaticInit()
             {
-                MaterialFactory::get_instance()->registerFunction("solid", (void *) SolidMaterial::createSolidMaterial);
+                MaterialFactory::get_instance()->registerFunction("solid", sigc::ptr_fun(new_solid_material));
             }
     };
 
@@ -196,7 +198,7 @@ class SolidMaterial : public Material
         virtual void set_opacity(double opacity);
         
  #if 0
- // Stub out specular methods.
+ Stub out specular methods.
         /// Get specular coefficient.  Specular coefficient determines how much
         /// specular highlighting affects the overall color of the object.
         ///
@@ -211,5 +213,42 @@ class SolidMaterial : public Material
 #endif
 
 };
+
+inline Material * new_solid_material(std::map<std::string, std::string> props) {
+    bool isLight = props.count("light") > 0;
+
+    Color * color = Scene::get_instance()->get_color(props["color"]);
+
+    double reflection = props.count("reflection") > 0 ?
+        (double)strtod(props["reflection"    ].c_str(), NULL)   : 1.0;
+
+    double diffusion = props.count("diffusion") > 0 ?
+        (double)strtod(props["diffusion"].c_str(), NULL)        :  1.0;
+
+    double reflectivity = props.count("reflectivity") > 0 ?
+        (double)strtod(props["reflectivity"].c_str(), NULL)     :  35.0;
+
+    double refraction = props.count("refraction") > 0 ?
+        (double)strtod(props["refraction"].c_str(), NULL)       :  1.0;
+
+    double opacity = props.count("opacity") > 0 ?
+        (double)strtod(props["opacity"].c_str(), NULL)          :  OPAQUE;
+
+    std::cout << " Creating material '" << props["name"] << "' with:"  << std::endl;
+    std::cout << "reflection:"          << reflection    << std::endl;
+    std::cout << "diffusion:"           << diffusion     << std::endl;
+    std::cout << "reflectivity:"        << reflectivity  << std::endl;
+    std::cout << "refraction:"          << refraction    << std::endl;
+    std::cout << "opacity: "            << opacity       << std::endl;
+
+    return new SolidMaterial( color,
+            isLight,
+            reflection,
+            diffusion,
+            reflectivity,
+            refraction,
+            opacity
+            );
+}
 
 #endif

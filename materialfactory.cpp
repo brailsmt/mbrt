@@ -1,40 +1,30 @@
 #include "materialfactory.h"
 #include <iostream>
 
-//#include "material.h"
-
 using std::map;
 using std::string;
 
 Material * MaterialFactory::create(string type, map<string,string> attributes)
 {
-    if(m_createFunctions.count(type) == 0)
+    if(m_createFunctions.find(type) != m_createFunctions.end()) 
     {
-        return NULL;
+        return m_createFunctions[type].emit(attributes);
     }
 
-    MaterialCreateFunction call = (MaterialCreateFunction) ( m_createFunctions[type]);
-    
-    // Guard in case someone accidently inserted a null into the map
-    if(call == NULL)
-    {
-        return NULL;
-    }
-    Material * ret = call(attributes);
-    return ret;
+    return NULL;
 }
     
 
-bool MaterialFactory::registerFunction(std::string type, void * createFunction)
+bool MaterialFactory::registerFunction(std::string type, material_create_slot createFunction)
 {
-    if(m_createFunctions.count(type) > 0)
+    if(m_createFunctions.find(type) != m_createFunctions.end())
     {
-        std::cout << "Warning: function of type '" << type << "' already registered, ignoring subsequent attempt." << std::endl;
+        std::cout << "Warning: function of type '" << type << "' already registered, ignoring." << std::endl;
         return false;
     }
 
     std::cout << "Adding material of type '" << type << "' ..." ;
-    m_createFunctions[type] = createFunction;
+    m_createFunctions[type].connect(createFunction);
     std::cout << "...done" << std::endl;
 
 }

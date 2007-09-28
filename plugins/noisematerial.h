@@ -6,6 +6,8 @@
 #include "material.h"
 #include "materialfactory.h"
 
+Material * make_noise_material(std::map<std::string, std::string> props);
+
 /// Number of points along each axis in the noise
 /// matrix.  Increasing this value will reduce the
 /// number of times the noise has to wrap around.
@@ -23,7 +25,7 @@ class NoiseMaterial : public Material{
             /// Perform static initialization.  Registers class with material factory.
             MaterialStaticInit()
             {
-                MaterialFactory::get_instance()->registerFunction("noise", (void *) NoiseMaterial::createNoiseMaterial);
+                MaterialFactory::get_instance()->registerFunction("noise", sigc::ptr_fun(make_noise_material));
             }
     };
 
@@ -108,5 +110,12 @@ class NoiseMaterial : public Material{
         /// Factory method to create noise material.
         static Material * createNoiseMaterial(std::map<std::string, std::string>);
 };
+
+Material * make_noise_material(std::map<std::string, std::string> props) {
+    Scene * scene = Scene::get_instance();
+    Material * one = scene->get_material(props["material1"]);
+    Material * two = scene->get_material(props["material2"]);
+    return new NoiseMaterial(one, two);
+}
 
 #endif
