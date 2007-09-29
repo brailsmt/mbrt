@@ -63,15 +63,13 @@ int main(int argc, char ** argv) {
                                           };
 
     int opt_val = -2;
-    while ( (opt_val = getopt_long (argc, argv, "s:", long_options, &option_index)) != -1 ) {
+    while ( (opt_val = getopt_long (argc, argv, "s:o:", long_options, &option_index)) != -1 ) {
         switch (opt_val) {
         case 's':
-            memset(filename, 0x0, 256);
-            memcpy(filename, optarg, strlen(optarg));
+            strncpy(filename, optarg, strlen(optarg));
             break;
         case 'o':
-            memset(output, 0x0, 256);
-            memcpy(output, optarg, strlen(optarg));
+            strncpy(output, optarg, strlen(optarg));
             break;
         }
     }

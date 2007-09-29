@@ -76,29 +76,10 @@ class SolidMaterial : public Material
         // Oh wait, yes you can.  TODO: find out where and
         // how all these are used and get rid of the unnecessary ones.
 
-        // Default constructor 
-        SolidMaterial()
-                : m_reflection_coefficient(1.0),
-                  m_diffusion_factor(0.25),
-                  m_color(new Color()),
-                  m_is_light_source(false),
-                  m_reflectivity(35.0),
-                  m_refraction_index(1.35),
-                  m_opacity(OPAQUE) {}	
-
         SolidMaterial(bool is_light)
                 : m_reflection_coefficient(1.0),
                   m_diffusion_factor(0.25f),
                   m_color(new Color()),
-                  m_is_light_source(is_light),
-                  m_reflectivity(35.0),
-                  m_refraction_index(1.35),
-                  m_opacity(OPAQUE) {}
-
-        SolidMaterial(Color * m_color, bool is_light)
-                : m_reflection_coefficient(1.0),
-                  m_diffusion_factor(0.25f),
-                  m_color(m_color),
                   m_is_light_source(is_light),
                   m_reflectivity(35.0),
                   m_refraction_index(1.35),

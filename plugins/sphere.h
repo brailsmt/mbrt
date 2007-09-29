@@ -50,26 +50,6 @@ class Sphere : public Primitive {
             }
         }
 
-        /// Create a sphere.
-        //TODO: verify that this constructor is used and remove it if not.
-        template <class _T>
-        Sphere( Material * m, _T x, _T y, _T z, _T r, std::string color_name = "", std::string material_name = "") 
-            : m_radius((double)r),
-              m_material_name(material_name),
-              m_color_name(color_name)
-        {
-            if (m) {
-                m_material = m;
-            }
-            else {
-                /// @TODO: if a null material is passed in, this
-                /// may be an error condition. Consider bailing
-                /// app.
-                m_material = new SolidMaterial(false);
-            }
-
-        }
-
         /// Clean up the sphere's resources.
         virtual ~Sphere();
 

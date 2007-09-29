@@ -74,7 +74,7 @@ class ImageWriterFactory {
 
             switch (type) {
             case PPM_IMAGE:
-                return new PpmImageWriter(scene->get_output_filename(), scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
+                return new PpmImageWriter(filename.length() > 0 ? filename: scene->get_output_filename(), scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
             default:
                 return NULL;
             }
