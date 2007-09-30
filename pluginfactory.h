@@ -12,15 +12,22 @@
 
 #include <string>
 #include <map>
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <libxml/tree.h>
 #include <sigc++/sigc++.h>
+
 #include "material.h"
 #include "primitive.h"
 
 /// Signal for a function which constructs a new instance of a Material.
+/// @todo  Change this to accept the XML node structure so we can keep the
+/// interface for materials and primitives the same and as flexible as
+/// possible.
 typedef sigc::signal<Material *, std::map<std::string, std::string> > material_create_fn;
 
 /// Signal for a function which constructs a new instance of a Primitive.
-typedef sigc::signal<Primitive *, std::map<std::string, std::string> > primitive_create_fn;
+typedef sigc::signal<Primitive *, xmlNode *> primitive_create_fn;
 
 /// This is an abstraction for material_create_fn signals to allow them to be
 /// passed transparently to the register function.
@@ -28,7 +35,7 @@ typedef sigc::slot<Material *, std::map<std::string, std::string> > material_cre
 
 /// This is an abstraction for primitive_create_fn signals to allow them to be
 /// passed transparently to the register function.
-typedef sigc::slot<Primitive *, std::map<std::string, std::string> > primitive_create_slot;
+typedef sigc::slot<Primitive *, xmlNode *> primitive_create_slot;
 
 
 
@@ -48,10 +55,22 @@ class PluginFactory {
          * @param type          String that the material type registered under
          * @param attributes    Attributes used to build materials
          * @return An initialized Material object
+         *
+         * @deprecated
+         * @todo Remove this in favor of the create() fucntion that accepts
+         * the xmlNode
          */
         _ParentType * create(std::string type, std::map<std::string, std::string> attributes) {
             if(m_createFunctions.find(type) != m_createFunctions.end()) {
                 return m_createFunctions[type].emit(attributes);
+            }
+
+            return NULL;
+        }
+
+        _ParentType * create(std::string type, xmlNode * node) {
+            if(m_createFunctions.find(type) != m_createFunctions.end()) {
+                return m_createFunctions[type].emit(node);
             }
 
             return NULL;

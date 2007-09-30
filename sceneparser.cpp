@@ -7,6 +7,7 @@
 #include "primitive.h"
 #include "plugins/sphere.h"
 #include "scene.h"
+#include "xml_util.h"
 
 #include "pluginfactory.h"
 
@@ -55,7 +56,6 @@ void SceneParser::register_default_handlers() {
     m_node_handlers["camera"       ].connect(sigc::mem_fun(this, &SceneParser::parse_camera));
     m_node_handlers["light_sources"].connect(sigc::mem_fun(this, &SceneParser::parse_light_sources));
     m_node_handlers["objects"      ].connect(sigc::mem_fun(this, &SceneParser::parse_objects));
-    m_node_handlers["sphere"       ].connect(sigc::mem_fun(this, &SceneParser::parse_sphere));
     m_node_handlers["colors"       ].connect(sigc::mem_fun(this, &SceneParser::parse_colors));
     m_node_handlers["materials"    ].connect(sigc::mem_fun(this, &SceneParser::parse_materials));
 }
@@ -83,19 +83,6 @@ xmlXPathObjectPtr SceneParser::get_xpath_nodes(xmlDocPtr root, char *xpath) {
             xmlXPathFreeObject(rv);
             cerr << "No result" << endl;
         }
-    }
-
-    return rv;
-}
-//}}}
-//{{{
-map<string, string> SceneParser::get_properties(xmlNode * node) {
-    xmlAttr * props = node->properties;
-    map<string, string> rv;
-    _xmlAttr * cur = props;
-    while ( cur != NULL ) {
-        rv[(char *)cur->name] = (char *)cur->children->content;
-        cur = cur->next;
     }
 
     return rv;
@@ -158,46 +145,23 @@ Primitive * SceneParser::noop(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_sphere(Scene * scene, xmlNode * node) {
-    cout << "Entering SceneParser::parse_sphere()" << endl;
-    Sphere * rv = NULL;
-
-    map<string, string> props = get_properties(node);
-
-    if ( props.empty() == false ) {
-        double x        = (double)strtod(props["x"        ].c_str(), NULL);
-        double y        = (double)strtod(props["y"        ].c_str(), NULL);
-        double z        = (double)strtod(props["z"        ].c_str(), NULL);
-        double radius   = (double)strtod(props["radius"   ].c_str(), NULL);
-        string color    = props["color"   ];
-        string material = props["material"];
-
-        rv = new Sphere(x, y, z, radius, color, material);
-    }
-
-    cout << "Leaving SceneParser::parse_sphere()" << endl;
-    return dynamic_cast<Primitive *>(rv);
-}
-//}}}
-//{{{
 Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
-    cout << "Entering SceneParser::parse_objects()" << endl;
-    /// @todo This is a near duplicate of parse_light_sources()
     xmlNode * child = node->children;
 
-    child = node->children;
+    // Parse all objects.
     while(child != node->last) {
-        if(m_node_handlers.find((char *)child->name) != m_node_handlers.end()) {
-            Primitive * prim = m_node_handlers[(char *)child->name].emit(scene, child);
-
-            // Add the primitive to the scene
-            scene->get_scene()->push_back(prim);
+        std::cout << "Primitive of type '" << child->name << std::endl;
+        Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, node);
+        if(prim == NULL) {
+            std::cout << "WARNING: Primitive of type '" << child->name << "' unknown." << std::endl;
+        }
+        else {
+            scene->add_primitive(prim);
         }
 
         child = child->next;
     }
 
-    cout << "Leaving SceneParser::parse_objects()" << endl;
     return NULL;
 }
 //}}}
@@ -257,7 +221,7 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
             prim->set_is_light(true);
 
             // Add the primitive to the scene
-            scene->get_scene()->push_back(prim);
+            scene->add_primitive(prim);
         }
 
         child = child->next;

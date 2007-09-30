@@ -112,6 +112,9 @@ class Scene {
 
         /// Add a material to the available materials.
         void add_material(std::string name, Material * material) { m_materials[name] = material; }
+        
+        /// Add a primitive to the scene.
+        void add_primitive(Primitive * prim) { scene.push_back(prim); }
 };
 //}}}
 

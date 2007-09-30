@@ -65,13 +65,8 @@ class SceneParser : public sigc::trackable {
         /// @param xpath The xpath to process.
         xmlXPathObjectPtr get_xpath_nodes(xmlDocPtr root, char *xpath);
 
-        /// Parse the properties and return them as a map<string, string>.
-        std::map<std::string, std::string> get_properties(xmlNode * node);
-
         /// Return the node content from the xmlXPathObjectPtr, for node at index idx.
         ///
         /// @return The content of the node, or NULL.
         char * get_xpath_content(const xmlXPathObjectPtr xpath, int idx = 0);
-
-        Primitive * parse_sphere(Scene * scene, xmlNode * node);
 };

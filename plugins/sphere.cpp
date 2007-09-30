@@ -6,11 +6,15 @@
 #include "sphere.h"
 #include <iostream>
 #include <vector>
+#include "xml_util.h"
 
 using std::cout;
 using std::endl;
 using std::vector;
 using std::string;
+
+// This actually makes the static init work.
+Sphere::StaticInit Sphere::m_init;
 
 //{{{
 Sphere::~Sphere() {}

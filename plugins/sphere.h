@@ -9,12 +9,28 @@
 #include "primitive.h"
 #include "scene.h"
 #include "xml_defs.h"
+#include "xml_util.h"
 #include <string>
 
 #include "solidmaterial.h"
 
+Primitive * new_sphere(xmlNode * node);
+void delete_sphere(Sphere * sphere);
+
 /// A Sphere is defined by its m_center point and its radius.
 class Sphere : public Primitive {
+
+    /// Fake a static initializer.
+    class StaticInit {
+        public:
+            /// Register material with the factory
+            StaticInit() {
+                PrimitiveFactory::get_instance()->registerPlugin("sphere", sigc::ptr_fun(new_sphere));
+            }
+    };
+    /// Force static initialization.
+    static StaticInit m_init;
+
     protected:
         /// The radius of the sphere.
         double m_radius;
@@ -37,6 +53,8 @@ class Sphere : public Primitive {
               m_material_name(material_name),
               m_color_name(color_name)
         {
+            cout << "Creating a Sphere at (" << x << ", " << y << ", " << z << ") with a radius of ";
+            cout << r << " color = " << color_name << " and material = " << material_name <<endl;
 
             m_center = Point3D(x,y,z);
             m_material = Scene::get_instance()->get_material(material_name);
@@ -114,6 +132,34 @@ class Sphere : public Primitive {
         /// point and normalized.
         virtual Ray get_normal(const Point3D &p) ;
 };
+
+Primitive * new_sphere(xmlNode * node) {
+    cout << "Entering new_sphere()" << endl;
+    Sphere * rv = NULL;
+
+    xml_properties props = get_properties(node);
+
+    if ( props.empty() == false ) {
+        double x        = (double)strtod(props["x"        ].c_str(), NULL);
+        double y        = (double)strtod(props["y"        ].c_str(), NULL);
+        double z        = (double)strtod(props["z"        ].c_str(), NULL);
+        double radius   = (double)strtod(props["radius"   ].c_str(), NULL);
+        std::string color    = props["color"   ];
+        std::string material = props["material"];
+
+        rv = new Sphere(x, y, z, radius, color, material);
+    }
+    else {
+        cout << "Empty props." << endl;
+    }
+
+    cout << "Leaving new_sphere()" << endl;
+    return dynamic_cast<Primitive *>(rv);
+}
+
+void delete_sphere(Sphere * sphere) {
+    delete sphere, sphere = NULL;
+}
 
 #endif
 
