@@ -2,7 +2,7 @@
 #define SOLIDMATERIAL_H
 
 #include "material.h"
-#include "materialfactory.h"
+#include "pluginfactory.h"
 
 #include <iostream>
 

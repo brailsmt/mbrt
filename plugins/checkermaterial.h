@@ -5,7 +5,7 @@
 #include "color.h"
 #include "raytrace_defs.h"
 #include "material.h"
-#include "materialfactory.h"
+#include "pluginfactory.h"
 #include "scene.h"
 
 Material * new_checker_material(std::map<std::string, std::string> props);

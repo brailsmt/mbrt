@@ -8,7 +8,7 @@
 #include "plugins/sphere.h"
 #include "scene.h"
 
-#include "materialfactory.h"
+#include "pluginfactory.h"
 
 #include <iostream>
 

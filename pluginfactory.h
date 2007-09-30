@@ -1,4 +1,4 @@
-/* file name       : materialfactory.h
+/* file name       : pluginfactory.h
  * contributors    : Brandon Inman
  *                   Michael Brailsford
  * header inserted : Mon Sep 24 22:31:24 -0500 2007
