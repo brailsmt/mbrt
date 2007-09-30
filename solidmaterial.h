@@ -14,14 +14,14 @@ inline Material * new_solid_material(std::map<std::string, std::string> props);
 /// that can exist at the leaf nodes of a material tree.
 class SolidMaterial : public Material
 {
-    /// Static initialization.  Registers the material with the MaterialFactory.
+    /// Static initialization.  Registers the material with the PluginFactory.
     class SolidMaterialStaticInit
     {
         public:
             /// Register this class with the factory.
             SolidMaterialStaticInit()
             {
-                MaterialFactory::get_instance()->registerFunction("solid", sigc::ptr_fun(new_solid_material));
+                MaterialFactory::get_instance()->registerPlugin("solid", sigc::ptr_fun(new_solid_material));
             }
     };
 

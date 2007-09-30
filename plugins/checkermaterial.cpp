@@ -1,7 +1,7 @@
 #include "checkermaterial.h"
 #include <iostream>
 
-CheckeredMaterial::CheckeredMaterialStaticInit CheckeredMaterial::m_init;
+CheckeredMaterial::StaticInit CheckeredMaterial::m_init;
 
 int CheckeredMaterial::choose_material(const Point3D& intersection_point) const
 {
