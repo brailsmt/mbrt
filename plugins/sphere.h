@@ -14,6 +14,8 @@
 
 #include "solidmaterial.h"
 
+class Sphere;
+
 Primitive * new_sphere(xmlNode * node);
 void delete_sphere(Sphere * sphere);
 

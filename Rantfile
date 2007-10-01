@@ -7,7 +7,8 @@ import %w(autoclean c/dependencies)
 gen C::Dependencies
 gen Action do source "c_dependencies" end
 
-SUBLIBS = %w( mbrtplugins )
+#SUBLIBS = %w( mbrtplugins )
+SUBLIBS = %w( )
 SUBDIRS = %w( plugins )
 subdirs SUBDIRS
 

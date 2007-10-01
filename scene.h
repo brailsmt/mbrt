@@ -12,7 +12,6 @@ class Ray;
 class Primitive;
 class Point3D;
 class Color;
-class Sphere;
 class Material;
 
 //{{{
