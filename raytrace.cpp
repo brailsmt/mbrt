@@ -13,7 +13,7 @@
 #include <getopt.h>
 #include <iostream>
 
-using std::cout;
+using std::cerr;
 using std::endl;
 
 struct raytrace_info rt_info;
@@ -26,20 +26,20 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
     seconds %= 3600;
     minutes = seconds / 60;
     seconds %= 60;
-    cout << endl;
-    cout << endl;
-    cout << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
-    cout << endl;
-    cout << endl;
+    cerr << endl;
+    cerr << endl;
+    cerr << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
+    cerr << endl;
+    cerr << endl;
 
-    cout << "Rendering " << fname << " took " << elapsed;
-    cout << " seconds (" << hours << ":" << minutes << ":" << seconds << ")" << endl;
+    cerr << "Rendering " << fname << " took " << elapsed;
+    cerr << " seconds (" << hours << ":" << minutes << ":" << seconds << ")" << endl;
 
-    cout.setf(cout.fixed);
-    cout.precision(5);
-    cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
-    cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
-    cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
+    cerr.setf(cerr.fixed);
+    cerr.precision(5);
+    cerr << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
+    cerr << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
+    cerr << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
 }
 //}}}
 
@@ -100,6 +100,7 @@ int main(int argc, char ** argv) {
     endwin();
     print_stats(filename, elapsed, primary_rays, traced_rays);
 
+    exit(EXIT_SUCCESS);
 }
 //}}}
 #endif

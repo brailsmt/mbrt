@@ -9,7 +9,6 @@
 
 using std::string;
 using std::vector;
-using std::cout;
 using std::cerr;
 using std::endl;
 
@@ -18,7 +17,7 @@ Scene * Scene::inst = NULL;
 //{{{
 Scene * Scene::get_instance(const char * scene_file_name) {
     if ( inst == NULL ) {
-        cout << "get_instance()" << endl;
+        cerr << "get_instance()" << endl;
         inst = new Scene();
         SceneParser sp(scene_file_name);
     }

@@ -11,7 +11,7 @@
 #include <iostream>
 
 using std::string;
-using std::cout;
+using std::cerr;
 using std::endl;
 
 //{{{
@@ -24,37 +24,41 @@ PpmImageWriter::PpmImageWriter(std::string _filename, int _height, int _width)
 //}}}
 
 //{{{
-void PpmImageWriter::write_image(Color * data) {
+bool PpmImageWriter::write_image(Color * data) {
+    bool rv = false;
+    int x, y;
+    getyx(stdscr, y, x);
 
     FILE * _file = fopen(m_filename.c_str(), "w+");
     if ( _file == NULL ) {
-        cout << "Could not open " << m_filename << "!  Aborting save!";
-        exit(EXIT_FAILURE);
+        mvprintw(y, 0, "Could not open %s!  Aborting save!", m_filename.c_str());
     }
+    else {
+        int header_length = 32;
+        char header[header_length];
+        memset(header, 0x0, header_length);
+        snprintf(header, header_length, "P6 %i %i %i ", m_px_width, m_px_height, PPM_MAX_VAL);
 
-    int header_length = 32;
-    char header[header_length];
-    memset(header, 0x0, header_length);
-    snprintf(header, header_length, "P6 %i %i %i ", m_px_width, m_px_height, PPM_MAX_VAL);
+        // Write the ppm header.
+        fwrite(header, sizeof(char), strlen(header), _file);
+        // Write the data.
+        for ( int i = 0; i < (m_px_width * m_px_height); ++i) {
+            uchar rgbdata[] = {
+                data[i].get_rgb_red(),
+                data[i].get_rgb_green(),
+                data[i].get_rgb_blue()
+            };
+            fwrite(rgbdata, sizeof(rgbdata), 1, _file);
+        }
 
-    // Write the ppm header.
-    fwrite(header, sizeof(char), strlen(header), _file);
-    // Write the data.
-    for ( int i = 0; i < (m_px_width * m_px_height); ++i) {
-        uchar rgbdata[] = {
-                              data[i].get_rgb_red(),
-                              data[i].get_rgb_green(),
-                              data[i].get_rgb_blue()
-                          };
-        fwrite(rgbdata, sizeof(rgbdata), 1, _file);
+        fclose(_file);
+
+        mvprintw(y, 0, "Saved rendered image to %s", m_filename.c_str());
+        rv = true;
     }
-
-    fclose(_file);
-
-    int x, y;
-    getyx(stdscr, y, x);
-    mvprintw(y, 0, "Saved rendered image to %s", m_filename.c_str());
     refresh();
+
+    return rv;
 }
 //}}}
 

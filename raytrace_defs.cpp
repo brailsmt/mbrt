@@ -9,7 +9,7 @@
 
 using std::vector;
 using std::cerr;
-using std::cout;
+using std::cerr;
 using std::endl;
 
 extern struct raytrace_info rt_info;
@@ -153,7 +153,7 @@ unsigned long trace_rays(Color * data, Point3D eye) {
         screen_intersection.y += dy;
     }
 
-    cout << endl;
+    cerr << endl;
     return rt_info.traced_rays;
 }
 //}}}

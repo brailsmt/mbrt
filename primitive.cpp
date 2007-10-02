@@ -71,7 +71,6 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
         for ( iter = scene->get_scene()->begin(); iter != end; ++iter ) {
 
             if ( (*iter)->is_light(intersection_point) == true) {
-                //Sphere * light = (Sphere *)(*iter);
                 Primitive * light = *iter;
                 double diffusion = light->get_diffuse(intersection_point);
 

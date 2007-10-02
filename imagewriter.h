@@ -27,7 +27,7 @@ class ImageWriter {
         /// Write the image data to file.
         ///
         /// @param data Image imformation that will be written.
-        virtual void write_image (Color * data) = 0;
+        virtual bool write_image (Color * data) = 0;
 
 };
 
@@ -49,7 +49,7 @@ class PpmImageWriter : public ImageWriter {
         /// Write the image data to a ppm file.
         ///
         /// @param data Image imformation that will be written.
-        virtual void write_image (Color * data);
+        virtual bool write_image (Color * data);
 };
 
 class ImageWriterFactory {

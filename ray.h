@@ -7,7 +7,7 @@
 #include <iostream>
 #include <sstream>
 
-using std::cout;
+using std::cerr;
 using std::endl;
 
 /// Classic ray, with an origin and direction.

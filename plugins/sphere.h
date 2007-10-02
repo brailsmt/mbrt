@@ -55,8 +55,8 @@ class Sphere : public Primitive {
               m_material_name(material_name),
               m_color_name(color_name)
         {
-            cout << "Creating a Sphere at (" << x << ", " << y << ", " << z << ") with a radius of ";
-            cout << r << " color = " << color_name << " and material = " << material_name <<endl;
+            cerr << "Creating a Sphere at (" << x << ", " << y << ", " << z << ") with a radius of ";
+            cerr << r << " color = " << color_name << " and material = " << material_name <<endl;
 
             m_center = Point3D(x,y,z);
             m_material = Scene::get_instance()->get_material(material_name);
@@ -136,7 +136,7 @@ class Sphere : public Primitive {
 };
 
 Primitive * new_sphere(xmlNode * node) {
-    cout << "Entering new_sphere()" << endl;
+    cerr << "Entering new_sphere()" << endl;
     Sphere * rv = NULL;
 
     xml_properties props = get_properties(node);
@@ -152,10 +152,10 @@ Primitive * new_sphere(xmlNode * node) {
         rv = new Sphere(x, y, z, radius, color, material);
     }
     else {
-        cout << "Empty props." << endl;
+        cerr << "Empty props." << endl;
     }
 
-    cout << "Leaving new_sphere()" << endl;
+    cerr << "Leaving new_sphere()" << endl;
     return dynamic_cast<Primitive *>(rv);
 }
 

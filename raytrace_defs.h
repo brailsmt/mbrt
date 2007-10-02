@@ -94,6 +94,12 @@ inline double jitter(double limit) {
     return rv;
 }
 //}}}
+
+/// Provide a way to cleanly shutdown ncurses and exit the application.
+inline void exit_mbrt(int code) {
+    endwin();
+    exit(code);
+}
 #endif
 
 // vim: ts=4 sw=4

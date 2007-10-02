@@ -5,7 +5,6 @@
 
 #include "sceneparser.h"
 #include "primitive.h"
-#include "plugins/sphere.h"
 #include "scene.h"
 #include "xml_util.h"
 
@@ -13,7 +12,6 @@
 
 #include <iostream>
 
-using std::cout;
 using std::cerr;
 using std::endl;
 using std::map;
@@ -26,27 +24,27 @@ SceneParser::SceneParser(const char * scene_filename)
       m_scene_filename(scene_filename)
 
 {
-    cout << "SceneParser()" << endl;
+    cerr << "SceneParser()" << endl;
     register_default_handlers();
 
-    cout << m_scene_filename << endl;
+    cerr << m_scene_filename << endl;
     xmlDoc * doc = xmlReadFile(m_scene_filename.c_str(), NULL, 0);
 
     if ( doc == NULL ) {
         cerr << "Could not read and parse " << m_scene_filename << "." << endl;
-        exit(EXIT_FAILURE);
+        exit_mbrt(EXIT_FAILURE);
     }
 
     xmlNode * root = xmlDocGetRootElement(doc);
     if ( root == NULL ) {
         cerr << "Could not find root element in file " << m_scene_filename << "." << endl;
-        exit(EXIT_FAILURE);
+        exit_mbrt(EXIT_FAILURE);
     }
     parse(root);
 
     xmlFreeDoc(doc);
     xmlCleanupParser();
-    cout << "End SceneParser()" << endl;
+    cerr << "End SceneParser()" << endl;
 }
 //}}}
 
@@ -69,7 +67,7 @@ xmlXPathObjectPtr SceneParser::get_xpath_nodes(xmlDocPtr root, char *xpath) {
     context = xmlXPathNewContext(root);
     if (context == NULL) {
         cerr << "Error in xmlXPathNewContext" << endl;
-        exit(EXIT_FAILURE);
+        exit_mbrt(EXIT_FAILURE);
     }
     else {
         rv = xmlXPathEvalExpression((xmlChar *)xpath, context);
@@ -77,7 +75,7 @@ xmlXPathObjectPtr SceneParser::get_xpath_nodes(xmlDocPtr root, char *xpath) {
 
         if (rv == NULL) {
             cerr << "Error in xmlXPathEvalExpression" << endl;
-            exit(EXIT_FAILURE);
+            exit_mbrt(EXIT_FAILURE);
         }
         else if (xmlXPathNodeSetIsEmpty(rv->nodesetval)) {
             xmlXPathFreeObject(rv);
@@ -101,8 +99,8 @@ Primitive * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
                 Material * material = MaterialFactory::get_instance()->create(props["type"], props);
                 if(material == NULL)
                 {
-                    std::cout << "ERROR: Material of type '" << props["type"] << "' unknown." << std::endl;
-                    exit(1);
+                    std::cerr << "ERROR: Material of type '" << props["type"] << "' unknown." << std::endl;
+                    exit_mbrt(1);
                 }
 
                 scene->add_material(props["name"], material);
@@ -119,7 +117,7 @@ Primitive * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
 Primitive * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
     xmlNode * child = node->children;
 
-    // Parse all colors and spheres which are the children of the node passed in.
+    // Parse all colors which are the children of the node passed in.
     while(child != node->last) {
         if(strcmp((char *)child->name, "color") == 0) {
             map<string, string> props = get_properties(child);
@@ -150,10 +148,10 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 
     // Parse all objects.
     while(child != node->last) {
-        std::cout << "Primitive of type '" << child->name << std::endl;
+        std::cerr << "Primitive of type '" << child->name << std::endl;
         Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, node);
         if(prim == NULL) {
-            std::cout << "WARNING: Primitive of type '" << child->name << "' unknown." << std::endl;
+            std::cerr << "WARNING: Primitive of type '" << child->name << "' unknown." << std::endl;
         }
         else {
             scene->add_primitive(prim);
@@ -167,7 +165,7 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 //}}}
 //{{{
 Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
-    cout << "Entering SceneParser::parse_meta()" << endl;
+    cerr << "Entering SceneParser::parse_meta()" << endl;
     scene->set_output_filename(m_scene_filename.replace(m_scene_filename.find(".xml"), 4, ".ppm"));
 
     xmlNode * child = node->children;
@@ -190,25 +188,25 @@ Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
         child = child->next;
     }
 
-    cout << "Leaving SceneParser::parse_meta()" << endl;
+    cerr << "Leaving SceneParser::parse_meta()" << endl;
     return NULL;
 }
 //}}}
 //{{{
 Primitive * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
-    cout << "Entering SceneParser::parse_camera()" << endl;
+    cerr << "Entering SceneParser::parse_camera()" << endl;
     map<string, string> props = get_properties(node);
     scene->set_camera((double)strtod(props["x"].c_str(), NULL),
                       (double)strtod(props["y"].c_str(), NULL),
                       (double)strtod(props["z"].c_str(), NULL));
 
-    cout << "Leaving SceneParser::parse_camera()" << endl;
+    cerr << "Leaving SceneParser::parse_camera()" << endl;
     return NULL;
 }
 //}}}
 //{{{
 Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
-    cout << "Entering SceneParser::parse_light_sources()" << endl;
+    cerr << "Entering SceneParser::parse_light_sources()" << endl;
     /// @todo This is a near duplicate of parse_objects()
     xmlNode * child = node->children;
 
@@ -227,13 +225,13 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
         child = child->next;
     }
 
-    cout << "Leaving SceneParser::parse_light_sources()" << endl;
+    cerr << "Leaving SceneParser::parse_light_sources()" << endl;
     return NULL;
 }
 //}}}
 //{{{
 void SceneParser::parse(xmlNode * node) {
-    cout << "Entering SceneParser::parse()" << endl;
+    cerr << "Entering SceneParser::parse()" << endl;
 
     if(strcmp((char *)node->name, "scene") == 0) {
         Scene * scene        = Scene::get_instance();
@@ -244,19 +242,19 @@ void SceneParser::parse(xmlNode * node) {
                 m_node_handlers[(char *)child->name].emit(scene, child);
             }
             else {
-                cout << "Cannot parse <" << child->name << "> nodes.  Skipping..." << endl;
+                cerr << "Cannot parse <" << child->name << "> nodes.  Skipping..." << endl;
             }
 
             child = child->next;
         }
 
-        cout << "==================== DONE PARSING XML ==========================" << endl;
+        cerr << "==================== DONE PARSING XML ==========================" << endl;
     }
     else {
-        cout << "Expecting <scene> node, but got <" << node->name << ">." << endl;
+        cerr << "Expecting <scene> node, but got <" << node->name << ">." << endl;
     }
 
-    cout << "Leaving SceneParser::parse()" << endl;
+    cerr << "Leaving SceneParser::parse()" << endl;
 }
 //}}}
 

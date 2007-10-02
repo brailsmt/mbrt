@@ -6,6 +6,8 @@
 #include "material.h"
 #include "pluginfactory.h"
 
+#include <iostream>
+
 Material * make_noise_material(std::map<std::string, std::string> props);
 
 /// Number of points along each axis in the noise
@@ -19,19 +21,20 @@ const int MAX_NOISE = 28;
 /// two materials.
 class NoiseMaterial : public Material{
     /// Helper class to provide static initialization
-    class MaterialStaticInit
+    class StaticInit
     {
         public:
             /// Perform static initialization.  Registers class with material factory.
-            MaterialStaticInit()
+            StaticInit()
             {
+                std::cerr << "Registering \"noise\"" << std::endl;
                 MaterialFactory::get_instance()->registerPlugin("noise", sigc::ptr_fun(make_noise_material));
             }
     };
 
     protected:
         /// Dummy variable to force static initialization
-        static MaterialStaticInit m_init;
+        static StaticInit m_init;
 
         /// First material element of composite.
         Material * m_material_one;

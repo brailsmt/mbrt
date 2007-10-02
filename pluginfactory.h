@@ -85,14 +85,15 @@ class PluginFactory {
         ///                           under the type name.  The first to register will always win, and a warning will
         ///                           be logged that another attempt was made to register.
         bool registerPlugin(std::string type, _SlotType createFunction) {
+            std::cerr << "Registering function for type <" << type << ">." << std::endl;
             if(m_createFunctions.find(type) != m_createFunctions.end()) {
-                std::cout << "Warning: function of type '" << type << "' already registered, ignoring." << std::endl;
+                std::cerr << "Warning: function for type <" << type << "> already registered, ignoring." << std::endl;
                 return false;
             }
 
-            std::cout << "Adding material of type '" << type << "' ..." ;
+            std::cerr << "Adding plugin for <" << type << "> node..." ;
             m_createFunctions[type].connect(createFunction);
-            std::cout << "...done" << std::endl;
+            std::cerr << "...done" << std::endl;
         }
 
         ///Return an instance of PluginFactory.
