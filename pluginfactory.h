@@ -62,17 +62,28 @@ class PluginFactory {
          */
         _ParentType * create(std::string type, std::map<std::string, std::string> attributes) {
             if(m_createFunctions.find(type) != m_createFunctions.end()) {
-                return m_createFunctions[type].emit(attributes);
+                _ParentType * tmp =  m_createFunctions[type].emit(attributes);
+                if(!tmp)
+                    std::cerr << "1Going to return null." << std::endl;
+                return tmp;
+                //return m_createFunctions[type].emit(attributes);
             }
+            
+            std::cerr << "1Returning null because not found." << std::endl;
 
             return NULL;
         }
 
         _ParentType * create(std::string type, xmlNode * node) {
             if(m_createFunctions.find(type) != m_createFunctions.end()) {
-                return m_createFunctions[type].emit(node);
+                _ParentType * tmp =  m_createFunctions[type].emit(node);
+                if(!tmp)
+                    std::cerr << "Going to return null." << std::endl;
+                return tmp;
+                //return m_createFunctions[type].emit(node);
             }
 
+            std::cerr << "Returning null because not found." << std::endl;
             return NULL;
         }
 
@@ -102,6 +113,7 @@ class PluginFactory {
         static PluginFactory * get_instance() {
             static PluginFactory<_ParentType, _SigType, _SlotType> * instance = NULL;
             if(instance == NULL) {
+                std::cerr << "Creating new factory" << std::endl;
                 instance = new PluginFactory<_ParentType, _SigType, _SlotType>();
             }
             return instance;

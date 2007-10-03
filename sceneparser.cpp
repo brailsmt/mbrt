@@ -148,8 +148,8 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 
     // Parse all objects.
     while(child != node->last) {
-        std::cerr << "Primitive of type '" << child->name << std::endl;
-        Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, node);
+        std::cerr << "Primitive of type '" << child->name << "'" << std::endl;
+        Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, child);
         if(prim == NULL) {
             std::cerr << "WARNING: Primitive of type '" << child->name << "' unknown." << std::endl;
         }
