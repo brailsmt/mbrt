@@ -22,6 +22,8 @@ void delete_sphere(Sphere * sphere);
 /// A Sphere is defined by its m_center point and its radius.
 class Sphere : public Primitive {
 
+    protected:
+
     /// Fake a static initializer.
     class StaticInit {
         public:

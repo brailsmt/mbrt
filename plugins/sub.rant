@@ -29,5 +29,5 @@ end
 desc "Link libmbrtplugins.so.0.0.1 to libmbrtplugins.so"
 file "libmbrtplugins.so" => %w( libmbrtplugins.so.0.0.1 ) do |task_info|
     sys "sudo ldconfig -v -n ."
-    sys "ln -s #{task_info.prerequisites[0]} #{task_info.name}"
+    sys "ln -fs #{task_info.prerequisites[0]} #{task_info.name}"
 end
