@@ -6,16 +6,16 @@ rt: all
 clean:
 	rant clean
 
-scenes/test_reflection.xml: all
+scenes/test_defect.xml: all
 
-renders/reflection_test.png: all scenes/test_defect.xml
-	./trace.sh scenes/test_defect.xml
+renders/test_defect.ppm: all scenes/test_defect.xml
+	./rt -s scenes/test_defect.xml
 
 
-sample: renders/reflection_test.png
+sample: renders/test_defect.ppm
 
 
 show-sample: sample 
-	gtksee renders/reflection_test.png
+	feh scene.ppm
 
 
