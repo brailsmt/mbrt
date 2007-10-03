@@ -96,6 +96,7 @@ Primitive * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
             map<string, string> props = get_properties(child);
 
             if ( props.empty() == false ) {
+                //MaterialFactory::get_instance()->listSignals();
                 Material * material = MaterialFactory::get_instance()->create(props["type"], props);
                 if(material == NULL)
                 {
@@ -212,13 +213,13 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
 
     child = node->children;
     while(child != node->last) {
-        if(m_node_handlers.find((char *)child->name) != m_node_handlers.end()) {
-            Primitive * prim = m_node_handlers[(char *)child->name].emit(scene, child);
-
-            // Make the primitive a light source since it was in the <light_sources> tag.
+        std::cerr << "Primitive of type '" << child->name << "'" << std::endl;
+        Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, child);
+        if(prim == NULL) {
+            std::cerr << "WARNING: Primitive of type '" << child->name << "' unknown." << std::endl;
+        }
+        else {
             prim->set_is_light(true);
-
-            // Add the primitive to the scene
             scene->add_primitive(prim);
         }
 

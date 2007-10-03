@@ -32,7 +32,7 @@ objs = src.ext( 'o' )
 rt_deps = objs
 
 desc "Build everything that has changed since the last build"
-task :all => %w( cscope.out rt )
+task :all => %w( cscope.out plugins/default rt )
 
 desc "Build everything from scratch."
 task :dist_all => %w( clean dox cscope.out rt )

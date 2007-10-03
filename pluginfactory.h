@@ -48,7 +48,6 @@ class PluginFactory {
         /// Map of function pointers to methods for creating materials.
         std::map<std::string, _SigType>  m_createFunctions;
 
-
     public:
         /** Creates a Material object based on the type and the passed in parameters
          *
@@ -110,8 +109,8 @@ class PluginFactory {
         ///Return an instance of PluginFactory.
         ///
         ///@return instance of PluginFactory
-        static PluginFactory * get_instance() {
-            static PluginFactory<_ParentType, _SigType, _SlotType> * instance = NULL;
+        static PluginFactory<_ParentType, _SigType, _SlotType> * get_instance() {
+            static PluginFactory<_ParentType, _SigType, _SlotType> * instance;
             if(instance == NULL) {
                 std::cerr << "Creating new factory" << std::endl;
                 instance = new PluginFactory<_ParentType, _SigType, _SlotType>();

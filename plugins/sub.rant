@@ -16,6 +16,7 @@ gen Rule, :o => :cpp do |task_info|
     sys "#{cconf.cxx} -fPIC #{cconf.cflags} #{mycconf.incdirs} #{cconf.incdirs} -c -o #{task_info.name} #{task_info.source}"
 end
 
+desc "Build the plugins"
 task :default => %w(libmbrtplugins.so.0.0.1 libmbrtplugins.so)
 
 #make the static library
