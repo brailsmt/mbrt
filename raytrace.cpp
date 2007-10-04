@@ -21,7 +21,7 @@
 #include "scene.h"
 
 using std::vector;
-using std::cerr;
+using std::cout;
 using std::endl;
 
 struct raytrace_info rt_info;
@@ -175,7 +175,6 @@ unsigned long trace_rays(Color * data, Point3D eye) {
         screen_intersection.y += dy;
     }
 
-    cerr << endl;
     return rt_info.traced_rays;
 }
 //}}}
@@ -187,20 +186,20 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
     seconds %= 3600;
     minutes = seconds / 60;
     seconds %= 60;
-    cerr << endl;
-    cerr << endl;
-    cerr << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
-    cerr << endl;
-    cerr << endl;
+    cout << endl;
+    cout << endl;
+    cout << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
+    cout << endl;
+    cout << endl;
 
-    cerr << "Rendering " << fname << " took " << elapsed;
-    cerr << " seconds (" << hours << ":" << minutes << ":" << seconds << ")" << endl;
+    cout << "Rendering " << fname << " took " << elapsed;
+    cout << " seconds (" << hours << ":" << minutes << ":" << seconds << ")" << endl;
 
-    cerr.setf(cerr.fixed);
-    cerr.precision(5);
-    cerr << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
-    cerr << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
-    cerr << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
+    cout.setf(cout.fixed);
+    cout.precision(5);
+    cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
+    cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
+    cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
 }
 //}}}
 //{{{
@@ -212,12 +211,12 @@ void load_plugins() {
     for (; *iter != NULL ; ++iter) {
         // No need to keep the handle to the shared object;
         // we don't need to get any symbols from
-        cerr << "Attempting to load plugin '" << *iter << "'.."<< endl;
+        log_info("Attempting to load plugin '%s'...\n", *iter);
         if(dlopen(*iter, RTLD_NOW)) {
-            cerr << "Finished loading plugin '" <<*iter << '\'' << endl;
+            log_info("Finished loading plugin '%s'\n", *iter);
         }
         else {
-            cerr << "..failed."<< endl;
+            log_err("Failed to load plugin '%s'.\n", *iter);
         }
     }
 
@@ -238,6 +237,9 @@ void register_signal_handlers() {
 
 //{{{
 int main(int argc, char ** argv) {
+    openlog("mbrt", LOG_CONS, LOG_DEBUG);
+    log_info("******************  Starting mbrt  ******************\n");
+
     register_signal_handlers();
 
     load_plugins();
@@ -251,10 +253,10 @@ int main(int argc, char ** argv) {
     extern int optind, opterr, optopt;
     int option_index = 0;
     static struct option long_options[] = {
-                                              {"scene",  1, NULL, 's'},
-                                              {"output", 1, NULL, 'o'},
-                                              {0, 0, 0, 0}
-                                          };
+        {"scene",  1, NULL, 's'},
+        {"output", 1, NULL, 'o'},
+        {0, 0, 0, 0}
+    };
 
     int opt_val = -2;
     while ( (opt_val = getopt_long (argc, argv, "s:o:", long_options, &option_index)) != -1 ) {
@@ -295,6 +297,8 @@ int main(int argc, char ** argv) {
     endwin();
     print_stats(filename, elapsed, primary_rays, traced_rays);
 
+    log_info("******************  Exiting mbrt  ******************\n");
+    closelog();
     exit(EXIT_SUCCESS);
 }
 //}}}

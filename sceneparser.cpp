@@ -12,8 +12,6 @@
 
 #include <iostream>
 
-using std::cerr;
-using std::endl;
 using std::map;
 using std::vector;
 using std::string;
@@ -24,27 +22,27 @@ SceneParser::SceneParser(const char * scene_filename)
       m_scene_filename(scene_filename)
 
 {
-    cerr << "SceneParser()" << endl;
+    log_debug("SceneParser()\n");
     register_default_handlers();
 
-    cerr << m_scene_filename << endl;
+    log_debug("%s\n", m_scene_filename.c_str());
     xmlDoc * doc = xmlReadFile(m_scene_filename.c_str(), NULL, 0);
 
     if ( doc == NULL ) {
-        cerr << "Could not read and parse " << m_scene_filename << "." << endl;
+        log_err("Could not read and parse %s!\n", m_scene_filename.c_str());
         exit_mbrt(EXIT_FAILURE);
     }
 
     xmlNode * root = xmlDocGetRootElement(doc);
     if ( root == NULL ) {
-        cerr << "Could not find root element in file " << m_scene_filename << "." << endl;
+        log_err("Could not find root element in file %s!\n", m_scene_filename.c_str());
         exit_mbrt(EXIT_FAILURE);
     }
     parse(root);
 
     xmlFreeDoc(doc);
     xmlCleanupParser();
-    cerr << "End SceneParser()" << endl;
+    log_debug("End SceneParser()\n");
 }
 //}}}
 
@@ -56,34 +54,6 @@ void SceneParser::register_default_handlers() {
     m_node_handlers["objects"      ].connect(sigc::mem_fun(this, &SceneParser::parse_objects));
     m_node_handlers["colors"       ].connect(sigc::mem_fun(this, &SceneParser::parse_colors));
     m_node_handlers["materials"    ].connect(sigc::mem_fun(this, &SceneParser::parse_materials));
-}
-//}}}
-//{{{
-xmlXPathObjectPtr SceneParser::get_xpath_nodes(xmlDocPtr root, char *xpath) {
-
-    xmlXPathContextPtr context;
-    xmlXPathObjectPtr rv = NULL;
-
-    context = xmlXPathNewContext(root);
-    if (context == NULL) {
-        cerr << "Error in xmlXPathNewContext" << endl;
-        exit_mbrt(EXIT_FAILURE);
-    }
-    else {
-        rv = xmlXPathEvalExpression((xmlChar *)xpath, context);
-        xmlXPathFreeContext(context);
-
-        if (rv == NULL) {
-            cerr << "Error in xmlXPathEvalExpression" << endl;
-            exit_mbrt(EXIT_FAILURE);
-        }
-        else if (xmlXPathNodeSetIsEmpty(rv->nodesetval)) {
-            xmlXPathFreeObject(rv);
-            cerr << "No result" << endl;
-        }
-    }
-
-    return rv;
 }
 //}}}
 //{{{
@@ -100,7 +70,7 @@ Primitive * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
                 Material * material = MaterialFactory::get_instance()->create(props["type"], props);
                 if(material == NULL)
                 {
-                    std::cerr << "ERROR: Material of type '" << props["type"] << "' unknown." << std::endl;
+                    log_crit("Material of type '%s' unknown!\n", props["type"].c_str());
                     exit_mbrt(1);
                 }
 
@@ -149,10 +119,10 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 
     // Parse all objects.
     while(child != node->last) {
-        std::cerr << "Primitive of type '" << child->name << "'" << std::endl;
+        log_debug("Primitive of type '%s'.\n", child->name);
         Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, child);
         if(prim == NULL) {
-            std::cerr << "WARNING: Primitive of type '" << child->name << "' unknown." << std::endl;
+            log_warn("Primitive of type '%s' unknown...Skipping!\n", child->name);
         }
         else {
             scene->add_primitive(prim);
@@ -166,7 +136,7 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 //}}}
 //{{{
 Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
-    cerr << "Entering SceneParser::parse_meta()" << endl;
+    log_debug("Entering SceneParser::parse_meta()\n");
     scene->set_output_filename(m_scene_filename.replace(m_scene_filename.find(".xml"), 4, ".ppm"));
 
     xmlNode * child = node->children;
@@ -189,34 +159,34 @@ Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
         child = child->next;
     }
 
-    cerr << "Leaving SceneParser::parse_meta()" << endl;
+    log_debug("Leaving SceneParser::parse_meta()\n");
     return NULL;
 }
 //}}}
 //{{{
 Primitive * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
-    cerr << "Entering SceneParser::parse_camera()" << endl;
+    log_debug("Entering SceneParser::parse_camera()\n");
     map<string, string> props = get_properties(node);
     scene->set_camera((double)strtod(props["x"].c_str(), NULL),
                       (double)strtod(props["y"].c_str(), NULL),
                       (double)strtod(props["z"].c_str(), NULL));
 
-    cerr << "Leaving SceneParser::parse_camera()" << endl;
+    log_debug("Leaving SceneParser::parse_camera()\n");
     return NULL;
 }
 //}}}
 //{{{
 Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
-    cerr << "Entering SceneParser::parse_light_sources()" << endl;
+    log_debug("Entering SceneParser::parse_light_sources()\n");
     /// @todo This is a near duplicate of parse_objects()
     xmlNode * child = node->children;
 
     child = node->children;
     while(child != node->last) {
-        std::cerr << "Primitive of type '" << child->name << "'" << std::endl;
+        log_debug("Primitive of type '%s'\n", child->name);
         Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, child);
         if(prim == NULL) {
-            std::cerr << "WARNING: Primitive of type '" << child->name << "' unknown." << std::endl;
+            log_warn("Primitive of type '%s' unknown...Skipping!\n", child->name);
         }
         else {
             prim->set_is_light(true);
@@ -226,13 +196,13 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
         child = child->next;
     }
 
-    cerr << "Leaving SceneParser::parse_light_sources()" << endl;
+    log_debug("Leaving SceneParser::parse_light_sources()\n");
     return NULL;
 }
 //}}}
 //{{{
 void SceneParser::parse(xmlNode * node) {
-    cerr << "Entering SceneParser::parse()" << endl;
+    log_debug("Entering SceneParser::parse()\n");
 
     if(strcmp((char *)node->name, "scene") == 0) {
         Scene * scene        = Scene::get_instance();
@@ -243,19 +213,19 @@ void SceneParser::parse(xmlNode * node) {
                 m_node_handlers[(char *)child->name].emit(scene, child);
             }
             else {
-                cerr << "Cannot parse <" << child->name << "> nodes.  Skipping..." << endl;
+                log_warn("Cannot parse <%s> nodes.  Skipping...", child->name);
             }
 
             child = child->next;
         }
 
-        cerr << "==================== DONE PARSING XML ==========================" << endl;
+        log_info("==================== DONE PARSING XML ==========================");
     }
     else {
-        cerr << "Expecting <scene> node, but got <" << node->name << ">." << endl;
+        log_err("Expecting <scene> node, but got <%s>.", node->name);
     }
 
-    cerr << "Leaving SceneParser::parse()" << endl;
+    log_debug("Leaving SceneParser::parse()\n");
 }
 //}}}
 

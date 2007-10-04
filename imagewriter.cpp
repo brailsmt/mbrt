@@ -11,8 +11,6 @@
 #include <iostream>
 
 using std::string;
-using std::cerr;
-using std::endl;
 
 //{{{
 PpmImageWriter::PpmImageWriter(std::string _filename, int _height, int _width)

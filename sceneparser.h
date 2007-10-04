@@ -8,7 +8,6 @@
 #include <map>
 #include <string>
 #include <libxml/parser.h>
-#include <libxml/xpath.h>
 #include <libxml/tree.h>
 #include <sigc++/sigc++.h>
 
@@ -58,15 +57,4 @@ class SceneParser : public sigc::trackable {
         ///
         /// @param root The root of the document to parse.
         void parse(xmlNode * root);
-
-        /// Get the nodes from the root which match the xpath passed in.
-        ///
-        /// @param root The root node to be searched with the xpath.
-        /// @param xpath The xpath to process.
-        xmlXPathObjectPtr get_xpath_nodes(xmlDocPtr root, char *xpath);
-
-        /// Return the node content from the xmlXPathObjectPtr, for node at index idx.
-        ///
-        /// @return The content of the node, or NULL.
-        char * get_xpath_content(const xmlXPathObjectPtr xpath, int idx = 0);
 };
