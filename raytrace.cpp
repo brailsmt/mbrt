@@ -12,6 +12,7 @@
 #include <iostream>
 #include <ncurses.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "raytrace_defs.h"
 #include "imagewriter.h"
@@ -178,7 +179,6 @@ unsigned long trace_rays(Color * data, Point3D eye) {
     return rt_info.traced_rays;
 }
 //}}}
-
 //{{{
 void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays) {
     int hours, minutes, seconds;
@@ -224,8 +224,21 @@ void load_plugins() {
     globfree(&glob_data);
 }
 //}}}
+
+/// Register signal handlers to ensure ncurses is shut down properly when the
+/// process is terminated or crashes.
+//{{{
+void register_signal_handlers() {
+    struct sigaction sigact;
+    sigact.sa_handler = exit_mbrt;
+    sigaction(15, &sigact, NULL);
+    sigaction(11, &sigact, NULL);
+}
+//}}}
+
 //{{{
 int main(int argc, char ** argv) {
+    register_signal_handlers();
 
     load_plugins();
 
