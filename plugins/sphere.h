@@ -8,7 +8,6 @@
 
 #include "primitive.h"
 #include "scene.h"
-#include "xml_defs.h"
 #include "xml_util.h"
 #include <string>
 

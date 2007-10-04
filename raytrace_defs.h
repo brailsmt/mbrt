@@ -73,19 +73,6 @@ struct raytrace_info {
 }
 ;
 
-/// Trace a ray for each pixel in image.
-///
-/// @param data Image imformation that will be populated by tracing the rays.
-/// @param eye The origin of all rays shot into the scene.
-unsigned long trace_rays( Color * data, Point3D eye);
-
-/// Trace a ray from the coordinate of the eye, through every pixel in the image.
-///
-/// @param pixel The pixel in the image which will be calculated by tracing the ray.
-/// @param ray The ray to be traced.
-/// @param depth The current depth in the recursion of rays traced.
-void trace_ray( Color &pixel, const Ray &ray, int depth);
-
 /// Generate a jitter within the range [-limit, limit).
 //{{{
 inline double jitter(double limit) {
@@ -96,10 +83,12 @@ inline double jitter(double limit) {
 //}}}
 
 /// Provide a way to cleanly shutdown ncurses and exit the application.
+//{{{
 inline void exit_mbrt(int code) {
     endwin();
     exit(code);
 }
+//}}}
 #endif
 
 // vim: ts=4 sw=4
