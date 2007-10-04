@@ -4,12 +4,9 @@
 /// &copy; 2007 Michael Brailsford
 
 #include "sphere.h"
-#include <iostream>
 #include <vector>
 #include "xml_util.h"
 
-using std::cerr;
-using std::endl;
 using std::vector;
 using std::string;
 

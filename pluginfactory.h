@@ -63,13 +63,11 @@ class PluginFactory {
             if(m_createFunctions.find(type) != m_createFunctions.end()) {
                 _ParentType * tmp =  m_createFunctions[type].emit(attributes);
                 if(!tmp)
-                    std::cerr << "1Going to return null." << std::endl;
+                    log_warn("[deprecated] Create function for %s type returned NULL.", type.c_str());
                 return tmp;
-                //return m_createFunctions[type].emit(attributes);
             }
             
-            std::cerr << "1Returning null because not found." << std::endl;
-
+            log_warn("[deprecated] Could not find signal for %s type.", type.c_str());
             return NULL;
         }
 
@@ -77,12 +75,11 @@ class PluginFactory {
             if(m_createFunctions.find(type) != m_createFunctions.end()) {
                 _ParentType * tmp =  m_createFunctions[type].emit(node);
                 if(!tmp)
-                    std::cerr << "Going to return null." << std::endl;
+                    log_warn("Create function for <%s> node returned NULL.", node->name);
                 return tmp;
-                //return m_createFunctions[type].emit(node);
             }
 
-            std::cerr << "Returning null because not found." << std::endl;
+            log_warn("Could not find signal for %s type.", type.c_str());
             return NULL;
         }
 
@@ -95,15 +92,15 @@ class PluginFactory {
         ///                           under the type name.  The first to register will always win, and a warning will
         ///                           be logged that another attempt was made to register.
         bool registerPlugin(std::string type, _SlotType createFunction) {
-            std::cerr << "Registering function for type <" << type << ">." << std::endl;
+            log_debug("Registering function for type <%s>.", type.c_str());
             if(m_createFunctions.find(type) != m_createFunctions.end()) {
-                std::cerr << "Warning: function for type <" << type << "> already registered, ignoring." << std::endl;
+                log_warn("Function for type <%s> already registered, ignoring.", type.c_str());
                 return false;
             }
 
-            std::cerr << "Adding plugin for <" << type << "> node..." ;
+            log_debug("Adding plugin for <%s> node...", type.c_str());
             m_createFunctions[type].connect(createFunction);
-            std::cerr << "...done" << std::endl;
+            log_debug("...done");
         }
 
         ///Return an instance of PluginFactory.
@@ -112,7 +109,7 @@ class PluginFactory {
         static PluginFactory<_ParentType, _SigType, _SlotType> * get_instance() {
             static PluginFactory<_ParentType, _SigType, _SlotType> * instance;
             if(instance == NULL) {
-                std::cerr << "Creating new factory" << std::endl;
+                log_debug("Creating new factory");
                 instance = new PluginFactory<_ParentType, _SigType, _SlotType>();
             }
             return instance;

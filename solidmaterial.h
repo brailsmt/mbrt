@@ -209,12 +209,12 @@ inline Material * new_solid_material(std::map<std::string, std::string> props) {
     double opacity = props.count("opacity") > 0 ?
         (double)strtod(props["opacity"].c_str(), NULL)          :  OPAQUE;
 
-    std::cerr << "Creating material '" << props["name"] << "' with:"  << std::endl;
-    std::cerr << "  reflection:"          << reflection    << std::endl;
-    std::cerr << "  diffusion:"           << diffusion     << std::endl;
-    std::cerr << "  reflectivity:"        << reflectivity  << std::endl;
-    std::cerr << "  refraction:"          << refraction    << std::endl;
-    std::cerr << "  opacity: "            << opacity       << std::endl;
+    log_debug("Creating material '%s' with:", props["name"].c_str());
+    log_debug("  reflection:   %2.2f", reflection  );
+    log_debug("  diffusion:    %2.2f", diffusion   );
+    log_debug("  reflectivity: %2.2f", reflectivity);
+    log_debug("  refraction:   %2.2f", refraction  );
+    log_debug("  opacity:      %2.2f", opacity     );
 
     return new SolidMaterial( color,
             isLight,

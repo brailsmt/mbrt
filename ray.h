@@ -7,9 +7,6 @@
 #include <iostream>
 #include <sstream>
 
-using std::cerr;
-using std::endl;
-
 /// Classic ray, with an origin and direction.
 //{{{
 class Ray {

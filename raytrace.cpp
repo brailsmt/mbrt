@@ -231,7 +231,7 @@ void register_signal_handlers() {
     struct sigaction sigact;
     sigact.sa_handler = exit_mbrt;
     sigaction(15, &sigact, NULL);
-    sigaction(11, &sigact, NULL);
+    //sigaction(11, &sigact, NULL);
 }
 //}}}
 

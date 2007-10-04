@@ -166,7 +166,6 @@ double NoiseMaterial::get_reflection(const Point3D& intersection_point) const
     double coeff = choose_material(intersection_point);
     double contributionOne = m_material_one->get_reflection(intersection_point) * coeff;
     double contributionTwo = m_material_two->get_reflection(intersection_point) * (1.0 - coeff);
-    //std::cerr << "Noise: returning reflection of " << (contributionOne + contributionTwo) << std::endl;
     return contributionOne + contributionTwo;
 }
 
@@ -175,7 +174,6 @@ double NoiseMaterial::get_reflectivity(const Point3D& intersection_point) const
     double coeff = choose_material(intersection_point);
     double contributionOne = m_material_one->get_reflectivity(intersection_point) * coeff;
     double contributionTwo = m_material_two->get_reflectivity(intersection_point) * (1.0 - coeff);
-    //std::cerr << "Noise: returning reflectivity of " << (contributionOne + contributionTwo) << std::endl;
     return contributionOne + contributionTwo;
 }
 

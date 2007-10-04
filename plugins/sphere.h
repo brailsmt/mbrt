@@ -56,8 +56,9 @@ class Sphere : public Primitive {
               m_material_name(material_name),
               m_color_name(color_name)
         {
-            cerr << "Creating a Sphere at (" << x << ", " << y << ", " << z << ") with a radius of ";
-            cerr << r << " color = " << color_name << " and material = " << material_name <<endl;
+            log_debug("here");
+            log_debug("Creating a Sphere at (%0.2f, %0.2f, %0.2f) with a radius of %0.2f, color = %s, and material = %s",
+                                                        x, y, z, r, m_color_name.c_str(), m_material_name.c_str());
 
             m_center = Point3D(x,y,z);
             m_material = Scene::get_instance()->get_material(material_name);
@@ -137,7 +138,7 @@ class Sphere : public Primitive {
 };
 
 Primitive * new_sphere(xmlNode * node) {
-    cerr << "Entering new_sphere()" << endl;
+    log_debug("Entering new_sphere()");
     Sphere * rv = NULL;
 
     xml_properties props = get_properties(node);
@@ -153,10 +154,10 @@ Primitive * new_sphere(xmlNode * node) {
         rv = new Sphere(x, y, z, radius, color, material);
     }
     else {
-        cerr << "Empty props." << endl;
+        log_err("No properties specified for <sphere> tag.");
     }
 
-    cerr << "Leaving new_sphere()" << endl;
+    log_err("Leaving new_sphere()");
     return dynamic_cast<Primitive *>(rv);
 }
 
