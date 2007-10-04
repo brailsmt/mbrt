@@ -1,5 +1,6 @@
 /// @file raytrace.cpp
 /// @author Michael Brailsford <brailsmt@yahoo.com>
+/// @author Brandon Inman <brinman2002@yahoo.com>
 /// @date Fri Mar 23 00:10:18 -0500 2007
 /// &copy; 2007 Michael Brailsford
 
@@ -12,6 +13,9 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <iostream>
+
+#include <glob.h>
+#include <dlfcn.h>
 
 using std::cerr;
 using std::endl;
@@ -43,10 +47,42 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
 }
 //}}}
 
+//{{{
+
+void load_plugins()
+{
+    glob_t glob_data;
+    glob("plugins/*.so", 0, NULL, &glob_data);
+
+    char ** iter = glob_data.gl_pathv;
+    for (; *iter != NULL ; ++iter)
+    {
+        // No need to keep the handle to the shared object;
+        // we don't need to get any symbols from
+        cerr << "Attempting to load plugin '" << *iter << "'.."<< endl;
+        if(dlopen(*iter, RTLD_NOW))
+        {
+            cerr << "Finished loading plugin '" <<*iter << '\'' << endl;
+        }
+        else
+        {
+            cerr << "..failed."<< endl;
+        }
+    }
+
+    globfree(&glob_data);
+
+    
+    
+}
+
+//}}}
+
 #ifndef _UNITTEST 
 //{{{
 int main(int argc, char ** argv) {
-    initscr();
+
+    load_plugins();
 
     time_t start_time = time(NULL);
     char filename[256] = "scene.xml";
@@ -83,6 +119,7 @@ int main(int argc, char ** argv) {
 
     unsigned long traced_rays;
     int x, y;
+    initscr();
     getmaxyx(stdscr, y, x);
     mvprintw(y - 1, 0, "Tracing %s...", filename);
     traced_rays = trace_rays(data, scene->get_camera());

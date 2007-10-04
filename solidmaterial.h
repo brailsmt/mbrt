@@ -29,12 +29,6 @@ class SolidMaterial : public Material
          /// Dummy variable to run static initialization
         static SolidMaterialStaticInit m_init;
 
-    public:
-        /// Factory method to create a material from a set of attributes.
-        /// @param attributes A map of strings that determine the attributes of the material
-        /// @return A pointer to a SolidMaterial object.
-        static Material * createSolidMaterial(std::map<std::string, std::string> attributes);
-
     protected:
         /// This is the percentage of light that is reflected off this material.  This value is
         /// between 0 and 1, 0 means the material reflects 0% of the light, a 1 means the material
@@ -215,12 +209,12 @@ inline Material * new_solid_material(std::map<std::string, std::string> props) {
     double opacity = props.count("opacity") > 0 ?
         (double)strtod(props["opacity"].c_str(), NULL)          :  OPAQUE;
 
-    std::cerr << " Creating material '" << props["name"] << "' with:"  << std::endl;
-    std::cerr << "reflection:"          << reflection    << std::endl;
-    std::cerr << "diffusion:"           << diffusion     << std::endl;
-    std::cerr << "reflectivity:"        << reflectivity  << std::endl;
-    std::cerr << "refraction:"          << refraction    << std::endl;
-    std::cerr << "opacity: "            << opacity       << std::endl;
+    std::cerr << "Creating material '" << props["name"] << "' with:"  << std::endl;
+    std::cerr << "  reflection:"          << reflection    << std::endl;
+    std::cerr << "  diffusion:"           << diffusion     << std::endl;
+    std::cerr << "  reflectivity:"        << reflectivity  << std::endl;
+    std::cerr << "  refraction:"          << refraction    << std::endl;
+    std::cerr << "  opacity: "            << opacity       << std::endl;
 
     return new SolidMaterial( color,
             isLight,

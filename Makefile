@@ -16,6 +16,6 @@ sample: renders/test_defect.ppm
 
 
 show-sample: sample 
-	feh scene.ppm
+	feh scene.ppm &
 
 

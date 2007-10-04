@@ -6,43 +6,6 @@
 
 SolidMaterial::SolidMaterialStaticInit SolidMaterial::m_init;
 
-Material * SolidMaterial::createSolidMaterial(std::map<std::string, std::string> attributes)
-{
-    bool isLight = attributes.count("light") > 0;
-    
-    Color * color = Scene::get_instance()->get_color(attributes["color"]);
-
-    double reflection = attributes.count("reflection") > 0 ?
-        (double)strtod(attributes["reflection"    ].c_str(), NULL)   : 1.0;
-
-    double diffusion = attributes.count("diffusion") > 0 ?
-        (double)strtod(attributes["diffusion"].c_str(), NULL)        :  1.0;
-
-    double reflectivity = attributes.count("reflectivity") > 0 ?
-        (double)strtod(attributes["reflectivity"].c_str(), NULL)     :  35.0;
-
-    double refraction = attributes.count("refraction") > 0 ?
-        (double)strtod(attributes["refraction"].c_str(), NULL)       :  1.0;
-
-    double opacity = attributes.count("opacity") > 0 ?
-        (double)strtod(attributes["opacity"].c_str(), NULL)          :  OPAQUE;
-
-    std::cerr << "Creating material '" << attributes["name"] << "' with:"  << std::endl;
-    std::cerr << "reflection:"         << reflection         << std::endl;
-    std::cerr << "diffusion:"          << diffusion          << std::endl;
-    std::cerr << "reflectivity:"       << reflectivity       << std::endl;
-    std::cerr << "refraction:"         << refraction         << std::endl;
-    std::cerr << "opacity: "           << opacity            << std::endl;
-
-    return new SolidMaterial( color,
-                         isLight,
-                         reflection,
-                         diffusion,
-                         reflectivity,
-                         refraction,
-                         opacity
-                         );
-}
 
 Color * SolidMaterial::get_color(const Point3D& intersection_point) const 
 { 
