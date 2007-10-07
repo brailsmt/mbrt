@@ -89,6 +89,8 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
 
                     // Determine the vector at which the incoming ray is refracted.  This is done
                     // according to Snell's Law.
+                    
+                    // TODO{: only perform calculations if object is actually refracting light
                     double refraction_index = get_refraction_index(intersection_point);
                     double refract_coefficient = refraction_index / 1.0003; // / scene->global_refraction_index();
                     double normal_dot_neg_ray = dot_product(normal.direction(), -ray.direction());
@@ -96,6 +98,7 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                     if (sqrt_val >= 0.0) {
                         refract = ray.direction() * refract_coefficient + normal.direction() * ((normal_dot_neg_ray * refract_coefficient) - sqrt(sqrt_val));
                     }
+                    // }TODO
 
                     // Determine diffuse lighting.
                     if ( theta > 0.0 ) {
@@ -103,14 +106,18 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                         // If this spot is in shadow, skip it.
                         if ( is_in_shadow(rtl, intersection_point) == true )
                             continue;
+                        double reflectivity = 0.0;
+                        double specular_color = 1.0;
+                        if( (reflectivity = get_reflectivity(intersection_point)) > 0.0 )
+                        { 
+                            // Determine specular lighting.
+                            double spec_theta = dot_product(reflect, rtl.direction());
+                            specular_color = powf(spec_theta, get_reflectivity(intersection_point));
 
-                        // Determine specular lighting.
-                        double spec_theta = dot_product(reflect, rtl.direction());
-                        double spec_clr = powf(spec_theta, get_reflectivity(intersection_point));
-
-                        diffusion *= theta;
-                        rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
-                        rv += light->get_color(intersection_point) * spec_clr * get_reflection(intersection_point);
+                            diffusion *= theta;
+                            rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
+                            rv += light->get_color(intersection_point) * specular_color * get_reflection(intersection_point);
+                        }
                     }
                 }
             }
