@@ -111,13 +111,17 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                         if( (reflectivity = get_reflectivity(intersection_point)) > 0.0 )
                         { 
                             // Determine specular lighting.
-                            double spec_theta = dot_product(reflect, rtl.direction());
-                            specular_color = powf(spec_theta, get_reflectivity(intersection_point));
 
-                            diffusion *= theta;
-                            rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
-                            rv += light->get_color(intersection_point) * specular_color * get_reflection(intersection_point);
+                            double spec_theta = dot_product(reflect, rtl.direction());
+                            if(spec_theta > 0.0)
+                                specular_color = powf(spec_theta, get_reflectivity(intersection_point));
+                            else
+                                specular_color = 0.0;
+
                         }
+                        diffusion *= theta;
+                        rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
+                        rv += light->get_color(intersection_point) * specular_color * get_reflection(intersection_point);
                     }
                 }
             }

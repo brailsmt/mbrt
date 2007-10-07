@@ -28,6 +28,8 @@
         <material name='blue_marble'  type='noise' material1='solid_dark_blue'  material2='solidBlue' />
         <material name='green_marble' type='noise' material1='solid_dark_green' material2='solidGreen' />
 
+        <material name='defect' type='solid' color='green' reflectivity = '32.1' />
+
         <material name='checkered_marble' 
             type='checkered' 
             material1='blue_marble' 
