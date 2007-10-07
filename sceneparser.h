@@ -29,6 +29,7 @@ class SceneParser : public sigc::trackable {
         Primitive * parse_objects(Scene * scene, xmlNode * node);
         Primitive * parse_meta(Scene * scene, xmlNode * node);
         Primitive * parse_camera(Scene * scene, xmlNode * node);
+        Primitive * parse_bumpmaps(Scene * scene, xmlNode * node);
         Primitive * noop(Scene * scene, xmlNode * node);
 
         /// Parse a set of color nodes and return them in a map<char *, Color *>.

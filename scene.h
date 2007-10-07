@@ -13,6 +13,7 @@ class Primitive;
 class Point3D;
 class Color;
 class Material;
+class BumpMap;
 
 //{{{
 /// Scene represents everything to be rendered.  This includes light sources,
@@ -31,6 +32,9 @@ class Scene {
 
         /// This is a map of all materials available for the scene.
         std::map<std::string, Material *> m_materials;
+        
+        /// This is a map of bump maps available for the scene.
+        std::map<std::string, BumpMap *> m_bumpmaps;
         
         /// This is the point which describes the camera or eye which is looking into the scene.
         Point3D camera;
@@ -114,6 +118,13 @@ class Scene {
         
         /// Add a primitive to the scene.
         void add_primitive(Primitive * prim) { scene.push_back(prim); }
+        
+        /// Add a bump map to the scene.
+        void add_bumpmap(std::string name, BumpMap * bumpmap) { m_bumpmaps[name] = bumpmap; }
+        
+        /// Return the bumpmap named by the parameter.  The bumpmap is
+        /// defined in the scene definition file.
+        BumpMap * get_bumpmap(std::string name) { return m_bumpmaps[name]; }
 };
 //}}}
 

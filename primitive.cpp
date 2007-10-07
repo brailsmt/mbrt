@@ -60,7 +60,14 @@ bool Primitive::set_is_light(bool v) {
 //{{{
 Ray Primitive::get_final_normal(const Point3D& p)
 {
-    return get_normal(p);
+    if(m_bumpmap == NULL)
+    {
+        return get_normal(p);
+    }
+    else
+    {
+        return m_bumpmap->perturb_normal(get_normal(p), p);
+    }
 }
 //}}}
 

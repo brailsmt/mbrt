@@ -1,4 +1,4 @@
-/* file name       : pluginfactory.h
+/**file name       : pluginfactory.h
  * contributors    : Brandon Inman
  *                   Michael Brailsford
  * header inserted : Mon Sep 24 22:31:24 -0500 2007
@@ -19,6 +19,7 @@
 
 #include "material.h"
 #include "primitive.h"
+#include "bumpmap.h"
 
 /// Signal for a function which constructs a new instance of a Material.
 /// @todo  Change this to accept the XML node structure so we can keep the
@@ -29,6 +30,9 @@ typedef sigc::signal<Material *, std::map<std::string, std::string> > material_c
 /// Signal for a function which constructs a new instance of a Primitive.
 typedef sigc::signal<Primitive *, xmlNode *> primitive_create_fn;
 
+/// Signal for a function which constructs a new instance of a BumpMap.
+typedef sigc::signal<BumpMap *, xmlNode *> bumpmap_create_fn;
+
 /// This is an abstraction for material_create_fn signals to allow them to be
 /// passed transparently to the register function.
 typedef sigc::slot<Material *, std::map<std::string, std::string> > material_create_slot;
@@ -37,6 +41,9 @@ typedef sigc::slot<Material *, std::map<std::string, std::string> > material_cre
 /// passed transparently to the register function.
 typedef sigc::slot<Primitive *, xmlNode *> primitive_create_slot;
 
+/// This is an abstraction for bumpmap_create_fn signals to allow them to be
+/// passed transparently to the register function.
+typedef sigc::slot<BumpMap *, xmlNode *> bumpmap_create_slot;
 
 
 /// PluginFactory allows plugins to register themselves so that the
@@ -119,9 +126,9 @@ class PluginFactory {
 
 typedef PluginFactory<Material,  material_create_fn,  material_create_slot>  MaterialFactory;
 typedef PluginFactory<Primitive, primitive_create_fn, primitive_create_slot> PrimitiveFactory;
+typedef PluginFactory<BumpMap,   bumpmap_create_fn,   bumpmap_create_slot> BumpMapFactory;
 
 #endif
-
 /*
  * change log
  *

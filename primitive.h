@@ -4,6 +4,7 @@
 #include "raytrace_defs.h"
 #include "material.h"
 #include "color.h"
+#include "bumpmap.h"
 #include "ray.h"
 
 /// Defines an abstract interface that all primitives must implement.
@@ -101,6 +102,11 @@ class Primitive {
         /// might also be useful in the future for centering textures
         /// or materials around.
         Point3D m_center;
+
+        /// Bump map associated with primitive.  May be null.
+        //TODO should this be a part of the Material? Probably not...
+
+        BumpMap * m_bumpmap;
 
     private:
         /// Returns the final surface normal at point p, after being processed 

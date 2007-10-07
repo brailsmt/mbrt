@@ -54,6 +54,7 @@ void SceneParser::register_default_handlers() {
     m_node_handlers["objects"      ].connect(sigc::mem_fun(this, &SceneParser::parse_objects));
     m_node_handlers["colors"       ].connect(sigc::mem_fun(this, &SceneParser::parse_colors));
     m_node_handlers["materials"    ].connect(sigc::mem_fun(this, &SceneParser::parse_materials));
+    m_node_handlers["bumpmaps"     ].connect(sigc::mem_fun(this, &SceneParser::parse_bumpmaps));
 }
 //}}}
 //{{{
@@ -226,6 +227,31 @@ void SceneParser::parse(xmlNode * node) {
     }
 
     log_debug("Leaving SceneParser::parse()\n");
+}
+//}}}
+
+Primitive * SceneParser::parse_bumpmaps(Scene * scene, xmlNode * node) 
+{
+    // This function was copy/paste/modify two things
+    // Sounds like a candidate for refactoring.
+    
+    xmlNode * child = node->children;
+
+    // Parse all objects.
+    while(child != node->last) {
+        log_debug("BumpMap of type '%s'.\n", child->name);
+        BumpMap * bmap = BumpMapFactory::get_instance()->create((char *)child->name, child);
+        if(bmap == NULL) {
+            log_warn("BumpMap of type '%s' unknown...Skipping!\n", child->name);
+        }
+        else {
+            scene->add_bumpmap((char *)child->name, bmap);
+        }
+
+        child = child->next;
+    }
+
+    return NULL;
 }
 //}}}
 
