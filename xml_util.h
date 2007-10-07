@@ -16,7 +16,9 @@
 typedef std::map<std::string, std::string> xml_properties;
 
 //{{{
-xml_properties get_properties(xmlNode * node) {
+//xml_properties get_properties(xmlNode * node) ;
+static xml_properties get_properties(xmlNode * node) 
+{
     xmlAttr * props = node->properties;
     xml_properties rv;
 
@@ -28,6 +30,5 @@ xml_properties get_properties(xmlNode * node) {
 
     return rv;
 }
-//}}}
 #endif
 

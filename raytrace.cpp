@@ -212,13 +212,14 @@ void load_plugins() {
     char ** iter = glob_data.gl_pathv;
     for (; *iter != NULL ; ++iter) {
         // No need to keep the handle to the shared object;
-        // we don't need to get any symbols from
+        // we don't need to get any symbols from it 
         log_info("Attempting to load plugin '%s'...\n", *iter);
         if(dlopen(*iter, RTLD_NOW)) {
             log_info("Finished loading plugin '%s'\n", *iter);
         }
         else {
-            log_err("Failed to load plugin '%s'.\n", *iter);
+            log_err("Failed to load plugin '%s'.\n", *iter );
+            log_err(" dlerror() reports '%s' \n", dlerror() );
         }
     }
 
