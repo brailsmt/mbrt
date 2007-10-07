@@ -67,6 +67,8 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
             //}}}
             // Reflect the ray, if the surface is reflective.   {{{
             double reflection_coefficient = primitive->get_reflection(intersection_point);
+
+            //TODO we seem to be missing an important part: applying the coefficient.
             if (reflection_coefficient > 0.0) {
                 depth++;
                 trace_ray(pixel, Ray(intersection_point, reflect), depth);
