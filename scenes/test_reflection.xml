@@ -1,9 +1,9 @@
 <scene>
     <meta>
-        <width  pixels="800" />
-        <height pixels="800" />
+        <width  pixels="600" />
+        <height pixels="600" />
         <file name="renders/test_reflection.ppm" />
-        <subpixels square_of='3'/>
+        <subpixels square_of='2'/>
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />
@@ -20,21 +20,21 @@
     </colors>
 
     <materials>
-        <material name='solidBlue'   type='solid' color='blue' />
-        <material name='solidWhite'  type='solid' color='white' />
-        <material name='solidYellow' type='solid' color='yellow' />
-        <material name='solidRed'    type='solid' color='red' />
-        <material name='solidGreen'  type='solid' color='green' /> 
+        <material name='solid_white'  type='solid' color='white' />
+        <material name='solid_yellow' type='solid' color='yellow' />
+        <material name='solid_red'    type='solid' color='red' />
+        <material name='solid_green'  type='solid' color='green' reflection='0.0' reflectivity='0.0' /> 
 
-        <material name='solid_dark_green' type='solid'  color='dark_green' /> 
-        <material name='solid_dark_blue'  type='solid'  color='dark_blue' />
+        <material name='solid_dark_green' type='solid'  color='dark_green' reflection='1.0' reflectivity='30.0' /> 
+        <material name='solid_blue'       type='solid'  color='blue'       reflection='1.0' reflectivity='30.0'/>
+        <material name='solid_dark_blue'  type='solid'  color='dark_blue'  reflection='1.0' reflectivity='30.0' />
 
-        <material name='blue_marble'  type='noise' material1='solid_dark_blue'  material2='solidBlue' />
-        <material name='green_marble' type='noise' material1='solidGreen' material2='solidGreen' />
+        <material name='blue_marble'  type='noise' material1='solid_dark_blue'  material2='solid_blue' />
+        <material name='green_marble' type='noise' material1='solid_green' material2='solid_green' />
 
 
-        <material name='checkered'  type='checkered' material1='solidBlue'  material2='solidWhite' />
-        <material name='noise'      type='noise'     material1='solidBlue'  material2='solidWhite' />
+        <material name='checkered'  type='checkered' material1='solid_blue'  material2='solid_white' />
+        <material name='noise'      type='noise'     material1='solid_blue'  material2='solid_white' />
 
         <material name='checkered_marble' 
             type='checkered' 
@@ -49,9 +49,9 @@
 
     <objects>
 
-        <sphere x='  0' y='  0' z='  0' radius='3'  color='white' />
+        <sphere x='  0' y='  0' z='  0' radius='3' material='solid_white'  />
         <sphere x=' 10' y='  0' z=' 10' radius='3' material='noise' color='blue'  />
-        <sphere x='  0' y=' 10' z=' 15' radius='3' color='red'  />
+        <sphere x='  0' y=' 10' z=' 15' radius='3' material='solid_red'  />
         <sphere x='-10' y=' 10.1' z=' 14' radius='3' material='checkered_marble'  />
         <!-- Specifying material overrides any color value. -->
         <sphere x='  0' y='-10' z='-15' radius='3' material='checkered' color='green'  />

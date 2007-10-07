@@ -6,16 +6,15 @@ rt: all
 clean:
 	rant clean
 
-scenes/test_defect.xml: all
+scenes/test_reflection.xml: all
 
-renders/test_defect.ppm: all scenes/test_defect.xml
-	./rt -s scenes/test_defect.xml -o renders/test_defect.ppm
+renders/test_reflection.ppm: all scenes/test_reflection.xml
+	./rt -s scenes/test_reflection.xml -o renders/test_reflection.ppm
 
+.sample: renders/test_reflection.ppm
+	touch .sample
 
-sample: renders/test_defect.ppm
-
-
-show-sample: sample 
-	feh renders/test_defect.ppm &
+show-sample: all .sample
+	feh renders/test_reflection.ppm &
 
 

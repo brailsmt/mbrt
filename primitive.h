@@ -44,8 +44,11 @@ class Primitive {
 
         virtual bool set_is_light(bool ) ;
 
-        /// Returns the surface normal at point p.
+        /// Returns the surface normal at point p. Derived classes should override
+        /// this to provide the correct surface normal for the given point.
         virtual Ray get_normal(const Point3D &p) = 0;
+
+
 
         /// Determine the contribution to lighting/color of the pixel based on the incoming
         /// ray and the intersection point.
@@ -98,6 +101,11 @@ class Primitive {
         /// might also be useful in the future for centering textures
         /// or materials around.
         Point3D m_center;
+
+    private:
+        /// Returns the final surface normal at point p, after being processed 
+        /// for bump-mapping. 
+        Ray get_final_normal(const Point3D &p) ;
 };
 
 #endif

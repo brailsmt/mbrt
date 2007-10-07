@@ -27,6 +27,7 @@ double Primitive::get_reflectivity(const Point3D& intersection_point) const {
 //{{{
 double Primitive::get_specular(const Point3D& intersection_point) const {
     // Really?
+    // follow up: This currently doesn't appear to be used.
     return 1.0;
 }
 //}}}
@@ -56,6 +57,12 @@ bool Primitive::set_is_light(bool v) {
 }
 //}}}
 
+//{{{
+Ray Primitive::get_final_normal(const Point3D& p)
+{
+    return get_normal(p);
+}
+//}}}
 
 Color Primitive::get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) {
     // Determine the color of the pixel at the point of intersection.
@@ -79,7 +86,7 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                     Ray rtl(intersection_point, light->get_center() - intersection_point);
 
                     // Calculate the normal of the surface at the point of intersection.
-                    Ray normal(get_normal(intersection_point ) ); 
+                    Ray normal(get_final_normal(intersection_point ) ); 
 
                     // Determine the angle, in radians, between the normal and the ray to the light source.
                     double theta = dot_product(rtl.direction(), normal.direction());
@@ -106,19 +113,19 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                         // If this spot is in shadow, skip it.
                         if ( is_in_shadow(rtl, intersection_point) == true )
                             continue;
-                        double reflectivity = 0.0;
-                        double specular_color = 1.0;
-                        if( (reflectivity = get_reflectivity(intersection_point)) > 0.0 )
-                        { 
+                        double specular_color = 0.0;
+                        double reflectivity = get_reflectivity(intersection_point) ;
                             // Determine specular lighting.
-
+                        
+                        if(reflectivity > 0.001)
+                        {
                             double spec_theta = dot_product(reflect, rtl.direction());
-                            if(spec_theta > 0.0)
-                                specular_color = powf(spec_theta, get_reflectivity(intersection_point));
+                            if(spec_theta > 0.0001)
+                                specular_color = powf(spec_theta, reflectivity);
                             else
                                 specular_color = 0.0;
-
                         }
+
                         diffusion *= theta;
                         rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
                         rv += light->get_color(intersection_point) * specular_color * get_reflection(intersection_point);
