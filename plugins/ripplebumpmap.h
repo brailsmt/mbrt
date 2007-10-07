@@ -11,9 +11,13 @@
 
 class RippleBumpMap;
 
+/// Creates a rippled bumpmap
 BumpMap * new_ripplebumpmap(xmlNode * node);
+/// Deletes a rippled bumpmap 
 void delete_ripplebumpmap(RippleBumpMap * bumpmap);
 
+/// RippleBumpMap is a bump map that uses sin and cos.
+/// On a sphere, it gives the rough appearance of a golf ball.
 class RippleBumpMap : public BumpMap
 {
     protected:
@@ -30,6 +34,7 @@ class RippleBumpMap : public BumpMap
     static StaticInit m_init;
 
     public:
+        /// Apply bump map effect.
         virtual Ray perturb_normal(const Ray& normal, const Point3D& intersection_point) ;
 };
 

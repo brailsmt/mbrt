@@ -59,7 +59,6 @@ class Primitive {
         /// @param intersection_point This is Point3D that describes the intersection point of ray and
         ///                           primitive.
         /// @param ray This is the incoming ray.
-        /// @param scene This is the scene definition.
         /// @param reflect A reference to the reflection vector.  This is here to avoid calculating
         ///                it twice.
         /// @param refract A reference to the refraction vector.
@@ -103,8 +102,10 @@ class Primitive {
         /// or materials around.
         Point3D m_center;
 
-        /// Bump map associated with primitive.  May be null.
-        //TODO should this be a part of the Material? Probably not...
+        /// Bump map associated with primitive.  May be null. Bump maps
+        /// are associated with the primitive and not the material as
+        /// they affect the "structure" of the object as opposed to simply
+        /// the coloring and shading of the object. 
 
         BumpMap * m_bumpmap;
 

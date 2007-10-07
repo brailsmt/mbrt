@@ -94,6 +94,8 @@ Stub out of specular methods
         /// Get specular power coefficient.  The power coefficient determines
         /// the rate of fall-off of the specular highlight.
         ///
+        /// Note: this is currently the function of "reflectivity"
+        ///
         /// @return Specular power coefficient
         virtual double get_specular_power() = 0;
 #endif

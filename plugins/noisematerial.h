@@ -5,15 +5,11 @@
 #include "raytrace_defs.h"
 #include "material.h"
 #include "pluginfactory.h"
+#include "noise.h"
 
-#include <iostream>
 
 Material * make_noise_material(std::map<std::string, std::string> props);
 
-/// Number of points along each axis in the noise
-/// matrix.  Increasing this value will reduce the
-/// number of times the noise has to wrap around.
-const int MAX_NOISE = 28;
 
 /// This class defines a composite material of two materials that are combined
 /// based on a noise function. The result of the noise function is used to 
@@ -33,6 +29,11 @@ class NoiseMaterial : public Material{
     };
 
     protected:
+
+
+        /// Static noise instance.
+        Noise m_noise;
+        
         /// Dummy variable to force static initialization
         static StaticInit m_init;
 
@@ -46,20 +47,12 @@ class NoiseMaterial : public Material{
         /// The amount of the second material to use is (1.0 - choose_material() )
         double choose_material(const Point3D& intersection_point) const ;
 
-        /// Initialize noise matrix
-        void init_noise();
-
-        /// Noise matrix. Hold random values.  Exact noise
-        /// value is interpolated from the values in this matrix.
-        int m_noiseMatrix [MAX_NOISE][MAX_NOISE][MAX_NOISE];
-
     public:
         /// Create a noise-based material from two materials.
         NoiseMaterial(Material * one, Material * two)
         {
             m_material_one = one;
             m_material_two = two;
-            init_noise();
         }
 
         /// Copy construtor
@@ -68,7 +61,6 @@ class NoiseMaterial : public Material{
                     m_material_two(other.m_material_two)
         {
             // TODO: this should really just be a straight copy..
-            init_noise();
         }
 
 

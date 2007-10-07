@@ -18,3 +18,6 @@ show-sample: all .sample
 	feh renders/test_reflection.ppm &
 
 
+todo:
+	grep -niI TODO ./*.cpp ./*.h plugins/*.cpp plugins/*.h
+	grep -niI TODO ./*.cpp ./*.h plugins/*.cpp plugins/*.h | wc

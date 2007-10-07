@@ -24,16 +24,38 @@ class SceneParser : public sigc::trackable {
 
         /// Parse the &lt;light_sources&gt; XML node.
         ///
-        /// @param root The list of nodes contained within the &lt;light_sources&gt; node.
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * parse_light_sources(Scene * scene, xmlNode * node);
+        ///
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * parse_objects(Scene * scene, xmlNode * node);
+        ///
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * parse_meta(Scene * scene, xmlNode * node);
+        ///
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * parse_camera(Scene * scene, xmlNode * node);
+        ///
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * parse_bumpmaps(Scene * scene, xmlNode * node);
+        ///
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * noop(Scene * scene, xmlNode * node);
 
         /// Parse a set of color nodes and return them in a map<char *, Color *>.
+        ///
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * parse_colors(Scene * scene, xmlNode * node);
+        ///
+        /// @param scene The scene that the object will affect.
+        /// @param node The xml node that contains configuration for this element
         Primitive * parse_materials(Scene * scene, xmlNode * node); 
 
 
