@@ -3,6 +3,9 @@
 /// &copy; 2007 Brandon Inman
 //
 
+#ifndef RIPPLEBUMPMAP_H
+#define RIPPLEBUMPMAP_H
+
 #include "bumpmap.h"
 #include "pluginfactory.h"
 
@@ -41,4 +44,6 @@ BumpMap * new_ripplebumpmap(xmlNode * node) {
 void delete_ripplebumpmap(RippleBumpMap * ptr) {
     delete ptr, ptr = NULL;
 }
+
+#endif
 
