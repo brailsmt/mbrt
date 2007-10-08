@@ -6,7 +6,7 @@
 /// Number of points along each axis in the noise
 /// matrix.  Increasing this value will reduce the
 /// number of times the noise has to wrap around.
-const int MAX_NOISE = 28;
+const int MAX_NOISE = 280;
 
 class Noise
 {

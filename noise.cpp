@@ -1,5 +1,8 @@
 #include "noise.h"
+#include <syslog.h>
+#include <iostream>
 #if 10
+
 void Noise::init_noise()
 {
     int x1,y1,z1;
@@ -9,7 +12,8 @@ void Noise::init_noise()
         {
             for(int z = 0; z < MAX_NOISE; ++z)
             {
-                m_noiseMatrix[x][y][z] = rand();
+
+                m_noiseMatrix[x][y][z] =  rand();
                 // Edges must be equal on each side for 
                 // interpolation to work correctly.
                 if(x == MAX_NOISE)
@@ -44,9 +48,9 @@ double Noise::get_noise(const Point3D& point) const
     int d0, d1;
     int d;
 
-    double f_x =  fabs(point.x);
-    double f_y =  fabs(point.y);
-    double f_z =  fabs(point.z);
+    double f_x =  fabs(point.x) ;
+    double f_y =  fabs(point.y) ;
+    double f_z =  fabs(point.z) ;
 
 
     // TODO: replace with "double modf(double value, int* whole)"

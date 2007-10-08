@@ -54,6 +54,10 @@ class Triangle : public Primitive {
         /// Bump map associated with this primitive. Most often, will be blank.
         std::string m_bumpmap_name;
 
+        /// Dot product of normal and location of the prim.  Intermediate value
+        /// in intersection calculation, stored as it never changes.
+        double m_normal_location_dot ;
+
     public:
 
         /// Create a triangle with the default m_material.
@@ -77,6 +81,8 @@ class Triangle : public Primitive {
             // all prims. Consider refactor to base class.
             log_debug("Creating a Triangle, color = %s, material = %s, bumpmap = %s",
                                         m_color_name.c_str(), m_material_name.c_str(), m_bumpmap_name.c_str());
+
+            m_normal_location_dot = dot_product(m_normal_direction, m_location);
 
             Scene * scene = Scene::get_instance();
             m_material = scene->get_material(material_name);

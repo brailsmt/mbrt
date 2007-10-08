@@ -23,8 +23,9 @@ class NoiseMaterial : public Material{
             /// Perform static initialization.  Registers class with material factory.
             StaticInit()
             {
-                log_info("Registering \"noise\"");
+                log_info("Registering as \"noise\" and \"cloud\"");
                 MaterialFactory::get_instance()->registerPlugin("noise", sigc::ptr_fun(make_noise_material));
+                MaterialFactory::get_instance()->registerPlugin("cloud", sigc::ptr_fun(make_noise_material));
             }
     };
 

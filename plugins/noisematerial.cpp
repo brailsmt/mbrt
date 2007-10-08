@@ -32,11 +32,6 @@ Color * NoiseMaterial::get_color(const Point3D& intersection_point) const
 
     double coeff = choose_material(intersection_point);
 
-    // TODO: we could really prolly just hang onto pointers
-    // other than making copies.  I only did this way
-    // because of misunderstanding how operators worked,
-    // and haven't fixed it yet.
-
     Color * one = (m_material_one->get_color(intersection_point) );
     Color * two = (m_material_two->get_color(intersection_point) );
     (*retVal) = (*one * coeff) + (*two * (1.0-coeff) );
