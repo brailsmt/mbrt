@@ -12,7 +12,12 @@ class Noise
 {
     public:
 
-        Noise() { init_noise(); } 
+        /// Create noise with default seed.
+        Noise() { init_noise(0); } 
+
+        /// Create noise with specified seed.
+        Noise(int seed) { init_noise(seed); } 
+        
         /// Calculate noise value at given point in space.
         ///
         ///Based on a Pascal interpretation of 1985 Perlin noise function,
@@ -22,7 +27,7 @@ class Noise
         double get_noise(const Point3D& point) const ;
     protected:
         /// Initialize noise matrix
-        void init_noise();
+        void init_noise(int seed);
 
         /// Noise matrix. Hold random values.  Exact noise
         /// value is interpolated from the values in this matrix.

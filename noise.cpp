@@ -3,8 +3,9 @@
 #include <iostream>
 #if 10
 
-void Noise::init_noise()
+void Noise::init_noise(int seed)
 {
+    srand(seed);
     int x1,y1,z1;
     for(int x = 0; x < MAX_NOISE; ++x)
     {
