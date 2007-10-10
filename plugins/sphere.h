@@ -22,19 +22,17 @@ void delete_sphere(Sphere * sphere);
 class Sphere : public Primitive {
 
     protected:
+        /// Fake a static initializer.
+        class StaticInit {
+            public:
+                /// Register material with the factory
+                StaticInit() {
+                    PrimitiveFactory::get_instance()->registerPlugin("sphere", sigc::ptr_fun(new_sphere));
+                }
+        };
+        /// Force static initialization.
+        static StaticInit m_init;
 
-    /// Fake a static initializer.
-    class StaticInit {
-        public:
-            /// Register material with the factory
-            StaticInit() {
-                PrimitiveFactory::get_instance()->registerPlugin("sphere", sigc::ptr_fun(new_sphere));
-            }
-    };
-    /// Force static initialization.
-    static StaticInit m_init;
-
-    protected:
         /// The radius of the sphere.
         double m_radius;
 
@@ -75,7 +73,7 @@ class Sphere : public Primitive {
             Scene * scene = Scene::get_instance();
             m_center = Point3D(x,y,z);
             m_material = scene->get_material(material_name);
-            
+
             // TODO: should we really handle as a default, or should we trap this as an error?
             if(m_material == NULL)
             {

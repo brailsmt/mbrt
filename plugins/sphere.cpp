@@ -5,7 +5,6 @@
 
 #include "sphere.h"
 #include <vector>
-#include "xml_util.h"
 
 using std::vector;
 using std::string;

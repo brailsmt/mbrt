@@ -218,8 +218,8 @@ void load_plugins() {
             log_info("Finished loading plugin '%s'\n", *iter);
         }
         else {
-            log_err("Failed to load plugin '%s'.\n", *iter );
-            log_err(" dlerror() reports '%s' \n", dlerror() );
+            log_crit("Failed to load plugin '%s' with error %s\n", *iter, dlerror());
+            exit_mbrt(EXIT_FAILURE);
         }
     }
 

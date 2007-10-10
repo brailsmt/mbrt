@@ -17,22 +17,21 @@ class Ray {
         Vector _direction;
 
     public:
-        Ray()
-                : _origin(Point3D()),
-                _direction(Vector()),
-        _is_normalized(false) {}
+        Ray() : _origin(Point3D()), _direction(Vector()), _is_normalized(false) {}
 
         Ray(Point3D origin, Point3D direction)
                 : _origin(origin),
-                _direction(direction),
-        _is_normalized(false) {
+                  _direction(direction),
+                  _is_normalized(false) 
+        {
             Ray::normalize();
         }
 
         Ray(const Ray &other)
                 : _origin(other._origin),
-                _direction(other._direction),
-        _is_normalized(other._is_normalized) {
+                  _direction(other._direction),
+                  _is_normalized(other._is_normalized) 
+        {
             if (!_is_normalized) {
                 Ray::normalize();
             }

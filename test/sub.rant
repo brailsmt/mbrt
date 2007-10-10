@@ -5,11 +5,10 @@ require "yaml"
 
 src = Rant::FileList[ "test_*.cpp" ] 
 
-mycconf = CompilerConfig.new
+mycconf = CompilerConfig.new(var);
 mycconf.add_incdirs( Rant::FileList[ '..', "." ] )
 
 objs = %w(
-          ../sphere.o
          )
 
 gen AutoClean

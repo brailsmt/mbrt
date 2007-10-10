@@ -3,10 +3,17 @@
 
 #include <cmath>
 #include <sstream>
+#include <algorithm>
 
 class Point3D;
 typedef Point3D Vector;
 
+inline bool iswhitespace(char c) {
+    return c == ' '
+        || c == '\n'
+        || c == '\r'
+        || c == '\t';
+}
 //{{{
 /// A three-dimensional point in space.
 class Point3D {
@@ -29,6 +36,22 @@ class Point3D {
         /// Creates a point in three dimenisional space.
         template <class _T>
         Point3D(_T _x, _T _y, _T _z) : x((double)_x), y((double)_y), z((double)_z) {}
+
+        /// Creates a point in three space by parsing a string of the form
+        /// "(x, y, z)".
+        Point3D(std::string str) {
+            // remove all whitespace
+            std::string::iterator end;
+            std::remove_if(str.begin(), end, iswhitespace);
+            int openparen   = str.find('(');
+            int closeparen  = str.find(')');
+            int firstcomma  = str.find(',') + 1;
+            int secondcomma = str.find(',', firstcomma) + 1;
+            
+            x = (double)strtod(str.substr(openparen+1, firstcomma - openparen).c_str(),     NULL);
+            y = (double)strtod(str.substr(firstcomma, secondcomma - firstcomma).c_str(),  NULL);
+            z = (double)strtod(str.substr(secondcomma, closeparen - secondcomma).c_str(), NULL);
+        }
 
         /// Copy constructor
         Point3D(const Point3D &other) : x(other.x), y(other.y), z(other.z) {}
