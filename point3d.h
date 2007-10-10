@@ -158,7 +158,7 @@ inline double dot_product(const Vector &A, const Vector &B) {
 /// *why* I get the build errors when this isn't static; that should be tracked
 /// down but until then this is an acceptable workaround.
 //{{{
-static 
+inline 
 Vector cross_product(const Vector& one, const Vector& two)
 {
     return Vector(  one.y * two.z - one.z * two.y,

@@ -33,6 +33,7 @@ class Plane : public Primitive {
         /// The normal of a plane is always the same so this stores it so we
         /// only have to calculate it once.
         Point3D m_normal;
+        Point3D m_point;
 
         double m_A;
         double m_B;

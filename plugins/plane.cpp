@@ -18,6 +18,9 @@ Plane::Plane(Point3D p1, Point3D p2, Point3D p3, std::string color, std::string 
     double m_D = -(p1.x * (p2.y * p3.z - p3.y * p2.z) + p2.x * (p3.y * p1.z - p1.y * p3.z) + p3.x * (p1.y * p2.z - p2.y * p1.z));
 
     m_material = Scene::get_instance()->get_material(material_name);
+
+    m_point = p1;
+    m_normal = cross_product((p2 - p1), (p3 - p1));
 }
 
 bool Plane::collides_with(const Ray &ray, double &t) const {
