@@ -41,9 +41,30 @@ desc "Build everything from scratch"
 task :default => %w( all )
 
 desc "Clean up all build artifacts"
-task :clean => %w(autoclean)
+task :clean => %w(autoclean) do
+    sys "rm -rf *.gc*"
+end
+
+desc "Generate coverage reports"
+task :coverage => %w(clean config_coverage all run_scene gather_coverage)
 
 gen AutoClean
+
+desc "Set flags for coverage reports"
+task :config_coverage do |task_info|
+    cconf.add_cflags( "-fprofile-arcs -ftest-coverage " )
+    cconf.add_ldflags( "-fprofile-arcs -ftest-coverage " )
+end
+    
+desc "Gather coverage reports"
+task :gather_coverage do
+   sys "find . -name \"*.o\" -exec gcov `basename \\{\\} .o` \\;"     
+end
+
+desc "Runs a scene file. Used for coverage reports."
+task :run_scene do |task_info|
+    sys "./rt -s scenes/test_reflection.xml"
+end
 
 desc "Build the cscope database"
 file "cscope.out" => Rant::FileList[ '**/*.cpp', '**/*.h' ] do |task_info|

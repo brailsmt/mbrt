@@ -7,6 +7,7 @@ class CompilerConfig
         @libs    = Array.new
         @libdirs = Array.new
         @incdirs = Array.new
+        @ldflags = Array.new
         @cc      = "/usr/bin/gcc"
         @cxx     = "/usr/bin/g++"
         @var     = var
@@ -67,6 +68,12 @@ class CompilerConfig
     end
     #}}}
     #{{{
+    def add_ldflags(ldflags)
+        @ldflags << normalize(ldflags)
+        @ldflags.flatten!.uniq!
+    end
+    #}}}
+    #{{{
     def pkg_exists(pkg)
         if(`pkg-config #{pkg} --exists; echo $?` == "0\n")
             return true;
@@ -123,6 +130,11 @@ class CompilerConfig
                 yield args
             end
         end
+    end
+    #}}}
+    #{{{
+    def ldflags
+        @ldflags.join(" ")
     end
     #}}}
 end

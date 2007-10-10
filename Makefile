@@ -17,6 +17,14 @@ renders/test_reflection.ppm: all scenes/test_reflection.xml
 show-sample: all .sample
 	feh renders/test_reflection.ppm &
 
+renders/test_planes.ppm: all scenes/test_planes.xml
+	./rt -s scenes/test_planes.xml -o renders/test_planes.ppm
+
+.planes: renders/test_planes.ppm
+	touch .sample
+
+show-planes: all .planes
+	feh renders/test_planes.ppm &
 
 todo:
 	grep -niI TODO ./*.cpp ./*.h plugins/*.cpp plugins/*.h
