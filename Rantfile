@@ -42,6 +42,7 @@ task :default => %w( all )
 
 desc "Clean up all build artifacts"
 task :clean => %w(autoclean) do
+    # Clean up artifacts that Rant can't track
     sys "rm -rf *.gc*"
 end
 
@@ -58,7 +59,9 @@ end
     
 desc "Gather coverage reports"
 task :gather_coverage do
-   sys "find . -name \"*.o\" -exec gcov `basename \\{\\} .o` \\;"     
+   sys "lcov -c --directory . --output-file app.info"
+   sys "mkdir -p ./coverage_reports"
+   sys "genhtml -o coverage_reports app.info"
 end
 
 desc "Runs a scene file. Used for coverage reports."
