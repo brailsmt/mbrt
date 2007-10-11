@@ -1,9 +1,9 @@
 <scene>
     <meta>
-        <width  pixels="500" />
-        <height pixels="500" />
+        <width  pixels="3000" />
+        <height pixels="3000" />
         <file name="renders/test_reflection.ppm" />
-        <subpixels square_of='3'/>
+        <subpixels square_of='9'/>
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />

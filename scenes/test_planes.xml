@@ -3,7 +3,7 @@
         <width  pixels="800" />
         <height pixels="800" />
         <file name="renders/test_planes.ppm" />
-        <subpixels square_of='3'/>
+        <subpixels square_of='2'/>
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />
@@ -50,6 +50,8 @@
     <objects>
 
         <sphere x=' 10' y='  0' z=' 10' radius='3' material='noise' color='blue'  />
-        <plane p0="(30,0,3)" p1="(31,0,0)" p2="(32,0,1)" material="solidWhite"/>
+        <!--
+        <plane p0="(0,0,3)" p1="(1,0,0)" p2="(0,0,1)" material="solidWhite"/>
+        -->
     </objects>
 </scene>

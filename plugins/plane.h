@@ -7,13 +7,10 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include "primitive.h"
-#include "scene.h"
 #include "xml_util.h"
-#include <string>
+#include "pluginfactory.h"
 
-#include "solidmaterial.h"
-
+class Primitive;
 Primitive * new_plane(xmlNode * node);
 
 class Plane : public Primitive {
@@ -34,11 +31,8 @@ class Plane : public Primitive {
         /// only have to calculate it once.
         Point3D m_normal;
         Point3D m_point;
+        double m_d;
 
-        double m_A;
-        double m_B;
-        double m_C;
-        double m_D;
     public:
         /// Creates a new plane defined by three points in 3-space.
         Plane(Point3D p0, Point3D p1, Point3D p2, std::string color, std::string material);

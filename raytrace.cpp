@@ -214,8 +214,10 @@ void load_plugins() {
         // No need to keep the handle to the shared object;
         // we don't need to get any symbols from it 
         log_info("Attempting to load plugin '%s'...\n", *iter);
+        printf("Attempting to load plugin '%s'...\n", *iter);
         if(dlopen(*iter, RTLD_NOW)) {
             log_info("Finished loading plugin '%s'\n", *iter);
+            printf("Finished loading plugin '%s'\n", *iter);
         }
         else {
             log_crit("Failed to load plugin '%s' with error %s\n", *iter, dlerror());
