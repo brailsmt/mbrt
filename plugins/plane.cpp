@@ -13,8 +13,8 @@ Plane::StaticInit Plane::m_init;
 Plane::Plane(Point3D p1, Point3D p2, Point3D p3, std::string color, std::string material_name) 
     : m_point(p1)
 {
-    m_normal = cross_product((p2 - p1), (p3 - p1));
-    m_d = dot_product(m_point, m_normal);
+    m_normal = Ray(p1, cross_product((p2 - p1), (p3 - p1)));
+    m_d = dot_product(m_point, m_normal.direction());
 
     m_material = Scene::get_instance()->get_material(material_name);
 }
@@ -23,12 +23,12 @@ bool Plane::collides_with(const Ray &ray, double &t) const {
     Point3D orig = ray.origin();
     Vector dir = ray.direction();
 
-    double denominator = dot_product(dir, m_normal);
+    double denominator = dot_product(dir, m_normal.direction());
     if(denominator > -0.0001 && denominator < 0.0001) {
         return false;
     }
 
-    double numerator = m_d - dot_product(orig, m_normal);
+    double numerator = m_d - dot_product(orig, m_normal.direction());
     if(numerator > -0.0001 && numerator < 0.0001) {
         return false;
     }
@@ -37,3 +37,8 @@ bool Plane::collides_with(const Ray &ray, double &t) const {
     
     return true;
 }
+
+Ray Plane::get_normal(const Point3D &p) {
+    /// @todo This is wrong.
+    return Ray(p, cross_product((m_point - p), (m_normal.origin() - p)));
+};

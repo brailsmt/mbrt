@@ -1,7 +1,7 @@
 <scene>
     <meta>
-        <width  pixels="800" />
-        <height pixels="800" />
+        <width  pixels="400" />
+        <height pixels="400" />
         <file name="renders/test_planes.ppm" />
         <subpixels square_of='2'/>
     </meta>
@@ -33,6 +33,7 @@
         <material name='green_marble' type='noise' material1='solidGreen' material2='solidGreen' />
 
 
+        <!--<material name='checkered'  type='checkered' scale='10' material1='solidBlue'  material2='solidWhite' />-->
         <material name='checkered'  type='checkered' material1='solidBlue'  material2='solidWhite' />
         <material name='noise'      type='noise'     material1='solidBlue'  material2='solidWhite' />
 
@@ -49,9 +50,7 @@
 
     <objects>
 
-        <sphere x=' 10' y='  0' z=' 10' radius='3' material='noise' color='blue'  />
-        <!--
-        <plane p0="(0,0,3)" p1="(1,0,0)" p2="(0,0,1)" material="solidWhite"/>
-        -->
+        <sphere x='0' y='-20' z='0' radius='3' material='solidRed' color='blue'  />
+        <plane p0="(1,0,0)" p1="(0,0,0)" p2="(0,0,1)" material="solidBlue"/>
     </objects>
 </scene>

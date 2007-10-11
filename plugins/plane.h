@@ -29,7 +29,7 @@ class Plane : public Primitive {
 
         /// The normal of a plane is always the same so this stores it so we
         /// only have to calculate it once.
-        Point3D m_normal;
+        Ray m_normal;
         Point3D m_point;
         double m_d;
 
@@ -50,7 +50,7 @@ class Plane : public Primitive {
         virtual bool collides_with(const Ray &ray, double &t) const;
 
         /// Returns the surface normal at point p.
-        virtual Ray get_normal(const Point3D &p) { return Ray(p, m_normal); };
+        virtual Ray get_normal(const Point3D &p);
 };
 
 Primitive * new_plane(xmlNode * node) {
