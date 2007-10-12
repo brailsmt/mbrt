@@ -1,2 +1,0 @@
-all:
-	rant all
