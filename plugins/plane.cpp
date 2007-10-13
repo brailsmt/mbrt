@@ -10,13 +10,16 @@
 // This actually makes the static init work.
 Plane::StaticInit Plane::m_init;
 
-Plane::Plane(Point3D p1, Point3D p2, Point3D p3, std::string color, std::string material_name) 
+Plane::Plane(Point3D p1, Point3D p2, Point3D p3, std::string color, std::string material_name, std::string bumpmap_name) 
     : m_point(p1)
 {
     m_normal = Ray(p1, cross_product((p2 - p1), (p3 - p1)));
     m_d = dot_product(m_point, m_normal.direction());
 
-    m_material = Scene::get_instance()->get_material(material_name);
+    Scene * scene = Scene::get_instance();
+    m_material = scene->get_material(material_name);
+
+    m_bumpmap = scene->get_bumpmap(bumpmap_name);
 }
 
 bool Plane::collides_with(const Ray &ray, double &t) const {
@@ -40,5 +43,6 @@ bool Plane::collides_with(const Ray &ray, double &t) const {
 
 Ray Plane::get_normal(const Point3D &p) {
     /// @todo This is wrong.
-    return Ray(p, cross_product((m_point - p), (m_normal.origin() - p)));
+    return Ray(p, m_normal.direction() );
+    //return Ray(p, cross_product((m_point - p), (m_normal.origin() - p)));
 };

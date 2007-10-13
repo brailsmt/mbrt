@@ -1,7 +1,7 @@
 <scene>
     <meta>
-        <width  pixels="800" />
-        <height pixels="800" />
+        <width  pixels="400" />
+        <height pixels="400" />
         <file name="renders/test_reflection.ppm" />
         <subpixels square_of='3'/>
     </meta>

@@ -35,7 +35,7 @@ class Plane : public Primitive {
 
     public:
         /// Creates a new plane defined by three points in 3-space.
-        Plane(Point3D p0, Point3D p1, Point3D p2, std::string color, std::string material);
+        Plane(Point3D p0, Point3D p1, Point3D p2, std::string color, std::string material, std::string bumpmap);
 
         ///// Creates a new plane defined by a point and a normal.
         //Plane(Point3D p0, Ray normal);
@@ -60,7 +60,13 @@ Primitive * new_plane(xmlNode * node) {
     xml_properties props = get_properties(node);
 
     if ( props.empty() == false ) {
-        rv = new Plane(props["p0"], props["p1"], props["p2"], props["color"], props["material"]);
+        rv = new Plane(
+                        props["p0"], 
+                        props["p1"],
+                        props["p2"], 
+                        props["color"], 
+                        props["material"],
+                        props["bumpmap"]);
     }
     else {
         log_err("No properties specified for <plane> tag.");

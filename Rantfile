@@ -43,7 +43,9 @@ task :default => %w( all )
 desc "Clean up all build artifacts"
 task :clean => %w(autoclean) do
     # Clean up artifacts that Rant can't track
-    sys "rm -rf *.gc*"
+    sys "rm -f *.gc*"
+    sys "rm -f plugins/*.gc*"
+    sys "rm -rf coverage_reports"
 end
 
 desc "Generate coverage reports"

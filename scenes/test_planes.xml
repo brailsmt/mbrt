@@ -3,10 +3,10 @@
         <width  pixels="400" />
         <height pixels="400" />
         <file name="renders/test_planes.ppm" />
-        <subpixels square_of='2'/>
+        <subpixels square_of='3'/>
     </meta>
 
-    <camera x='0.0' y='0.0' z='-100' />
+    <camera x='0.0' y='-1.0' z=' -20' />
 
 
     <colors>
@@ -45,12 +45,11 @@
     </materials>
 
     <light_sources>
-        <sphere x='-30.0' y='-30' z='30' radius='0.1' material='solidWhite' color='white' />
+        <sphere x='-30.0' y='-30' z='20' radius='0.1' material='solidWhite' color='white' />
     </light_sources>
 
     <objects>
-
-        <sphere x='0' y='-20' z='0' radius='3' material='solidRed' color='blue'  />
-        <plane p0="(1,0,0)" p1="(0,0,0)" p2="(0,0,1)" material="solidBlue"/>
+        <sphere x='0' y='-2.8' z='0' radius='3' material='solidRed'   />
+        <plane p0="(-1.2,0,0)" p1="(0,0,0)" p2="(0,0,1.2)" material="checkered"/>
     </objects>
 </scene>
