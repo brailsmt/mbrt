@@ -5,9 +5,11 @@ CheckeredMaterial::StaticInit CheckeredMaterial::m_init;
 
 int CheckeredMaterial::choose_material(const Point3D& intersection_point) const
 {
-    int x = (int) (intersection_point.x * m_scale);
-    int y = (int) (intersection_point.y * m_scale);
-    int z = (int) (intersection_point.z * m_scale);
+    int x = (int) ( floor(intersection_point.x)) * m_scale ;
+    int y = (int) ( floor(intersection_point.y)) * m_scale ;
+    int z = (int) ( floor(intersection_point.z)) * m_scale ;
+
+    // -3 -2 -1  0  1  2  3
 
     int bit =  (x % 2  == 0) ? 1 : -1; 
     bit *=     (y % 2  == 0) ? 1 : -1; 

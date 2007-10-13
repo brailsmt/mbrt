@@ -148,7 +148,9 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                     double sy_jitter = sy + jitter(sdy);
                     double sx_jitter = sx + jitter(sdx);
 
-                    Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
+                    //Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
+                    // @todo TODO: change "+10.0" to properly support focal length
+                    Point3D subpixel(sx_jitter, sy_jitter, eye.z + 10.0);
                     Ray ray(eye, subpixel - eye);
 
                     Color color;
