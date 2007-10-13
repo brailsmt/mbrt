@@ -149,9 +149,9 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                     double sy_jitter = sy + jitter(sdy);
                     double sx_jitter = sx + jitter(sdx);
 
-                    // Calculate the point where the ray through the subpixel
-                    // will intersect the viewport.
-                    Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
+                    //Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
+                    // @todo TODO: change "+10.0" to properly support focal length
+                    Point3D subpixel(sx_jitter, sy_jitter, eye.z + 50.0);
                     
                     // Calculate the ray from the eye to the point where it
                     // intersect the viewport.
