@@ -153,17 +153,13 @@ inline double dot_product(const Vector &A, const Vector &B) {
 
 /// The cross product of two vectors is the normal vector to
 /// a plane defined by the two vectors
-///
-/// @todo Declared static to avoid build errors (duplicate symbols). Not really sure
-/// *why* I get the build errors when this isn't static; that should be tracked
-/// down but until then this is an acceptable workaround.
 //{{{
 inline 
 Vector cross_product(const Vector& one, const Vector& two)
 {
-    return Vector(  one.y * two.z - one.z * two.y,
-                    one.z * two.x - one.x * two.z,
-                    one.x * two.y - one.y * two.x);
+    return Vector(one.y * two.z - one.z * two.y,
+                  one.z * two.x - one.x * two.z,
+                  one.x * two.y - one.y * two.x);
 
 }
 //}}}

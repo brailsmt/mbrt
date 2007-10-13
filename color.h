@@ -16,6 +16,9 @@ class Color {
         /// Default constructor.  Creates a pure black color.
         Color() : m_red(0.0), m_green(0.0), m_blue(0.0) {}
 
+        /// Create a color from an RGB triplet.
+        Color(int rgb) : m_red(((unsigned char*)rgb)[0]/256.0), m_green(((unsigned char*)rgb)[1]/256.0), m_blue(((unsigned char*)rgb)[2]/256.0) {}
+
         /// Create a color from double components, ranging from 0.0 to 1.0
         Color(double _red, double _green, double _blue) : m_red(_red), m_green(_green), m_blue(_blue) {
             set_red(m_red);

@@ -29,6 +29,7 @@ class ImageWriter {
         /// @param data Image imformation that will be written.
         virtual bool write_image (Color * data) = 0;
 
+        virtual ~ImageWriter() {};
 };
 
 class PpmImageWriter : public ImageWriter {
@@ -73,10 +74,10 @@ class ImageWriterFactory {
             }
 
             switch (type) {
-            case PPM_IMAGE:
-                return new PpmImageWriter(filename.length() > 0 ? filename: scene->get_output_filename(), scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
-            default:
-                return NULL;
+                case PPM_IMAGE:
+                    return new PpmImageWriter(filename.length() > 0 ? filename: scene->get_output_filename(), scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
+                default:
+                    return NULL;
             }
         }
 

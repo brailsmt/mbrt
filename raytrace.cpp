@@ -36,8 +36,9 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
     Primitive * primitive = NULL;
     double dist = INF;
     Scene * scene = Scene::get_instance();
+    int max_depth = scene->get_max_recurse_depth();
 
-    if (depth <= MAX_DEPTH) {
+    if (depth <= max_depth) {
 
         if ( depth == 0 ) {
             rt_info.primary_rays++;
@@ -148,11 +149,15 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                     double sy_jitter = sy + jitter(sdy);
                     double sx_jitter = sx + jitter(sdx);
 
-                    //Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
-                    // @todo TODO: change "+10.0" to properly support focal length
-                    Point3D subpixel(sx_jitter, sy_jitter, eye.z + 10.0);
+                    // Calculate the point where the ray through the subpixel
+                    // will intersect the viewport.
+                    Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
+                    
+                    // Calculate the ray from the eye to the point where it
+                    // intersect the viewport.
                     Ray ray(eye, subpixel - eye);
 
+                    // Trace the ray into the scene, recording the pixel's color value.
                     Color color;
                     trace_ray(color, ray, 0);
                     colors.push_back(color);
@@ -197,8 +202,7 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
     cout << endl;
     cout << endl;
 
-    cout << "Rendering " << fname << " took " << elapsed;
-    cout << " seconds (" << hours << ":" << minutes << ":" << seconds << ")" << endl;
+    printf("Rendering %s took %i seconds (%02i:%02i:%02i)\n", fname, elapsed, hours, minutes, seconds);
 
     cout.setf(cout.fixed);
     cout.precision(5);
@@ -274,6 +278,7 @@ int main(int argc, char ** argv) {
             break;
         case 'o':
             strncpy(output, optarg, strlen(optarg));
+            output[strlen(optarg)] = '\0';
             break;
         }
     }

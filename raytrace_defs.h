@@ -32,9 +32,6 @@ const int SUBPIXEL_SQRT = 2;
 /// The max value for a color triplet in the ppm output file.
 const int PPM_MAX_VAL = 255;
 
-/// The max depth to which we will bounce rays.  After MAX_DEPTH reflections/refractions, stop.
-const int MAX_DEPTH = 15;
-
 /// Defines a completely opaque substance.
 const double OPAQUE = 0.0;
 

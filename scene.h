@@ -8,6 +8,9 @@
 #include <string>
 #include "color.h"
 
+/// The max depth to which we will bounce rays.  After MAX_DEPTH reflections/refractions, stop.
+const int MAX_DEPTH = 15;
+
 class Ray;
 class Primitive;
 class Point3D;
@@ -50,6 +53,9 @@ class Scene {
 
         /// This number is squared and determines the number of subpixels to render.
         int subpixels;
+
+        /// This is the maximum levels of recursion allowed for this scene.
+        int max_depth;
 
         /// Loads a scene from the XML file named by scene_file_name.
         Scene();
@@ -101,6 +107,11 @@ class Scene {
         /// Get the square root of the number of sibpixels in the image.
         int get_subpixel_sqrt() const { return subpixels; }
         void set_subpixel_sqrt(int subpx_sqrt) { subpixels = subpx_sqrt; }
+
+        /// Get the max recursion depth for this image.
+        int get_max_recurse_depth() const { return max_depth; }
+        /// ~et the max recursion depth for this image.
+        void set_max_recurse_depth(int recurse_depth) { max_depth = recurse_depth < MAX_DEPTH? recurse_depth: MAX_DEPTH; }
 
         /// Return the color named by the parameter.  The color's name is
         /// defined in the scene definition file.

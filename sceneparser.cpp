@@ -156,6 +156,9 @@ Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
         else if(strcmp((char *)child->name, "subpixels") == 0) {
             scene->set_subpixel_sqrt(strtol(props["square_of"].c_str(), NULL, 0));
         }
+        else if(strcmp((char *)child->name, "recurse") == 0) {
+            scene->set_max_recurse_depth(strtol(props["max_depth"].c_str(), NULL, 0));
+        }
 
         child = child->next;
     }
@@ -202,6 +205,30 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
+Primitive * SceneParser::parse_bumpmaps(Scene * scene, xmlNode * node) {
+    // This function was copy/paste/modify two things
+    // Sounds like a candidate for refactoring.
+    
+    xmlNode * child = node->children;
+
+    // Parse all objects.
+    while(child != node->last) {
+        log_debug("BumpMap of type '%s'.\n", child->name);
+        BumpMap * bmap = BumpMapFactory::get_instance()->create((char *)child->name, child);
+        if(bmap == NULL) {
+            log_warn("BumpMap of type '%s' unknown...Skipping!\n", child->name);
+        }
+        else {
+            scene->add_bumpmap((char *)child->name, bmap);
+        }
+
+        child = child->next;
+    }
+
+    return NULL;
+}
+//}}}
+//{{{
 void SceneParser::parse(xmlNode * node) {
     log_debug("Entering SceneParser::parse()\n");
 
@@ -227,31 +254,6 @@ void SceneParser::parse(xmlNode * node) {
     }
 
     log_debug("Leaving SceneParser::parse()\n");
-}
-//}}}
-
-Primitive * SceneParser::parse_bumpmaps(Scene * scene, xmlNode * node) 
-{
-    // This function was copy/paste/modify two things
-    // Sounds like a candidate for refactoring.
-    
-    xmlNode * child = node->children;
-
-    // Parse all objects.
-    while(child != node->last) {
-        log_debug("BumpMap of type '%s'.\n", child->name);
-        BumpMap * bmap = BumpMapFactory::get_instance()->create((char *)child->name, child);
-        if(bmap == NULL) {
-            log_warn("BumpMap of type '%s' unknown...Skipping!\n", child->name);
-        }
-        else {
-            scene->add_bumpmap((char *)child->name, bmap);
-        }
-
-        child = child->next;
-    }
-
-    return NULL;
 }
 //}}}
 
