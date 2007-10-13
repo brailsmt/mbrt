@@ -17,17 +17,17 @@ void Noise::init_noise(int seed)
                 m_noiseMatrix[x][y][z] =  rand();
                 // Edges must be equal on each side for 
                 // interpolation to work correctly.
-                if(x == MAX_NOISE)
+                if(x == (MAX_NOISE-1) )
                     x1 = 0;
                 else
                     x1 = x;
 
-                if(y == MAX_NOISE)
+                if(y == (MAX_NOISE-1) )
                     y1 = 0;
                 else
                     y1 = y;
 
-                if(z == MAX_NOISE)
+                if(z == (MAX_NOISE -1) )
                     z1 = 0;
                 else
                     z1 = z;
@@ -49,17 +49,33 @@ double Noise::get_noise(const Point3D& point) const
     int d0, d1;
     int d;
 
-    double f_x =  fabs(point.x) ;
-    double f_y =  fabs(point.y) ;
-    double f_z =  fabs(point.z) ;
+    double f_x =  point.x ;
+
+    double f_y =  point.y ;
+
+    double f_z =  point.z ;
+
+#if 0
+    f_x = fabs(f_x);
+    f_y = fabs(f_y);
+    f_z = fabs(f_z);
+
+#else
+    while(f_x < 0.0)
+        f_x += (MAX_NOISE -1 );
+    while(f_y < 0.0)
+        f_y += (MAX_NOISE -1 );
+    while(f_z < 0.0)
+        f_z += (MAX_NOISE -1 );
+#endif
 
 
     // TODO: replace with "double modf(double value, int* whole)"
     //
     // Whole portion of coordinates, wraped to size of noise matrix
-    int x = (int)floor(f_x) % MAX_NOISE;
-    int y = (int)floor(f_y) % MAX_NOISE;
-    int z = (int)floor(f_z) % MAX_NOISE;
+    int x = (int)floor(f_x) % (MAX_NOISE - 1);
+    int y = (int)floor(f_y) % (MAX_NOISE - 1);
+    int z = (int)floor(f_z) % (MAX_NOISE - 1);
 
     // Fractional part of coordinates
     double ox = f_x - floor(f_x);

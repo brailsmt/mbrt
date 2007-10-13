@@ -43,6 +43,8 @@ class NoiseMaterial : public Material{
         /// Second material element of composite.
         Material * m_material_two;
 
+        // Amount to scale noise by
+        double m_scale;
         /// Calculate how much of first material contributes to
         /// overall material.  This is a double ranging from 0.0 to 1.0.
         /// The amount of the second material to use is (1.0 - choose_material() )
@@ -50,10 +52,11 @@ class NoiseMaterial : public Material{
 
     public:
         /// Create a noise-based material from two materials.
-        NoiseMaterial(Material * one, Material * two)
+        NoiseMaterial(Material * one, Material * two, double scale = 1.0)
         {
             m_material_one = one;
             m_material_two = two;
+            m_scale = scale;
         }
 
         /// Copy construtor
@@ -111,7 +114,12 @@ Material * make_noise_material(std::map<std::string, std::string> props) {
     Scene * scene = Scene::get_instance();
     Material * one = scene->get_material(props["material1"]);
     Material * two = scene->get_material(props["material2"]);
-    return new NoiseMaterial(one, two);
+    double noise_scale = 1.0;
+    if(props.find("noise_scale") != props.end())
+    {
+        noise_scale = (double)strtod(props["noise_scale"].c_str(), NULL);
+    }
+    return new NoiseMaterial(one, two,noise_scale);
 }
 
 #endif

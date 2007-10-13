@@ -8,7 +8,7 @@ NoiseMaterial::StaticInit NoiseMaterial::m_init;
 
 double NoiseMaterial::choose_material(const Point3D& intersection_point) const
 {
-    return m_noise.get_noise(intersection_point);
+    return m_noise.get_noise(intersection_point * m_scale);
 }
 
 Color * NoiseMaterial::get_color(const Point3D& intersection_point) const 

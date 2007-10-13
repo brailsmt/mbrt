@@ -171,7 +171,8 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                 green += iter->m_green;
                 blue += iter->m_blue;
             }
-            data[(y*scene->get_viewport_pixel_width()) + x] = Color((red / colors.size()), (green / colors.size()), (blue / colors.size()));
+            int colors_size = colors.size();
+            data[(y*scene->get_viewport_pixel_width()) + x] = Color((red / colors_size), (green / colors_size), (blue / colors_size));
 
             screen_intersection.x += dx;
         }

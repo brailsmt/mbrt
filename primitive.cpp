@@ -86,14 +86,14 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
 
             if ( (*iter)->is_light(intersection_point) == true) {
                 Primitive * light = *iter;
-                double diffusion = light->get_diffuse(intersection_point);
 
-                if ( diffusion > 0.0 ) {
+                //double diffusion = light->get_diffuse(intersection_point);
+                //if ( diffusion > 0.0 ) {
                     // Calculate the ray to the light source (rtl).
                     Ray rtl(intersection_point, light->get_center() - intersection_point);
 
                     // Calculate the normal of the surface at the point of intersection.
-                    Ray normal(get_final_normal(intersection_point ) ); 
+                    Ray normal(get_final_normal(intersection_point) ); 
 
                     // Determine the angle, in radians, between the normal and the ray to the light source.
                     double theta = dot_product(rtl.direction(), normal.direction());
@@ -105,6 +105,7 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                     // according to Snell's Law.
                     
                     // TODO{: only perform calculations if object is actually refracting light
+#if 0
                     double refraction_index = get_refraction_index(intersection_point);
                     double refract_coefficient = refraction_index / 1.0003; // / scene->global_refraction_index();
                     double normal_dot_neg_ray = dot_product(normal.direction(), -ray.direction());
@@ -113,6 +114,7 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                         refract = ray.direction() * refract_coefficient + normal.direction() * ((normal_dot_neg_ray * refract_coefficient) - sqrt(sqrt_val));
                     }
                     // }TODO
+#endif
 
                     // Determine diffuse lighting.
                     if ( theta > 0.0 ) {
@@ -133,13 +135,19 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
                                 specular_color = 0.0;
                         }
 
-                        diffusion *= theta;
+                        //diffusion *= theta;
+                        double diffusion = get_diffuse(intersection_point) * theta;
+                        if(diffusion > 1.0)
+                        {
+                            log_warn("Diffusion %d", diffusion);
+                        }
+
                         rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
                         // I don't think this does what you think it does.  It uses the reflection coefficient
                         // as the specular coefficient.  These are not the same thing.
                         rv += light->get_color(intersection_point) * specular_color * get_reflection(intersection_point);
                     }
-                }
+                //}
             }
         }
     }

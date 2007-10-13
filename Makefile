@@ -20,12 +20,16 @@ show-sample: all .sample
 renders/test_planes.ppm: all scenes/test_planes.xml
 	./rt -s scenes/test_planes.xml -o renders/test_planes.ppm
 
-.planes: renders/test_planes.ppm
-	touch .sample
 
-show-planes: all .planes
+show-planes: all renders/test_planes.ppm
 	feh renders/test_planes.ppm &
 
+renders/test_planes2.ppm: all scenes/test_planes2.xml
+	./rt -s scenes/test_planes2.xml -o renders/test_planes2.ppm
+
+
+show-planes2: all renders/test_planes2.ppm
+	feh renders/test_planes2.ppm &
 todo:
 	grep -niI TODO ./*.cpp ./*.h plugins/*.cpp plugins/*.h
 	grep -niI TODO ./*.cpp ./*.h plugins/*.cpp plugins/*.h | wc

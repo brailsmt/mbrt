@@ -42,7 +42,5 @@ bool Plane::collides_with(const Ray &ray, double &t) const {
 }
 
 Ray Plane::get_normal(const Point3D &p) {
-    /// @todo This is wrong.
     return Ray(p, m_normal.direction() );
-    //return Ray(p, cross_product((m_point - p), (m_normal.origin() - p)));
 };
