@@ -73,11 +73,11 @@
     </light_sources>
 
     <objects>
-        <sphere x='  0' y='  0.0' z='  0' radius='3' material='solid_white'  />
-        <sphere x='  0' y=' 10.0' z=' 15' radius='3' material='solid_red' bumpmap='ripple' />
-        <sphere x=' 10' y='  0.0' z=' 10' radius='3' material='cloud' />
-        <sphere x='  0' y='-10.0' z='-15' radius='3' material='checkered' />
-        <sphere x='-10' y=' 10.1' z=' 14' radius='3' material='checkered_cloud' />
-        <sphere x='-10' y='-10.1' z=' 14' radius='3' material='marble' />
+        <!--<sphere x='  0' y='  0.0' z='   0' radius='3' material='solid_white'  />-->
+        <sphere x='  0' y=' 10.0' z=' -1.5' radius='3' material='solid_red' bumpmap='ripple' />
+        <sphere x=' 10' y='  0.0' z=' -1.0' radius='3' material='cloud' />
+        <sphere x='  0' y='-10.0' z=' -1.5' radius='3' material='checkered' />
+        <sphere x='-10' y=' 10.1' z=' -1.4' radius='3' material='checkered_cloud' />
+        <sphere x='-10' y='-10.1' z=' -1.4' radius='3' material='marble' />
     </objects>
 </scene>

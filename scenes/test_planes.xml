@@ -1,9 +1,14 @@
 <scene>
     <meta>
-        <width  pixels="400" />
-        <height pixels="400" />
+        <!--
+        <width  pixels="1024" />
+        <height pixels="768" />
+        -->
+        <width  pixels="512" />
+        <height pixels="384" />
         <file name="renders/test_planes.ppm" />
-        <subpixels square_of='3'/>
+        <subpixels square_of='2'/>
+        <recurse max_depth="1" />
     </meta>
 
     <camera x='0.0' y='-2.0' z='-17.0'  />
@@ -51,7 +56,7 @@
     </light_sources>
 
     <objects>
-        <sphere x='0' y='-2.8' z='-10' radius='3' material='solidRed'   />
+        <sphere x='0' y='-3' z='-10' radius='3' material='solidRed'   />
         <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="checkered"/>
     </objects>
 </scene>

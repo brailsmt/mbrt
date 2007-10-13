@@ -1,0 +1,34 @@
+<scene>
+    <meta>
+        <width  pixels="1024" />
+        <height pixels="1024" />
+        <file name="renders/red_ball_on_checkerboard.ppm" />
+        <subpixels square_of='5'/>
+        <recurse max_depth="1" />
+    </meta>
+
+    <camera x='0.0' y='-2.0' z='-17.0'  />
+
+
+    <colors>
+        <color name='white'  red='0xff' green='0xff' blue='0xff' />
+        <color name='blue'   red='0x00' green='0x00' blue='0xff' />
+        <color name='red'    red='0xff' green='0x00' blue='0x00' />
+    </colors>
+
+    <materials>
+        <material name='solidRed'   type='solid' color='red' />
+        <material name='solidWhite' type='solid' color='white' />
+        <material name='solidBlue'  type='solid' color='blue' />
+        <material name='checkered'  type='checkered' material1='solidBlue'  material2='solidWhite' />
+    </materials>
+
+    <light_sources>
+        <sphere x='8.0' y='-12' z='-16.2' radius='0.1' material='solidWhite'   />
+    </light_sources>
+
+    <objects>
+        <sphere x='0' y='-3' z='-5' radius='3' material='solidRed'   />
+        <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="checkered"/>
+    </objects>
+</scene>
