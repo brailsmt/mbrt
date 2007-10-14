@@ -1,14 +1,14 @@
 <scene>
     <meta>
-        <width  pixels="1024" />
-        <height pixels="1024" />
-        <subpixels square_of='5'/>
+        <width  pixels="2048" />
+        <height pixels="2048" />
+        <subpixels square_of='10'/>
 
         <file name="renders/silver_ball_water.ppm" />
         <recurse max_depth='15' />
     </meta>
 
-    <camera x='0.0' y='-0.50' z='-17.0'  />
+    <camera x='0.0' y='-5.50' z='-60.0'  />
 
 
     <colors>
@@ -32,13 +32,45 @@
     </materials>
 
     <light_sources>
-        <sphere x='8.0' y='-12' z='-16.2' radius='0.1' material='solidWhite'   />
+        <sphere center="(80.0, -52, -70.2)" radius='0.1' material='solidWhite'   />
     </light_sources>
 
     <objects>
-        <sphere x='-3' y='-3' z='-10' radius='3' material='solidRed'   />
-        <sphere x='3' y='-6' z='-10' radius='3' material='solidBlack'   />
-        <sphere x='-10' y='-9' z='-10' radius='3' material='solidSilver'   />
+        <sphere center="(-9, -1.5, -10)" radius='1.5' material='solidRed'  />
+        <sphere center="(-9, -4.5, -10)" radius='1.5' material='solidBlack'    />
+        <sphere center="(-9, -7.5, -10)" radius='1.5' material='solidRed'  />
+        <sphere center="(-9, -10.5, -10)" radius='1.5' material='solidBlack'    />
+
+        <sphere center="(-6, -1.5, -10)"  radius='1.5' material='solidBlack'  />
+        <sphere center="(-6, -4.5, -10)"  radius='1.5' material='solidRed'    />
+        <sphere center="(-6, -7.5, -10)"  radius='1.5' material='solidBlack'  />
+        <sphere center="(-6, -10.5, -10)" radius='1.5' material='solidRed'    />
+
+        <sphere center="(-3, -1.5, -10)"  radius='1.5' material='solidRed'    />
+        <sphere center="(-3, -4.5, -10)"  radius='1.5' material='solidBlack'  />
+        <sphere center="(-3, -7.5, -10)"  radius='1.5' material='solidRed'    />
+        <sphere center="(-3, -10.5, -10)" radius='1.5' material='solidBlack'    />
+
+        <sphere center="( 0, -1.5, -10)"  radius='1.5' material='solidBlack'  />
+        <sphere center="( 0, -4.5, -10)"  radius='1.5' material='solidRed'    />
+        <sphere center="( 0, -7.5, -10)"  radius='1.5' material='solidBlack'  />
+        <sphere center="( 0, -10.5, -10)" radius='1.5' material='solidRed'    />
+
+        <sphere center="( 3, -1.5, -10)" radius='1.5' material='solidRed' />
+        <sphere center="( 3, -4.5, -10)" radius='1.5' material='solidBlack' />
+        <sphere center="( 3, -7.5, -10)" radius='1.5' material='solidRed' />
+        <sphere center="( 3, -10.5, -10)" radius='1.5' material='solidBlack'    />
+
+        <sphere center="( 6, -1.5, -10)" radius='1.5' material='solidBlack'  />
+        <sphere center="( 6, -4.5, -10)" radius='1.5' material='solidRed'    />
+        <sphere center="( 6, -7.5, -10)" radius='1.5' material='solidBlack'  />
+        <sphere center="( 6, -10.5, -10)" radius='1.5' material='solidRed'    />
+
+        <sphere center="( 9, -1.5, -10)" radius='1.5' material='solidRed'  />
+        <sphere center="( 9, -4.5, -10)" radius='1.5' material='solidBlack'    />
+        <sphere center="( 9, -7.5, -10)" radius='1.5' material='solidRed'  />
+        <sphere center="( 9, -10.5, -10)" radius='1.5' material='solidBlack'    />
+
         <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solidBlack"/>
     </objects>
 </scene>
