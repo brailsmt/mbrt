@@ -6,7 +6,7 @@
         <subpixels square_of='10'/>
         -->
         <width  pixels="256" />
-        <height pixels="192" />
+        <height pixels="256" />
         <subpixels square_of='5'/>
 
         <file name="renders/silver_ball_water.ppm" />
@@ -35,11 +35,11 @@
     </materials>
 
     <light_sources>
-        <sphere x='8.0' y='-12' z='-16.2' radius='0.1' material='solidWhite'   />
+        <sphere center="(8.0, -12, -16.2)" radius='0.1' material='solidWhite'   />
     </light_sources>
 
     <objects>
-        <sphere x='0' y='-3' z='-10' radius='3' material='solidBlack'   />
+        <sphere center="(0, -3, -10)" radius='3' material='solidBlack'   />
         <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solidBlue" bumpmap='ripple'/>
     </objects>
 </scene>

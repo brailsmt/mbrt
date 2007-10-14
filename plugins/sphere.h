@@ -85,6 +85,39 @@ class Sphere : public Primitive {
             m_bumpmap = scene->get_bumpmap(bumpmap_name);
         }
 
+        template <class _T>
+        Sphere( 
+            std::string coords,
+            _T r, 
+            std::string color_name = "", 
+            std::string material_name = "",
+            std::string bumpmap_name = "") 
+            : m_radius((double)r),
+              m_material_name(material_name),
+              m_color_name(color_name),
+              m_bumpmap_name(bumpmap_name)
+        {
+            m_center = Point3D(coords);
+
+            // TODO some of this initialization will be common across
+            // all prims. Consider refactor.
+            log_debug("here");
+            log_debug("Creating a Sphere at (%0.2f, %0.2f, %0.2f) with a radius of %0.2f, color = %s, material = %s, bumpmap = %s",
+                                                        m_center.x, m_center.y, m_center.z, r, m_color_name.c_str(), m_material_name.c_str(), m_bumpmap_name.c_str());
+
+            Scene * scene = Scene::get_instance();
+            m_material = scene->get_material(material_name);
+
+            // TODO: should we really handle as a default, or should we trap this as an error?
+            if(m_material == NULL)
+            {
+                Color * color = scene->get_color(color_name);
+                color = color ? color : new Color(1.0,0.5,0.5);
+                m_material = new SolidMaterial(color ,false);
+            }
+
+            m_bumpmap = scene->get_bumpmap(bumpmap_name);
+        }
         /// Clean up the sphere's resources.
         virtual ~Sphere();
 
@@ -157,15 +190,21 @@ Primitive * new_sphere(xmlNode * node) {
     xml_properties props = get_properties(node);
 
     if ( props.empty() == false ) {
-        double x        = (double)strtod(props["x"        ].c_str(), NULL);
-        double y        = (double)strtod(props["y"        ].c_str(), NULL);
-        double z        = (double)strtod(props["z"        ].c_str(), NULL);
         double radius   = (double)strtod(props["radius"   ].c_str(), NULL);
         std::string color    = props["color"   ];
         std::string material = props["material"];
         std::string bumpmap  = props["bumpmap"];
 
-        rv = new Sphere(x, y, z, radius, color, material, bumpmap);
+        if(props.find("center") != props.end()) {
+            rv = new Sphere(props["center"], radius, color, material, bumpmap);
+        }
+        else {
+            double x        = (double)strtod(props["x"        ].c_str(), NULL);
+            double y        = (double)strtod(props["y"        ].c_str(), NULL);
+            double z        = (double)strtod(props["z"        ].c_str(), NULL);
+            rv = new Sphere(x, y, z, radius, color, material, bumpmap);
+        }
+
     }
     else {
         log_err("No properties specified for <sphere> tag.");

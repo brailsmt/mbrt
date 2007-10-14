@@ -171,9 +171,20 @@ Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
 Primitive * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
     log_debug("Entering SceneParser::parse_camera()\n");
     map<string, string> props = get_properties(node);
-    scene->set_camera((double)strtod(props["x"].c_str(), NULL),
-                      (double)strtod(props["y"].c_str(), NULL),
-                      (double)strtod(props["z"].c_str(), NULL));
+    if(props.find("location") != props.end()) {
+        Point3D coords(props["location"]);
+        scene->set_camera(coords.x, coords.y, coords.z);
+        log_debug("(%f, %f, %f)", coords.x, coords.y, coords.z);
+    }
+    else {
+        scene->set_camera((double)strtod(props["x"].c_str(), NULL),
+                          (double)strtod(props["y"].c_str(), NULL),
+                          (double)strtod(props["z"].c_str(), NULL));
+
+        log_debug("(%f, %f, %f)", (double)strtod(props["x"].c_str(), NULL),
+                                  (double)strtod(props["y"].c_str(), NULL),
+                                  (double)strtod(props["z"].c_str(), NULL));
+    }
 
     log_debug("Leaving SceneParser::parse_camera()\n");
     return NULL;
