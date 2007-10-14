@@ -26,67 +26,7 @@ using std::endl;
 
 struct raytrace_info rt_info;
 
-/// Trace a ray from the coordinate of the eye, through every pixel in the image.
-///
-/// @param pixel The pixel in the image which will be calculated by tracing the ray.
-/// @param ray The ray to be traced.
-/// @param depth The current depth in the recursion of rays traced.
-//{{{
-void trace_ray(Color &pixel, const Ray &ray, int depth) {
-    Primitive * primitive = NULL;
-    double dist = INF;
-    Scene * scene = Scene::get_instance();
-    int max_depth = scene->get_max_recurse_depth();
-
-    if (depth <= max_depth) {
-
-        if ( depth == 0 ) {
-            rt_info.primary_rays++;
-        }
-
-        // Track statistics.    {{{
-        rt_info.traced_rays++;
-        if (rt_info.traced_rays % REPORT_FACTOR == 0) {
-            int x, y;
-            getyx(stdscr, y, x);
-            long t = (long)difftime(time(NULL), rt_info.start_time);
-            mvprintw(y - 1, 0, "Elapsed time:  %02i:%02i:%02i", t / 3600, (t / 60) % 60, t % 60);
-            mvprintw(y, x + 2, "%02.2f%% done", 100 * (double)rt_info.primary_rays / (double)rt_info.total_primary_rays);
-            move(y, x);
-            refresh();
-        }
-        //}}}
-
-        if ((primitive = scene->find_collision(ray, dist)) != NULL) {
-            Vector dir = ray.direction();
-            Point3D intersection_point = ray.origin() + (dir * dist);
-            Vector reflect;
-            Vector refract;
-
-            // Determine the main color from the directly striking the object.  {{{
-            pixel += primitive->get_color_contribution(intersection_point, ray, reflect, refract);
-            //}}}
-            // Reflect the ray, if the surface is reflective.   {{{
-            double reflection_coefficient = primitive->get_reflection(intersection_point);
-
-            //TODO we seem to be missing an important part: applying the coefficient.
-            if (reflection_coefficient > 0.0) {
-                depth++;
-                trace_ray(pixel, Ray(intersection_point, reflect), depth);
-                depth--;
-            }
-            //}}}
-            // Trace the refracted ray, if the primitive is transparent.    {{{
-            if (primitive->get_opacity(intersection_point) > OPAQUE) {
-                depth++;
-                trace_ray(pixel, Ray(intersection_point, refract), depth);
-                depth--;
-            }
-            //}}}
-        }
-    }
-}
-//}}}
+void trace_ray(Color &pixel, const Ray &ray, int depth);
 
 /// Trace a ray for each pixel in image.
 ///
@@ -149,9 +89,8 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                     double sy_jitter = sy + jitter(sdy);
                     double sx_jitter = sx + jitter(sdx);
 
-                    //Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
-                    // @todo TODO: change "+10.0" to properly support focal length
-                    Point3D subpixel(sx_jitter, sy_jitter, eye.z + 50.0);
+                    // THIS IS NOT FOCAL LENGTH!  DON'T CHANGE BACK.
+                    Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
                     
                     // Calculate the ray from the eye to the point where it
                     // intersect the viewport.
@@ -188,6 +127,69 @@ unsigned long trace_rays(Color * data, Point3D eye) {
     return rt_info.traced_rays;
 }
 //}}}
+
+/// Trace a ray from the coordinate of the eye, through every pixel in the image.
+///
+/// @param pixel The pixel in the image which will be calculated by tracing the ray.
+/// @param ray The ray to be traced.
+/// @param depth The current depth in the recursion of rays traced.
+//{{{
+void trace_ray(Color &pixel, const Ray &ray, int depth) {
+    Primitive * primitive = NULL;
+    double dist = INF;
+    Scene * scene = Scene::get_instance();
+    int max_depth = scene->get_max_recurse_depth();
+
+    if (depth <= max_depth) {
+
+        if ( depth == 0 ) {
+            rt_info.primary_rays++;
+        }
+
+        // Track statistics.    {{{
+        rt_info.traced_rays++;
+        if (rt_info.traced_rays % REPORT_FACTOR == 0) {
+            int x, y;
+            getyx(stdscr, y, x);
+            long t = (long)difftime(time(NULL), rt_info.start_time);
+            mvprintw(y - 1, 0, "Elapsed time:  %02i:%02i:%02i", t / 3600, (t / 60) % 60, t % 60);
+            mvprintw(y, x + 2, "%02.2f%% done", 100 * (double)rt_info.primary_rays / (double)rt_info.total_primary_rays);
+            move(y, x);
+            refresh();
+        }
+        //}}}
+
+        if ((primitive = scene->find_collision(ray, dist)) != NULL) {
+            Vector dir = ray.direction();
+            Point3D intersection_point = ray.origin() + (dir * dist);
+            Vector reflect;
+            Vector refract;
+
+            // Determine the main color from the directly striking the object.  {{{
+            pixel += primitive->get_color_contribution(intersection_point, ray, reflect, refract);
+            //}}}
+            // Reflect the ray, if the surface is reflective.   {{{
+            double reflection_coefficient = primitive->get_reflection(intersection_point);
+
+            //TODO we seem to be missing an important part: applying the coefficient.
+            if (reflection_coefficient > 0.0) {
+                depth++;
+                trace_ray(pixel, Ray(intersection_point, reflect), depth);
+                depth--;
+            }
+            //}}}
+            // Trace the refracted ray, if the primitive is transparent.    {{{
+            if (primitive->get_opacity(intersection_point) > OPAQUE) {
+                depth++;
+                trace_ray(pixel, Ray(intersection_point, refract), depth);
+                depth--;
+            }
+            //}}}
+        }
+    }
+}
+//}}}
+
 //{{{
 void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays) {
     int hours, minutes, seconds;

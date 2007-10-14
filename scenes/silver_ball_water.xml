@@ -6,8 +6,8 @@
         <subpixels square_of='10'/>
         -->
         <width  pixels="256" />
-        <height pixels="256" />
-        <subpixels square_of='10'/>
+        <height pixels="192" />
+        <subpixels square_of='5'/>
 
         <file name="renders/silver_ball_water.ppm" />
         <recurse max_depth='5' />
