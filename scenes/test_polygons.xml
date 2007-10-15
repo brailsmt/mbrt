@@ -5,14 +5,11 @@
         <height pixels="768" />
         -->
         <width  pixels="512" />
-        <height pixels="384" />
-        <file name="renders/test_planes.ppm" />
+        <height pixels="512" />
+        <file name="renders/test_polygons.ppm" />
         <subpixels square_of='2'/>
         <recurse max_depth="1" />
     </meta>
-
-    <camera x='0.0' y='-2.0' z='-17.0'  />
-
 
     <colors>
         <color name='white'  red='0xff' green='0xff' blue='0xff' />
@@ -23,6 +20,7 @@
         <color name='green'  red='0x00' green='0xff' blue='0x00' />
         <color name='dark_green'  red='0x00' green='0x22' blue='0x00' />
         <color name='yellow' red='0xff' green='0xff' blue='0x00' />
+        <color name='black'  red='0x1a' green='0x1a' blue='0x1a' />
     </colors>
 
     <materials>
@@ -39,6 +37,7 @@
         <material name='blue_marble'  type='noise' material1='solid_dark_blue'  material2='solidBlue' />
         <material name='green_marble' type='noise' material1='solidGreen' material2='solidGreen' />
 
+        <material name='solidBlack'  type='solid' color='black' /> 
 
         <!--<material name='checkered'  type='checkered' scale='10' material1='solidBlue'  material2='solidWhite' />-->
         <material name='checkered'  type='checkered' material1='solidBlue'  material2='solidWhite' />
@@ -51,15 +50,19 @@
             scale='0.80'/>
     </materials>
 
+    <camera x='0.0' y='-2.0' z='-10.0'  />
+
     <light_sources>
         <sphere x='8.0' y='-12' z='-16.2' radius='0.1' material='solidWhite'   />
     </light_sources>
 
     <objects>
+        <sphere x='-4' y='-3' z='2' radius='3' material='solidRed'   />
         <polygon material="solidBlue">
-            <vertex at="(0, 3, 10)" />
-            <vertex at="(3, 3, 10)" />
-            <vertex at="(3, 0, 10)" />
+            <vertex at="(-5, -1, -5)" />
+            <vertex at="( 5, -2,  0)" />
+            <vertex at="( 0, -2,  5)" />
         </polygon>
+        <plane p0="(0, 0, 0)" p1="(1, 0, 0)" p2="(0, 0, 1)" material="solidBlack"/>
     </objects>
 </scene>
