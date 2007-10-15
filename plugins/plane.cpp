@@ -5,11 +5,11 @@
  */
 
 #include "plane.h"
-#include "scene.h"
 
 // This actually makes the static init work.
 Plane::StaticInit Plane::m_init;
 
+//{{{
 Plane::Plane(Point3D p1, Point3D p2, Point3D p3, std::string color, std::string material_name, std::string bumpmap_name) 
     : m_point(p1)
 {
@@ -21,7 +21,8 @@ Plane::Plane(Point3D p1, Point3D p2, Point3D p3, std::string color, std::string 
 
     m_bumpmap = scene->get_bumpmap(bumpmap_name);
 }
-
+//}}}
+//{{{
 bool Plane::collides_with(const Ray &ray, double &t) const {
     Point3D orig = ray.origin();
     Vector dir = ray.direction();
@@ -37,10 +38,17 @@ bool Plane::collides_with(const Ray &ray, double &t) const {
     }
 
     t = numerator / denominator;
+
+    // The ray collides behind the origin.
+    if(t <= 0) {
+        return false;
+    }
     
     return true;
 }
-
+//}}}
+//{{{
 Ray Plane::get_normal(const Point3D &p) {
     return Ray(p, m_normal.direction() );
-};
+}
+//}}}

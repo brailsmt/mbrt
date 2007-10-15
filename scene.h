@@ -1,8 +1,8 @@
 
 #ifndef SCENE_H
 #define SCENE_H
-#include "point3d.h"
 
+#include "raytrace_defs.h"
 #include <map>
 #include <vector>
 #include <string>

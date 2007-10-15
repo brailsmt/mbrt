@@ -4,6 +4,7 @@
 #include <cmath>
 #include <sstream>
 #include <algorithm>
+#include "raytrace_defs.h"
 
 class Point3D;
 typedef Point3D Vector;
@@ -14,8 +15,8 @@ inline bool iswhitespace(char c) {
         || c == '\r'
         || c == '\t';
 }
-//{{{
 /// A three-dimensional point in space.
+//{{{
 class Point3D {
     public:
         
@@ -40,6 +41,7 @@ class Point3D {
         /// Creates a point in three space by parsing a string of the form
         /// "(x, y, z)".
         Point3D(std::string str) {
+            syslog(LOG_INFO, "%s", str.c_str());
             // remove all whitespace
             std::string::iterator end;
             std::remove_if(str.begin(), end, iswhitespace);
@@ -92,11 +94,11 @@ class Point3D {
 //}}}
 
 // This is inline, it must be defined in the header.
-//{{{
 /// Calculate the distant from this point to another point.
 ///
 /// @param other The point to find the distance to
 ///@return distance to the point
+//{{{
 double Point3D::distance_to(const Point3D &other) {
     double dx = x - other.x;
     double dy = y - other.y;

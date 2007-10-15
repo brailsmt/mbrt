@@ -1,6 +1,7 @@
 #ifndef NOISE_H
 #define NOISE_H
 
+#include "raytrace_defs.h"
 #include "point3d.h"
 
 /// Number of points along each axis in the noise

@@ -1,5 +1,4 @@
 
-#include "raytrace_defs.h"
 #include "primitive.h"
 #include "scene.h"
 #include "material.h"

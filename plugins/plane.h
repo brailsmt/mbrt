@@ -7,6 +7,7 @@
 #ifndef PLANE_H
 #define PLANE_H
 
+#include "raytrace_defs.h"
 #include "xml_util.h"
 #include "pluginfactory.h"
 

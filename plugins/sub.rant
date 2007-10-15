@@ -1,6 +1,9 @@
 require '../build.rb'
 import "md5"
 import "autoclean"
+#import "c/dependencies"
+#gen C::Dependencies
+#gen Action do source "c_dependencies" end
 
 src  = Rant::FileList[ '*.cpp' ] 
 

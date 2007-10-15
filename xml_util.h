@@ -13,6 +13,8 @@
 #include <libxml/xpath.h>
 #include <libxml/tree.h>
 
+#include "point3d.h"
+
 typedef std::map<std::string, std::string> xml_properties;
 
 struct rgb {
@@ -48,6 +50,12 @@ inline int parse_rgb(std::string rgb_triplet) {
     }
 
     return rv;
+}
+
+inline Point3D parse_vertex(xmlNode * node) {
+    log_debug("%s", node->name);
+    xml_properties props = get_properties(node);
+    return Point3D(props["at"]);
 }
 #endif
 
