@@ -27,7 +27,9 @@ class Sphere : public Primitive {
             public:
                 /// Register material with the factory
                 StaticInit() {
+                    log_debug("Registering 'sphere'");
                     PrimitiveFactory::get_instance()->registerPlugin("sphere", sigc::ptr_fun(new_sphere));
+                    log_debug("Sphere registered.");
                 }
         };
         /// Force static initialization.
@@ -36,88 +38,27 @@ class Sphere : public Primitive {
         /// The radius of the sphere.
         double m_radius;
 
-        /// Material of this primitive.  Overrides any color value.
-        std::string m_material_name;
-        /// Color of this primitive.  Overridden by material, if it exists.
-        std::string m_color_name;
-        /// Bump map associated with this primitive. Most often, will be blank.
-        std::string m_bumpmap_name;
-
     public:
         /// Create a default sphere with a radius of 1.
+        /*
         Sphere() : m_radius(1) {
             m_material = new SolidMaterial(false);
         }
+        */
 
         /// Create a sphere with the default m_material.
-        template <class _T>
+        //template <class _T>
         Sphere( 
-            _T x, 
-            _T y, 
-            _T z, 
-            _T r, 
-            std::string color_name = "", 
-            std::string material_name = "",
-            std::string bumpmap_name = "") 
-            : m_radius((double)r),
-              m_material_name(material_name),
-              m_color_name(color_name),
-              m_bumpmap_name(bumpmap_name)
+            Point3D center,
+            double r)
+            : m_radius(r)
         {
-            // TODO some of this initialization will be common across
-            // all prims. Consider refactor.
-            log_debug("here");
-            log_debug("Creating a Sphere at (%0.2f, %0.2f, %0.2f) with a radius of %0.2f, color = %s, material = %s, bumpmap = %s",
-                                                        x, y, z, r, m_color_name.c_str(), m_material_name.c_str(), m_bumpmap_name.c_str());
+            log_debug("Creating a Sphere at (%0.2f, %0.2f, %0.2f) with a radius of %0.2f", center.x, center.y, center.z, r );
 
-            Scene * scene = Scene::get_instance();
-            m_center = Point3D(x,y,z);
-            m_material = scene->get_material(material_name);
+            m_center = center;
 
-            // TODO: should we really handle as a default, or should we trap this as an error?
-            if(m_material == NULL)
-            {
-                Color * color = scene->get_color(color_name);
-                color = color ? color : new Color(1.0,0.5,0.5);
-                m_material = new SolidMaterial(color ,false);
-            }
-
-            m_bumpmap = scene->get_bumpmap(bumpmap_name);
         }
 
-        template <class _T>
-        Sphere( 
-            std::string coords,
-            _T r, 
-            std::string color_name = "", 
-            std::string material_name = "",
-            std::string bumpmap_name = "") 
-            : m_radius((double)r),
-              m_material_name(material_name),
-              m_color_name(color_name),
-              m_bumpmap_name(bumpmap_name)
-        {
-            m_center = Point3D(coords);
-
-            // TODO some of this initialization will be common across
-            // all prims. Consider refactor.
-            log_debug("here");
-            log_debug("Creating a Sphere at (%0.2f, %0.2f, %0.2f) with a radius of %0.2f, color = %s, material = %s, bumpmap = %s",
-                                                        m_center.x, m_center.y, m_center.z, r, m_color_name.c_str(), m_material_name.c_str(), m_bumpmap_name.c_str());
-
-            Scene * scene = Scene::get_instance();
-            m_material = scene->get_material(material_name);
-
-            // TODO: should we really handle as a default, or should we trap this as an error?
-            if(m_material == NULL)
-            {
-                Color * color = scene->get_color(color_name);
-                color = color ? color : new Color(1.0,0.5,0.5);
-                m_material = new SolidMaterial(color ,false);
-            }
-
-            m_bumpmap = scene->get_bumpmap(bumpmap_name);
-        }
         /// Clean up the sphere's resources.
         virtual ~Sphere();
 
@@ -191,27 +132,24 @@ Primitive * new_sphere(xmlNode * node) {
 
     if ( props.empty() == false ) {
         double radius   = (double)strtod(props["radius"   ].c_str(), NULL);
-        std::string color    = props["color"   ];
-        std::string material = props["material"];
-        std::string bumpmap  = props["bumpmap"];
 
         if(props.find("center") != props.end()) {
-            rv = new Sphere(props["center"], radius, color, material, bumpmap);
+            rv = new Sphere(Point3D(props["center"]), radius); 
         }
         else {
-            double x        = (double)strtod(props["x"        ].c_str(), NULL);
-            double y        = (double)strtod(props["y"        ].c_str(), NULL);
-            double z        = (double)strtod(props["z"        ].c_str(), NULL);
-            rv = new Sphere(x, y, z, radius, color, material, bumpmap);
+            double x = (double)strtod(props["x"].c_str(), NULL);
+            double y = (double)strtod(props["y"].c_str(), NULL);
+            double z = (double)strtod(props["z"].c_str(), NULL);
+            rv = new Sphere(Point3D(x, y, z), radius);
         }
-
     }
     else {
         log_err("No properties specified for <sphere> tag.");
     }
 
-    log_err("Leaving new_sphere()");
-    return dynamic_cast<Primitive *>(rv);
+    log_debug("Leaving new_sphere()");
+    return rv;
+    //return dynamic_cast<Primitive *>(rv);
 }
 
 void delete_sphere(Sphere * sphere) {

@@ -6,6 +6,7 @@
 #include "color.h"
 #include "bumpmap.h"
 #include "ray.h"
+#include "xml_util.h"
 
 /// Defines an abstract interface that all primitives must implement.
 class Primitive {
@@ -49,6 +50,9 @@ class Primitive {
         /// this to provide the correct surface normal for the given point.
         virtual Ray get_normal(const Point3D &p) = 0;
 
+        /// Perform common initialization.  This method is <em>not</em>
+        /// declared virtual as it should never be overridden.  
+        virtual bool initialize(xmlNode * node);
 
 
         /// Determine the contribution to lighting/color of the pixel based on the incoming

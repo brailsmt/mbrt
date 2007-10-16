@@ -126,6 +126,9 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
             log_warn("Primitive of type '%s' unknown...Skipping!\n", child->name);
         }
         else {
+            log_debug("calling Primitive#initialize");
+            prim->initialize(child);
+            log_debug("done");
             scene->add_primitive(prim);
         }
 

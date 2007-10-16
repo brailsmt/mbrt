@@ -157,3 +157,20 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
 
     return rv;
 }
+
+bool Primitive::initialize(xmlNode * node)
+{
+    log_debug("Initializing primitive...");
+    xml_properties props = get_properties(node);
+    Scene * scene = Scene::get_instance();
+
+    m_material = scene->get_material( props["material"] );
+    if(props.find("bumpmap") != props.end())
+    {
+        m_bumpmap = scene->get_bumpmap( props["bumpmap"] );
+    }
+    log_debug("Done!");
+
+    return true;  
+}
+
