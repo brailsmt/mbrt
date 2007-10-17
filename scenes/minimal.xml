@@ -1,0 +1,83 @@
+<scene>
+    <meta>
+        <width  pixels="400" />
+        <height pixels="400" />
+        <file name="renders/test_reflection.ppm" />
+        <subpixels square_of='3'/>
+    </meta>
+
+    <camera x='0.0' y='0.0' z='-100' />
+
+
+    <bumpmaps>
+        <ripple name='ripple' />
+    </bumpmaps>
+
+    <colors>
+        <!-- General set of colors -->
+        <color name='blue'          red='0x00' green='0x00' blue='0xff' />
+        <color name='dark_blue'     red='0x00' green='0x00' blue='0x01' />
+        <color name='dark_green'    red='0x00' green='0x01' blue='0x00' />
+        <color name='green'         red='0x00' green='0xff' blue='0x00' />
+        <color name='red'           red='0xff' green='0x00' blue='0x00' />
+        <color name='white'         red='0xff' green='0xff' blue='0xff' />
+        <color name='yellow'        red='0xff' green='0xff' blue='0x00' />
+    </colors>
+
+    <materials>
+        <!-- Create some solid materials from the above colors -->
+        <material name='solid_blue'         type='solid' color='blue'       reflection='1.0' reflectivity='30.0'/>
+        <material name='solid_dark_blue'    type='solid' color='dark_blue'  reflection='8.0' reflectivity='30.0' />
+        <material name='solid_dark_green'   type='solid' color='dark_green' reflection='0.00' reflectivity='0.0' /> 
+        <material name='solid_green'        type='solid' color='green'      reflection='0.00' reflectivity='0.0' /> 
+        <material name='solid_red'          type='solid' color='red' />
+        <material name='solid_white'        type='solid' color='white' />
+        <material name='solid_yellow'       type='solid' color='yellow' />
+
+
+        <!-- Create a couple of simple examples of composite materials -->
+        <material name='checkered'  type='checkered' material1='solid_blue'  material2='solid_white' />
+        <material name='cloud'      type='cloud'     material1='solid_blue'  material2='solid_white' />
+
+        <material 
+            name='marble'     
+            type='marble'    
+            material1a='solid_blue'  
+            material1b='solid_dark_blue' 
+            material2a='solid_green'
+            material2b='solid_yellow'
+            break_point='0.50'
+            noise_scale='1.8'
+            />
+
+        <!-- 
+            Create a more elaborate material. 
+            Start with a couple of marble materials
+         -->
+        <material name='blue_cloud'      type='cloud' material1='solid_dark_blue'    material2='solid_blue' />
+        <material name='green_cloud'     type='cloud' material1='solid_dark_green'   material2='solid_green' />
+
+        <!-- Apply them to a checker material -->
+        <material name='checkered_cloud' 
+            type='checkered' 
+            material1='blue_cloud' 
+            material2='green_cloud' 
+            scale='0.80'
+
+        />
+
+    </materials>
+
+    <light_sources>
+        <sphere x='-10.0' y='0' z='0' radius='0.1' material='solid_white' color='white' />
+    </light_sources>
+
+    <objects>
+        <!--<sphere x='  0' y='  0.0' z='   0' radius='3' material='solid_white'  />-->
+        <sphere x='  0' y=' 10.0' z=' -1.5' radius='3' material='solid_red' bumpmap='ripple' />
+        <sphere x=' 10' y='  0.0' z=' -1.0' radius='3' material='cloud' />
+        <sphere x='  0' y='-10.0' z=' -1.5' radius='3' material='checkered' />
+        <sphere x='-10' y=' 10.1' z=' -1.4' radius='3' material='checkered_cloud' />
+        <sphere x='-10' y='-10.1' z=' -1.4' radius='3' material='marble' />
+    </objects>
+</scene>
