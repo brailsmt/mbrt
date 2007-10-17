@@ -39,15 +39,8 @@ class Sphere : public Primitive {
         double m_radius;
 
     public:
-        /// Create a default sphere with a radius of 1.
-        /*
-        Sphere() : m_radius(1) {
-            m_material = new SolidMaterial(false);
-        }
-        */
 
-        /// Create a sphere with the default m_material.
-        //template <class _T>
+        /// Create a sphere
         Sphere( 
             Point3D center,
             double r)
@@ -148,8 +141,7 @@ Primitive * new_sphere(xmlNode * node) {
     }
 
     log_debug("Leaving new_sphere()");
-    return rv;
-    //return dynamic_cast<Primitive *>(rv);
+    return dynamic_cast<Primitive *>(rv);
 }
 
 void delete_sphere(Sphere * sphere) {

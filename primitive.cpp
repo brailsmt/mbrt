@@ -165,11 +165,24 @@ bool Primitive::initialize(xmlNode * node)
     Scene * scene = Scene::get_instance();
 
     m_material = scene->get_material( props["material"] );
+    if(!m_material)
+    {
+        log_err("Material of type '%s' not found.", props["material"].c_str() );
+    }
+    else
+    {
+        log_debug("Added material '%s'", props["material"].c_str() );
+    }
+
     if(props.find("bumpmap") != props.end())
     {
         m_bumpmap = scene->get_bumpmap( props["bumpmap"] );
     }
-    log_debug("Done!");
+    else
+    {
+        m_bumpmap = NULL;
+    }
+
 
     return true;  
 }

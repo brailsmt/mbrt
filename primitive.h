@@ -52,7 +52,7 @@ class Primitive {
 
         /// Perform common initialization.  This method is <em>not</em>
         /// declared virtual as it should never be overridden.  
-        virtual bool initialize(xmlNode * node);
+        bool initialize(xmlNode * node);
 
 
         /// Determine the contribution to lighting/color of the pixel based on the incoming

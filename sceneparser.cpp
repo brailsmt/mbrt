@@ -126,9 +126,7 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
             log_warn("Primitive of type '%s' unknown...Skipping!\n", child->name);
         }
         else {
-            log_debug("calling Primitive#initialize");
             prim->initialize(child);
-            log_debug("done");
             scene->add_primitive(prim);
         }
 
@@ -207,6 +205,8 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
             log_warn("Primitive of type '%s' unknown...Skipping!\n", child->name);
         }
         else {
+
+            prim->initialize(child);
             prim->set_is_light(true);
             scene->add_primitive(prim);
         }
