@@ -29,7 +29,7 @@ Scene::Scene()
       camera(),
       pixel_width(WIDTH),
       pixel_height(HEIGHT),
-      output_filename("out.ppm"),
+      output_filename("scene.ppm"),
       subpixels(SUBPIXEL_SQRT),
       max_depth(MAX_DEPTH)
 {

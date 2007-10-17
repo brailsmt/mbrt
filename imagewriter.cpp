@@ -51,6 +51,7 @@ bool PpmImageWriter::write_image(Color * data) {
 
         fclose(_file);
 
+        mvprintw(y, 0, "\n");
         mvprintw(y, 0, "Saved rendered image to %s", m_filename.c_str());
         rv = true;
     }

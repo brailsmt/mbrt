@@ -139,7 +139,6 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 //{{{
 Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
     log_debug("Entering SceneParser::parse_meta()\n");
-    scene->set_output_filename(m_scene_filename.replace(m_scene_filename.find(".xml"), 4, ".ppm"));
 
     xmlNode * child = node->children;
     while(child != node->last) {

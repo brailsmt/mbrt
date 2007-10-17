@@ -64,8 +64,12 @@ class ImageWriterFactory {
 
         /// This returns a pointer the right type of ImageWriter based on the extension of the filename passed in.
         ImageWriter * operator()(std::string filename) {
-            std::string ext = filename.substr(filename.rfind("."));
             Scene * scene = Scene::get_instance();
+
+            if(filename.length() == 0) {
+                filename = scene->get_output_filename();
+            }
+            std::string ext = filename.substr(filename.rfind("."));
 
             // Use PPM as the default.
             ImageTypes type = PPM_IMAGE;
@@ -75,7 +79,7 @@ class ImageWriterFactory {
 
             switch (type) {
                 case PPM_IMAGE:
-                    return new PpmImageWriter(filename.length() > 0 ? filename: scene->get_output_filename(), scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
+                    return new PpmImageWriter(filename, scene->get_viewport_pixel_height(), scene->get_viewport_pixel_width());
                 default:
                     return NULL;
             }

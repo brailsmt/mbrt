@@ -260,7 +260,7 @@ int main(int argc, char ** argv) {
 
     time_t start_time = time(NULL);
     char filename[256] = "scene.xml";
-    char output[256] = "scene.ppm";
+    char output[256]   = {'\0'};
     srand(time(NULL));
 
     extern char *optarg;
