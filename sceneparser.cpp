@@ -4,7 +4,7 @@
 /// &copy; 2007 Michael Brailsford
 
 #include "sceneparser.h"
-#include "primitive.h"
+#include "renderable.h"
 #include "scene.h"
 #include "xml_util.h"
 
@@ -58,7 +58,7 @@ void SceneParser::register_default_handlers() {
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
     xmlNode * child = node->children;
 
     // Parse all materials
@@ -86,7 +86,7 @@ Primitive * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
     xmlNode * child = node->children;
 
     // Parse all colors which are the children of the node passed in.
@@ -110,20 +110,20 @@ Primitive * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
-Primitive * SceneParser::noop(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::noop(Scene * scene, xmlNode * node) {
     return NULL;
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
     xmlNode * child = node->children;
 
     // Parse all objects.
     while(child != node->last) {
-        log_debug("Primitive of type '%s'.\n", child->name);
-        Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, child);
+        log_debug("Renderable of type '%s'.\n", child->name);
+        Renderable * prim = RenderableFactory::get_instance()->create((char *)child->name, child);
         if(prim == NULL) {
-            log_warn("Primitive of type '%s' unknown...Skipping!\n", child->name);
+            log_warn("Renderable of type '%s' unknown...Skipping!\n", child->name);
         }
         else {
             prim->initialize(child);
@@ -137,7 +137,7 @@ Primitive * SceneParser::parse_objects(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
     log_debug("Entering SceneParser::parse_meta()\n");
 
     xmlNode * child = node->children;
@@ -168,7 +168,7 @@ Primitive * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
     log_debug("Entering SceneParser::parse_camera()\n");
     map<string, string> props = get_properties(node);
     if(props.find("location") != props.end()) {
@@ -191,17 +191,17 @@ Primitive * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
     log_debug("Entering SceneParser::parse_light_sources()\n");
     /// @todo This is a near duplicate of parse_objects()
     xmlNode * child = node->children;
 
     child = node->children;
     while(child != node->last) {
-        log_debug("Primitive of type '%s'\n", child->name);
-        Primitive * prim = PrimitiveFactory::get_instance()->create((char *)child->name, child);
+        log_debug("Renderable of type '%s'\n", child->name);
+        Renderable * prim = RenderableFactory::get_instance()->create((char *)child->name, child);
         if(prim == NULL) {
-            log_warn("Primitive of type '%s' unknown...Skipping!\n", child->name);
+            log_warn("Renderable of type '%s' unknown...Skipping!\n", child->name);
         }
         else {
 
@@ -218,7 +218,7 @@ Primitive * SceneParser::parse_light_sources(Scene * scene, xmlNode * node) {
 }
 //}}}
 //{{{
-Primitive * SceneParser::parse_bumpmaps(Scene * scene, xmlNode * node) {
+Renderable * SceneParser::parse_bumpmaps(Scene * scene, xmlNode * node) {
     // This function was copy/paste/modify two things
     // Sounds like a candidate for refactoring.
     

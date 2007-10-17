@@ -16,7 +16,7 @@
 
 #include "raytrace_defs.h"
 #include "imagewriter.h"
-#include "primitive.h"
+#include "renderable.h"
 #include "ray.h"
 #include "scene.h"
 
@@ -135,7 +135,7 @@ unsigned long trace_rays(Color * data, Point3D eye) {
 /// @param depth The current depth in the recursion of rays traced.
 //{{{
 void trace_ray(Color &pixel, const Ray &ray, int depth) {
-    Primitive * primitive = NULL;
+    Renderable * primitive = NULL;
     double dist = INF;
     Scene * scene = Scene::get_instance();
     int max_depth = scene->get_max_recurse_depth();

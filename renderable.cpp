@@ -1,10 +1,10 @@
-#include "primitive.h"
+#include "renderable.h"
 #include <vector>
 
 using std::vector;
 
 //{{{
-double Primitive::get_diffuse(const Point3D& intersection_point) const {
+double Renderable::get_diffuse(const Point3D& intersection_point) const {
     double diffuse = m_material->get_diffuse(intersection_point);
     return (diffuse <= 0.0) ? 0.0 :
            (diffuse >= 1.0) ? 1.0 :
@@ -12,7 +12,7 @@ double Primitive::get_diffuse(const Point3D& intersection_point) const {
 }
 //}}}
 //{{{
-double Primitive::get_reflection(const Point3D& intersection_point) const {
+double Renderable::get_reflection(const Point3D& intersection_point) const {
     double reflection = m_material->get_reflection(intersection_point);
     return (reflection <= 0.0) ? 0.0 :
            (reflection >= 1.0) ? 1.0 :
@@ -20,45 +20,45 @@ double Primitive::get_reflection(const Point3D& intersection_point) const {
 }
 //}}}
 //{{{
-double Primitive::get_reflectivity(const Point3D& intersection_point) const {
+double Renderable::get_reflectivity(const Point3D& intersection_point) const {
     return m_material->get_reflectivity(intersection_point);
 }
 //}}}
 //{{{
-double Primitive::get_specular(const Point3D& intersection_point) const {
+double Renderable::get_specular(const Point3D& intersection_point) const {
     // Really?
     // follow up: This currently doesn't appear to be used.
     return 1.0;
 }
 //}}}
 //{{{
-double Primitive::get_opacity(const Point3D& intersection_point) const {
+double Renderable::get_opacity(const Point3D& intersection_point) const {
     return m_material->get_opacity(intersection_point);
 }
 //}}}
 //{{{
-double Primitive::get_refraction_index(const Point3D& intersection_point) const {
+double Renderable::get_refraction_index(const Point3D& intersection_point) const {
     return m_material == NULL ? 1.0 : (m_material->get_refraction_index(intersection_point));
 }
 //}}}
 //{{{
-Color Primitive::get_color(const Point3D& intersection_point) const {
+Color Renderable::get_color(const Point3D& intersection_point) const {
     return m_material == NULL ? Color() : *(m_material->get_color(intersection_point));
 }
 //}}}
 //{{{
-bool Primitive::is_light(const Point3D& intersection_point) const {
+bool Renderable::is_light(const Point3D& intersection_point) const {
     return m_material == NULL ? false : m_material->is_light(intersection_point);
 }
 //}}}
 //{{{
-bool Primitive::set_is_light(bool v) {
+bool Renderable::set_is_light(bool v) {
     if (m_material != NULL) m_material->set_is_light(v);
 }
 //}}}
 
 //{{{
-Ray Primitive::get_final_normal(const Point3D& p)
+Ray Renderable::get_final_normal(const Point3D& p)
 {
     if(m_bumpmap == NULL)
     {
@@ -71,7 +71,7 @@ Ray Primitive::get_final_normal(const Point3D& p)
 }
 //}}}
 
-Color Primitive::get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) {
+Color Renderable::get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) {
     // Determine the color of the pixel at the point of intersection.
     double ambient_factor = 0.2;
     Color rv = get_color(intersection_point) * ambient_factor;
@@ -81,11 +81,11 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
 
         // now calculate all rays to light sources, and accumulate each source's contribution to
         // the pixel color.
-        vector<Primitive *>::iterator iter, end = scene->get_scene()->end();
+        vector<Renderable *>::iterator iter, end = scene->get_scene()->end();
         for ( iter = scene->get_scene()->begin(); iter != end; ++iter ) {
 
             if ( (*iter)->is_light(intersection_point) == true) {
-                Primitive * light = *iter;
+                Renderable * light = *iter;
 
                 //double diffusion = light->get_diffuse(intersection_point);
                 //if ( diffusion > 0.0 ) {
@@ -158,7 +158,7 @@ Color Primitive::get_color_contribution(const Point3D &intersection_point, const
     return rv;
 }
 
-bool Primitive::initialize(xmlNode * node)
+bool Renderable::initialize(xmlNode * node)
 {
     log_debug("Initializing primitive...");
     xml_properties props = get_properties(node);

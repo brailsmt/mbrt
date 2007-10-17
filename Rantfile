@@ -1,11 +1,16 @@
 require 'rant/filelist'
 require 'build.rb'
 
-#import "md5"
 import %w(autoclean c/dependencies)
-#import %w(md5 autoclean c/dependencies)
-gen C::Dependencies
-gen Action do source "c_dependencies" end
+
+gen AutoClean
+
+desc "Determine C++ dependencies"
+gen C::Dependencies, :search => %w(. plugins)
+gen Action do
+    source "c_dependencies"
+end
+
 
 SUBLIBS = %w( )
 SUBDIRS = %w( plugins )
@@ -31,6 +36,7 @@ src  = Rant::FileList[ '*.cpp' ]
 objs = src.ext( 'o' )
 rt_deps = objs
 
+
 desc "Build everything that has changed since the last build"
 task :all => %w( cscope.out plugins/default rt )
 
@@ -46,12 +52,11 @@ task :clean => %w(autoclean) do
     sys "rm -f *.gc*"
     sys "rm -f plugins/*.gc*"
     sys "rm -rf coverage_reports"
+    sys "rm -f app.info core c_dependencies plugins/c_dependencies"
 end
 
 desc "Generate coverage reports"
 task :coverage => %w(clean config_coverage all run_scene gather_coverage)
-
-gen AutoClean
 
 desc "Set flags for coverage reports"
 task :config_coverage do |task_info|

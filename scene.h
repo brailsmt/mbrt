@@ -12,7 +12,7 @@
 const int MAX_DEPTH = 15;
 
 class Ray;
-class Primitive;
+class Renderable;
 class Point3D;
 class Color;
 class Material;
@@ -27,8 +27,8 @@ class Scene {
         /// This is the instance of the Scene class.
         static Scene * inst;
 
-        /// This is the scene, which is a collection of Primitives.
-        std::vector<Primitive *> scene;
+        /// This is the scene, which is a collection of Renderables.
+        std::vector<Renderable *> scene;
 
         /// This is a map of all colors available for the scene.
         std::map<std::string, Color *> m_colors;
@@ -72,17 +72,17 @@ class Scene {
         /// Destructor.
         ~Scene();
 
-        /// Return the scene's collection of Primitives.
-        inline std::vector<Primitive *> * get_scene() { return &scene; }
+        /// Return the scene's collection of Renderables.
+        inline std::vector<Renderable *> * get_scene() { return &scene; }
 
-        /// Determine which Primitive in the scene is intersected by the ray, if any.
+        /// Determine which Renderable in the scene is intersected by the ray, if any.
         ///
         /// @param ray The ray that is being traced into the scene.
         /// @param dist [out] This is the distance along ray that the intersection occurs.
         ///
-        /// @return The primitive intersected at distance indicated by dist.  If no Primitive is
+        /// @return The primitive intersected at distance indicated by dist.  If no Renderable is
         ///         intersected, this method returns NULL.
-        Primitive * find_collision(const Ray &ray, double &dist) const;
+        Renderable * find_collision(const Ray &ray, double &dist) const;
 
         /// Return the point from which all rays originate.
         ///
@@ -128,7 +128,7 @@ class Scene {
         void add_material(std::string name, Material * material) { m_materials[name] = material; }
         
         /// Add a primitive to the scene.
-        void add_primitive(Primitive * prim) { scene.push_back(prim); }
+        void add_primitive(Renderable * prim) { scene.push_back(prim); }
         
         /// Add a bump map to the scene.
         void add_bumpmap(std::string name, BumpMap * bumpmap) { m_bumpmaps[name] = bumpmap; }

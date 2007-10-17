@@ -13,7 +13,7 @@
 
 #include "scene.h"
 
-typedef sigc::signal<Primitive *, Scene *, xmlNode *> nodehandler_t ;
+typedef sigc::signal<Renderable *, Scene *, xmlNode *> nodehandler_t ;
 
 /// This class parses an XML scene definition file, and creates a Scene object based on the
 /// definition.
@@ -26,37 +26,37 @@ class SceneParser : public sigc::trackable {
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * parse_light_sources(Scene * scene, xmlNode * node);
+        Renderable * parse_light_sources(Scene * scene, xmlNode * node);
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * parse_objects(Scene * scene, xmlNode * node);
+        Renderable * parse_objects(Scene * scene, xmlNode * node);
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * parse_meta(Scene * scene, xmlNode * node);
+        Renderable * parse_meta(Scene * scene, xmlNode * node);
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * parse_camera(Scene * scene, xmlNode * node);
+        Renderable * parse_camera(Scene * scene, xmlNode * node);
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * parse_bumpmaps(Scene * scene, xmlNode * node);
+        Renderable * parse_bumpmaps(Scene * scene, xmlNode * node);
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * noop(Scene * scene, xmlNode * node);
+        Renderable * noop(Scene * scene, xmlNode * node);
 
         /// Parse a set of color nodes and return them in a map<char *, Color *>.
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * parse_colors(Scene * scene, xmlNode * node);
+        Renderable * parse_colors(Scene * scene, xmlNode * node);
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
-        Primitive * parse_materials(Scene * scene, xmlNode * node); 
+        Renderable * parse_materials(Scene * scene, xmlNode * node); 
 
 
     protected:

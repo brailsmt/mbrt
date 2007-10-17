@@ -6,7 +6,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "primitive.h"
+#include "renderable.h"
 #include "scene.h"
 #include "xml_util.h"
 #include <string>
@@ -15,11 +15,11 @@
 
 class Sphere;
 
-Primitive * new_sphere(xmlNode * node);
+Renderable * new_sphere(xmlNode * node);
 void delete_sphere(Sphere * sphere);
 
 /// A Sphere is defined by its m_center point and its radius.
-class Sphere : public Primitive {
+class Sphere : public Renderable {
 
     protected:
         /// Fake a static initializer.
@@ -28,7 +28,7 @@ class Sphere : public Primitive {
                 /// Register material with the factory
                 StaticInit() {
                     log_debug("Registering 'sphere'");
-                    PrimitiveFactory::get_instance()->registerPlugin("sphere", sigc::ptr_fun(new_sphere));
+                    RenderableFactory::get_instance()->registerPlugin("sphere", sigc::ptr_fun(new_sphere));
                     log_debug("Sphere registered.");
                 }
         };
@@ -117,7 +117,7 @@ class Sphere : public Primitive {
         virtual Ray get_normal(const Point3D &p) ;
 };
 
-Primitive * new_sphere(xmlNode * node) {
+Renderable * new_sphere(xmlNode * node) {
     log_debug("Entering new_sphere()");
     Sphere * rv = NULL;
 
@@ -141,7 +141,7 @@ Primitive * new_sphere(xmlNode * node) {
     }
 
     log_debug("Leaving new_sphere()");
-    return dynamic_cast<Primitive *>(rv);
+    return dynamic_cast<Renderable *>(rv);
 }
 
 void delete_sphere(Sphere * sphere) {

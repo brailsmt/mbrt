@@ -13,19 +13,19 @@
 #include <vector>
 #include "point3d.h"
 
-class Primitive;
-Primitive * new_polygon(xmlNode * node);
+class Renderable;
+Renderable * new_polygon(xmlNode * node);
 
-class Polygon : public Primitive {
+class Polygon : public Renderable {
     protected:
         /// Fake a static initializer.
         class StaticInit {
             public:
                 /// Register material with the factory
                 StaticInit() {
-                    PrimitiveFactory::get_instance()->registerPlugin("polygon",  sigc::ptr_fun(new_polygon));
-                    PrimitiveFactory::get_instance()->registerPlugin("triangle", sigc::ptr_fun(new_polygon));
-                    PrimitiveFactory::get_instance()->registerPlugin("square",   sigc::ptr_fun(new_polygon));
+                    RenderableFactory::get_instance()->registerPlugin("polygon",  sigc::ptr_fun(new_polygon));
+                    RenderableFactory::get_instance()->registerPlugin("triangle", sigc::ptr_fun(new_polygon));
+                    RenderableFactory::get_instance()->registerPlugin("square",   sigc::ptr_fun(new_polygon));
                 }
         };
         /// Force static initialization.
@@ -70,7 +70,7 @@ class Polygon : public Primitive {
 };
 
 //{{{
-Primitive * new_polygon(xmlNode * node) {
+Renderable * new_polygon(xmlNode * node) {
     log_debug("Entering new_plane()");
     Polygon * rv = NULL;
 
@@ -108,7 +108,7 @@ Primitive * new_polygon(xmlNode * node) {
     }
 
     log_err("Leaving new_polygon()");
-    return dynamic_cast<Primitive *>(rv);
+    return dynamic_cast<Renderable *>(rv);
 }
 //}}}
 //{{{

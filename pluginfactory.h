@@ -18,7 +18,7 @@
 #include <sigc++/sigc++.h>
 
 #include "material.h"
-#include "primitive.h"
+#include "renderable.h"
 #include "bumpmap.h"
 
 /// Signal for a function which constructs a new instance of a Material.
@@ -27,8 +27,8 @@
 /// possible.
 typedef sigc::signal<Material *, std::map<std::string, std::string> > material_create_fn;
 
-/// Signal for a function which constructs a new instance of a Primitive.
-typedef sigc::signal<Primitive *, xmlNode *> primitive_create_fn;
+/// Signal for a function which constructs a new instance of a Renderable.
+typedef sigc::signal<Renderable *, xmlNode *> primitive_create_fn;
 
 /// Signal for a function which constructs a new instance of a BumpMap.
 typedef sigc::signal<BumpMap *, xmlNode *> bumpmap_create_fn;
@@ -39,7 +39,7 @@ typedef sigc::slot<Material *, std::map<std::string, std::string> > material_cre
 
 /// This is an abstraction for primitive_create_fn signals to allow them to be
 /// passed transparently to the register function.
-typedef sigc::slot<Primitive *, xmlNode *> primitive_create_slot;
+typedef sigc::slot<Renderable *, xmlNode *> primitive_create_slot;
 
 /// This is an abstraction for bumpmap_create_fn signals to allow them to be
 /// passed transparently to the register function.
@@ -125,7 +125,7 @@ class PluginFactory {
 };
 
 typedef PluginFactory<Material,  material_create_fn,  material_create_slot>  MaterialFactory;
-typedef PluginFactory<Primitive, primitive_create_fn, primitive_create_slot> PrimitiveFactory;
+typedef PluginFactory<Renderable, primitive_create_fn, primitive_create_slot> RenderableFactory;
 typedef PluginFactory<BumpMap,   bumpmap_create_fn,   bumpmap_create_slot> BumpMapFactory;
 
 #endif

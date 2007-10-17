@@ -9,9 +9,9 @@
 #include "xml_util.h"
 
 /// Defines an abstract interface that all primitives must implement.
-class Primitive {
+class Renderable {
     public:
-        virtual ~Primitive() {}
+        virtual ~Renderable() {}
 
         /// Does the ray passed in collide with this object?
         ///
@@ -20,7 +20,7 @@ class Primitive {
         /// @return True if the ray collides with this object.
         virtual bool collides_with(const Ray &ray, double &t) const = 0;
 
-        /// Returns the color of the Primitive.
+        /// Returns the color of the Renderable.
         virtual Color get_color(const Point3D& intersection_point) const ;
 
         /// Returns the diffusion factor of the primitive.
@@ -73,7 +73,7 @@ class Primitive {
 
         bool is_in_shadow(const Ray &ray_to_light, const Point3D intersection_point) {
             double dist = INF;
-            Primitive * prim = NULL;
+            Renderable * prim = NULL;
             Scene * scene = Scene::get_instance();
 
             prim = scene->find_collision(ray_to_light, dist);
@@ -101,7 +101,7 @@ class Primitive {
 
         /// "Center" of object.  Some objects do not have a true
         /// center, such as a plane, but to simplify the lighting
-        /// algorithm we need to move this to Primitive.  This
+        /// algorithm we need to move this to Renderable.  This
         /// might also be useful in the future for centering textures
         /// or materials around.
         Point3D m_center;

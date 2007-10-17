@@ -11,10 +11,10 @@
 #include "xml_util.h"
 #include "pluginfactory.h"
 
-class Primitive;
-Primitive * new_plane(xmlNode * node);
+class Renderable;
+Renderable * new_plane(xmlNode * node);
 
-class Plane : public Primitive {
+class Plane : public Renderable {
     protected:
         /// Fake a static initializer.
         class StaticInit {
@@ -22,7 +22,7 @@ class Plane : public Primitive {
                 /// Register material with the factory
                 StaticInit() {
                     log_debug("here");
-                    PrimitiveFactory::get_instance()->registerPlugin("plane", sigc::ptr_fun(new_plane));
+                    RenderableFactory::get_instance()->registerPlugin("plane", sigc::ptr_fun(new_plane));
                 }
         };
         /// Force static initialization.
@@ -54,7 +54,7 @@ class Plane : public Primitive {
         virtual Ray get_normal(const Point3D &p);
 };
 
-Primitive * new_plane(xmlNode * node) {
+Renderable * new_plane(xmlNode * node) {
     log_debug("Entering new_plane()");
     Plane * rv = NULL;
 
@@ -74,7 +74,7 @@ Primitive * new_plane(xmlNode * node) {
     }
 
     log_err("Leaving new_plane()");
-    return dynamic_cast<Primitive *>(rv);
+    return dynamic_cast<Renderable *>(rv);
 }
 
 void delete_plane(Plane * plane) {

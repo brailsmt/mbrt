@@ -1,5 +1,5 @@
 
-#include "primitive.h"
+#include "renderable.h"
 #include "scene.h"
 #include "material.h"
 #include "sceneparser.h"
@@ -42,9 +42,9 @@ Scene::~Scene() {
 //}}}
 
 //{{{
-Primitive * Scene::find_collision(const Ray &ray, double &dist) const {
-    vector<Primitive *>::const_iterator iter, end;
-    Primitive * rv = NULL;
+Renderable * Scene::find_collision(const Ray &ray, double &dist) const {
+    vector<Renderable *>::const_iterator iter, end;
+    Renderable * rv = NULL;
 
     for (iter = scene.begin(), end = scene.end(); iter != end; ++iter) {
         double d = dist;
