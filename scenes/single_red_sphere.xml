@@ -4,20 +4,22 @@
         <file name="renders/single_red_sphere.ppm" />
         <height pixels="512" />
         <subpixels square_of='2'/>
+        <recurse max_depth='1' />
     </meta>
 
-    <camera x='0.0' y='0.0' z='-100' />
-
-    <colors>
-        <color name='white'  red='0xff' green='0xff' blue='0xff' />
-        <color name='red'   red='0xff' green='0x00' blue='0x00' />
-    </colors>
+    <camera x='0.0' y='-1.0' z='-10' />
 
     <light_sources>
         <sphere x='20.0' y='-25' z='-50' radius='0.1' color='white' />
     </light_sources>
 
+    <materials>
+        <material name='solidRed'    type='solid' color='red' />
+        <material name='solidWhite'    type='solid' color='white' />
+    </materials>
+
     <objects>
-        <sphere x='  0' y='  0' z='  0' radius='8' color='red' />
+        <sphere x='0' y='-3' z='0' radius='3' material='solidRed' />
+        <plane p0='(2,0,3)' p1='(0,0,0)' p2='(2,0,4)' material='solidWhite' />
     </objects>
 </scene>

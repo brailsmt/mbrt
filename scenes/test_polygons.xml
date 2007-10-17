@@ -57,12 +57,13 @@
     </light_sources>
 
     <objects>
-        <sphere x='-4' y='-3' z='2' radius='3' material='solidRed'   />
+        <sphere x='-4' y='-3' z='2' radius='3' material='solidBlack'   />
         <polygon material="solidBlue">
             <vertex at="(-5, -1, -5)" />
             <vertex at="( 5, -2,  0)" />
             <vertex at="( 0, -2,  5)" />
         </polygon>
-        <plane p0="(0, 0, 0)" p1="(1, 0, 0)" p2="(0, 0, 1)" material="solidBlack"/>
+        <plane p0="(0, 0, 0)" p1="(1, 0, 0)" p2="(0, 0, 1)"
+            material="solidBlack"/>
     </objects>
 </scene>

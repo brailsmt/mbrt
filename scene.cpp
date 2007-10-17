@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "material.h"
 #include "sceneparser.h"
+#include "color.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -29,7 +30,8 @@ Scene::Scene()
       pixel_width(WIDTH),
       pixel_height(HEIGHT),
       output_filename("out.ppm"),
-      subpixels(SUBPIXEL_SQRT)
+      subpixels(SUBPIXEL_SQRT),
+      max_depth(MAX_DEPTH)
 {
 }
 //}}}
