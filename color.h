@@ -5,13 +5,26 @@ typedef unsigned char uchar;
 //{{{
 /// This class represents a color.
 class Color {
-    public:
+    private:
         /// Red component of the color
         double m_red;
         /// Green component of the color
         double m_green;
         /// Blue component of the color
         double m_blue;
+
+        inline double get_largest_color_component() const {
+            if(m_red >= m_green && m_red >= m_blue) {
+                return m_red;
+            }
+            else if(m_green >= m_red && m_green >= m_blue) {
+                return m_green;
+            }
+            else if(m_blue >= m_red && m_blue >= m_green) {
+                return m_blue;
+            }
+        }
+    public:
 
         /// Default constructor.  Creates a pure black color.
         Color() : m_red(0.0), m_green(0.0), m_blue(0.0) {}
@@ -71,25 +84,28 @@ class Color {
 
         /// Set a new red value
         /// @param new_red  The new value for the red component
-        void set_red (double new_red) { m_red = (new_red < 1.0) ? new_red : 1.0; }
+        void set_red (double new_red) { m_red = new_red; }
         /// Set a new green value
         /// @param new_green  The new value for the green component
-        void set_green (double new_green) { m_green = (new_green < 1.0) ? new_green : 1.0; }
+        void set_green (double new_green) { m_green = new_green; }
         /// Set a new blue value
         /// @param new_blue  The new value for the blue component
-        void set_blue (double new_blue) { m_blue = (new_blue < 1.0) ? new_blue : 1.0; }
+        void set_blue (double new_blue) { m_blue = new_blue; }
 
         /// Return red component scaled to 0..255
         /// @return red component
-        uchar get_rgb_red () const { return (uchar)(m_red * 255); }
+        inline uchar get_rgb_red () const {
+            return (uchar)((m_red/get_largest_color_component()) * 255);
+        }
 
         /// Return green component scaled to 0..255
         /// @return green component
-        uchar get_rgb_green() const { return (uchar)(m_green * 255); }
+        inline uchar get_rgb_green() const { return (uchar)((m_green/get_largest_color_component()) * 255); }
         
         /// Return blue component scaled to 0..255
         /// @return blue component
-        uchar get_rgb_blue () const { return (uchar)(m_blue * 255); }
+        inline uchar get_rgb_blue () const { return (uchar)((m_blue/get_largest_color_component()) * 255); }
+
 };
 //}}}
 

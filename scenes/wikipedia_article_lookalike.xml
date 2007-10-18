@@ -33,7 +33,7 @@
     </materials>
 
     <light_sources>
-        <sphere x='-8.0' y='-12' z='-61.2' radius='0.1' material='solidWhite'   />
+        <sphere x='8.0' y='-12' z='-16.2' radius='0.1' material='solidWhite'   />
     </light_sources>
 
     <objects>
