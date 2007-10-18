@@ -67,7 +67,6 @@ Renderable * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
             map<string, string> props = get_properties(child);
 
             if ( props.empty() == false ) {
-                //MaterialFactory::get_instance()->listSignals();
                 Material * material = MaterialFactory::get_instance()->create(props["type"], props);
                 if(material == NULL)
                 {
