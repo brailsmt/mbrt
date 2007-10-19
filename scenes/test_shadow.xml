@@ -8,18 +8,26 @@
     <camera x='0.0' y='0.0' z='-100' />
 
     <colors>
-        <color name='blue_light'  red='0x00' green='0x00' blue='0xff' />
-        <color name='white_light'  red='0xff' green='0xff' blue='0xff' />
+        <color name='blue'  red='0x00' green='0x00' blue='0xff' />
+        <color name='white'  red='0xff' green='0xff' blue='0xff' />
         <color name='clr' red='0xff' green='0xff' blue='0xff' />
     </colors>
 
+    <materials>
+        <material name='solid_green'        type='solid' color='green' /> 
+        <material name='solid_red'          type='solid' color='red'   />
+        <material name='solid_white'        type='solid' color='white' />
+        <material name='solid_blue'         type='solid' color='blue'  />
+        <material name='solid_clr'          type='solid' color='clr'   />
+    </materials>
+
     <light_sources>
-        <sphere x='-10.0' y=' 0' z='0' radius='0.1' color='white_light' />
-        <sphere x='  0.0' y='-1' z='0' radius='0.1' color='blue_light' />
+        <sphere x='-10.0' y=' 0' z='0' radius='0.1' material='solid_white' />
+        <sphere x='  0.0' y='-1' z='0' radius='0.1' material='solid_blue' />
     </light_sources>
 
     <objects>
-        <sphere x='  0' y='0.5' z='-1' radius='0.5' color='clr' />
-        <sphere x=' 10' y='  0' z=' 0' radius='3'   color='clr' />
+        <sphere x='  0' y='0.5' z='-1' radius='0.5' material='solid_clr' />
+        <sphere x=' 10' y='  0' z=' 0' radius='3'   material='solid_clr' />
     </objects>
 </scene>

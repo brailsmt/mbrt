@@ -16,29 +16,20 @@
         <color name='blue' red='0x00' green='0x00' blue='0xff' />
     </colors>
 
+    <materials>
+        <material name='solid_blue'        type='solid' color='blue_light' /> 
+        <material name='solid_red'         type='solid' color='red_light' /> 
+        <material name='solid_white'        type='solid' color='white_light' /> 
+        <material name='solid_clr'          type='solid' color='clr'   />
+    </materials>
     <light_sources>
-        <sphere x='-10.0' y='0' z='0' radius='0.1' color='white_light' />
-        <!--
-        <sphere x=' 5.0' y='-5.0' z='0' radius='0.1' color='white_light' />
-        <sphere x='-5.0' y='-2.0' z='0' radius='0.1' color='white_light' />
-        -->
+        <sphere x='-10.0' y='0' z='0' radius='0.1' material='solid_white' />
     </light_sources>
 
     <objects>
-        <sphere x=' 10' y='  0' z='5' radius='0.75' color='clr' />
-        <sphere x=' 10' y='  0' z='-2.1' radius='0.75' color='blue' />
-        <sphere x='  0' y='  0' z='0'    radius='0.75' color='clr' />
-        <sphere x=' 10' y='  0' z='0.2'  radius='3'    color='clr' />
-        <!--
-        <sphere x='  0' y='  0' z='0  ' radius='0.75' color='clr' />
-        <sphere x='  0' y='-10' z='0' radius='1.5' color='clr' />
-        <sphere x='  0' y=' 10' z='0' radius='1.5' color='clr' />
-        <sphere x=' 10' y='  0' z='0' radius='1.5' color='clr' />
-        <sphere x='-10' y='  0' z='0' radius='1.5' color='clr' />
-        <sphere x=' 10' y=' 10' z='0' radius='1.5' color='clr' />
-        <sphere x=' 10' y='-10' z='0' radius='1.5' color='clr' />
-        <sphere x='-10' y=' 10' z='0' radius='1.5' color='clr' />
-        <sphere x='-10' y='-10' z='0' radius='1.5' color='clr' />
-        -->
+        <sphere x=' 10' y='  0' z='5' radius='0.75'     material='solid_clr' />
+        <sphere x=' 10' y='  0' z='-2.1' radius='0.75'  material='solid_blue' />
+        <sphere x='  0' y='  0' z='0'    radius='0.75'  material='solid_clr' />
+        <sphere x=' 10' y='  0' z='0.2'  radius='3'     material='solid_clr' />
     </objects>
 </scene>

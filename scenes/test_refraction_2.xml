@@ -16,101 +16,108 @@
         <color name='green' red='0x00' green='0xff' blue='0x00' />
     </colors>
 
+    <materials>
+        <material name='solid_green'        type='solid' color='green' /> 
+        <material name='solid_red'          type='solid' color='red'   />
+        <material name='solid_white'        type='solid' color='white' />
+        <material name='solid_blue'         type='solid' color='blue'  />
+        <material name='solid_gray'         type='solid' color='gray'  />
+    </materials>
 
     <light_sources>
-        <sphere x='-10.0' y='-15.0' z='0' radius='0.1' color='white' />
+        <sphere x='-10.0' y='-15.0' z='0' radius='0.1' material='solid_white' />
     </light_sources>
 
     <objects>
-        <sphere x='0' y='0' z='10' radius='5' color='gray' opacity="1.0" />
+        <sphere x='0' y='0' z='10' radius='5' material='solid_gray' opacity="1.0" />
 
-        <sphere x=' -8' y='  -8' z=' 16' radius='.3' color='white' />
-        <sphere x=' -6' y='  -8' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -4' y='  -8' z=' 16' radius='.3' color='white' />
-        <sphere x=' -2' y='  -8' z=' 16' radius='.3' color='blue' />
-        <sphere x='  0' y='  -8' z=' 16' radius='.3' color='white' />
-        <sphere x='  2' y='  -8' z=' 16' radius='.3' color='blue' />
-        <sphere x='  4' y='  -8' z=' 16' radius='.3' color='white' />
-        <sphere x='  6' y='  -8' z=' 16' radius='.3' color='blue' />
-        <sphere x='  8' y='  -8' z=' 16' radius='.3' color='white' />
+        <sphere x=' -8' y='  -8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -6' y='  -8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -4' y='  -8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -2' y='  -8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  0' y='  -8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  2' y='  -8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  4' y='  -8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  6' y='  -8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  8' y='  -8' z=' 16' radius='.3' material='solid_white' />
 
-        <sphere x=' -8' y='  -6' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -6' y='  -6' z=' 16' radius='.3' color='white' />
-        <sphere x=' -4' y='  -6' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -2' y='  -6' z=' 16' radius='.3' color='white' />
-        <sphere x='  0' y='  -6' z=' 16' radius='.3' color='blue' />
-        <sphere x='  2' y='  -6' z=' 16' radius='.3' color='white' />
-        <sphere x='  4' y='  -6' z=' 16' radius='.3' color='blue' />
-        <sphere x='  6' y='  -6' z=' 16' radius='.3' color='white' />
-        <sphere x='  8' y='  -6' z=' 16' radius='.3' color='blue' />
+        <sphere x=' -8' y='  -6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -6' y='  -6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -4' y='  -6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -2' y='  -6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  0' y='  -6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  2' y='  -6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  4' y='  -6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  6' y='  -6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  8' y='  -6' z=' 16' radius='.3' material='solid_blue' />
 
-        <sphere x=' -8' y='  -4' z=' 16' radius='.3' color='white' />
-        <sphere x=' -6' y='  -4' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -4' y='  -4' z=' 16' radius='.3' color='white' />
-        <sphere x=' -2' y='  -4' z=' 16' radius='.3' color='blue' />
-        <sphere x='  0' y='  -4' z=' 16' radius='.3' color='white' />
-        <sphere x='  2' y='  -4' z=' 16' radius='.3' color='blue' />
-        <sphere x='  4' y='  -4' z=' 16' radius='.3' color='white' />
-        <sphere x='  6' y='  -4' z=' 16' radius='.3' color='blue' />
-        <sphere x='  8' y='  -4' z=' 16' radius='.3' color='white' />
+        <sphere x=' -8' y='  -4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -6' y='  -4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -4' y='  -4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -2' y='  -4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  0' y='  -4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  2' y='  -4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  4' y='  -4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  6' y='  -4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  8' y='  -4' z=' 16' radius='.3' material='solid_white' />
 
-        <sphere x=' -8' y='  -2' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -6' y='  -2' z=' 16' radius='.3' color='white' />
-        <sphere x=' -4' y='  -2' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -2' y='  -2' z=' 16' radius='.3' color='white' />
-        <sphere x='  0' y='  -2' z=' 16' radius='.3' color='blue' />
-        <sphere x='  2' y='  -2' z=' 16' radius='.3' color='white' />
-        <sphere x='  4' y='  -2' z=' 16' radius='.3' color='blue' />
-        <sphere x='  6' y='  -2' z=' 16' radius='.3' color='white' />
-        <sphere x='  8' y='  -2' z=' 16' radius='.3' color='blue' />
+        <sphere x=' -8' y='  -2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -6' y='  -2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -4' y='  -2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -2' y='  -2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  0' y='  -2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  2' y='  -2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  4' y='  -2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  6' y='  -2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  8' y='  -2' z=' 16' radius='.3' material='solid_blue' />
 
-        <sphere x=' -8' y='  0' z=' 16' radius='.3' color='white' />
-        <sphere x=' -6' y='  0' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -4' y='  0' z=' 16' radius='.3' color='white' />
-        <sphere x=' -2' y='  0' z=' 16' radius='.3' color='blue' />
-        <sphere x='  2' y='  0' z=' 16' radius='.3' color='blue' />
-        <sphere x='  4' y='  0' z=' 16' radius='.3' color='white' />
-        <sphere x='  6' y='  0' z=' 16' radius='.3' color='blue' />
-        <sphere x='  8' y='  0' z=' 16' radius='.3' color='white' />
+        <sphere x=' -8' y='  0' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -6' y='  0' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -4' y='  0' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -2' y='  0' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  2' y='  0' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  4' y='  0' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  6' y='  0' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  8' y='  0' z=' 16' radius='.3' material='solid_white' />
 
-        <sphere x=' -8' y='  2' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -6' y='  2' z=' 16' radius='.3' color='white' />
-        <sphere x=' -4' y='  2' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -2' y='  2' z=' 16' radius='.3' color='white' />
-        <sphere x='  0' y='  2' z=' 16' radius='.3' color='blue' />
-        <sphere x='  2' y='  2' z=' 16' radius='.3' color='white' />
-        <sphere x='  4' y='  2' z=' 16' radius='.3' color='blue' />
-        <sphere x='  6' y='  2' z=' 16' radius='.3' color='white' />
-        <sphere x='  8' y='  2' z=' 16' radius='.3' color='blue' />
+        <sphere x=' -8' y='  2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -6' y='  2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -4' y='  2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -2' y='  2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  0' y='  2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  2' y='  2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  4' y='  2' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  6' y='  2' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  8' y='  2' z=' 16' radius='.3' material='solid_blue' />
 
-        <sphere x=' -8' y='  4' z=' 16' radius='.3' color='white' />
-        <sphere x=' -6' y='  4' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -4' y='  4' z=' 16' radius='.3' color='white' />
-        <sphere x=' -2' y='  4' z=' 16' radius='.3' color='blue' />
-        <sphere x='  0' y='  4' z=' 16' radius='.3' color='white' />
-        <sphere x='  2' y='  4' z=' 16' radius='.3' color='blue' />
-        <sphere x='  4' y='  4' z=' 16' radius='.3' color='white' />
-        <sphere x='  6' y='  4' z=' 16' radius='.3' color='blue' />
-        <sphere x='  8' y='  4' z=' 16' radius='.3' color='white' />
+        <sphere x=' -8' y='  4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -6' y='  4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -4' y='  4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -2' y='  4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  0' y='  4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  2' y='  4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  4' y='  4' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  6' y='  4' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  8' y='  4' z=' 16' radius='.3' material='solid_white' />
 
-        <sphere x=' -8' y='  6' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -6' y='  6' z=' 16' radius='.3' color='white' />
-        <sphere x=' -4' y='  6' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -2' y='  6' z=' 16' radius='.3' color='white' />
-        <sphere x='  0' y='  6' z=' 16' radius='.3' color='blue' />
-        <sphere x='  2' y='  6' z=' 16' radius='.3' color='white' />
-        <sphere x='  4' y='  6' z=' 16' radius='.3' color='blue' />
-        <sphere x='  6' y='  6' z=' 16' radius='.3' color='white' />
-        <sphere x='  8' y='  6' z=' 16' radius='.3' color='blue' />
+        <sphere x=' -8' y='  6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -6' y='  6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -4' y='  6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -2' y='  6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  0' y='  6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  2' y='  6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  4' y='  6' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  6' y='  6' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  8' y='  6' z=' 16' radius='.3' material='solid_blue' />
 
-        <sphere x=' -8' y='  8' z=' 16' radius='.3' color='white' />
-        <sphere x=' -6' y='  8' z=' 16' radius='.3' color='blue' />
-        <sphere x=' -4' y='  8' z=' 16' radius='.3' color='white' />
-        <sphere x=' -2' y='  8' z=' 16' radius='.3' color='blue' />
-        <sphere x='  0' y='  8' z=' 16' radius='.3' color='white' />
-        <sphere x='  2' y='  8' z=' 16' radius='.3' color='blue' />
-        <sphere x='  4' y='  8' z=' 16' radius='.3' color='white' />
-        <sphere x='  6' y='  8' z=' 16' radius='.3' color='blue' />
-        <sphere x='  8' y='  8' z=' 16' radius='.3' color='white' />
+        <sphere x=' -8' y='  8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -6' y='  8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x=' -4' y='  8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x=' -2' y='  8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  0' y='  8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  2' y='  8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  4' y='  8' z=' 16' radius='.3' material='solid_white' />
+        <sphere x='  6' y='  8' z=' 16' radius='.3' material='solid_blue' />
+        <sphere x='  8' y='  8' z=' 16' radius='.3' material='solid_white' />
     </objects>
 </scene>

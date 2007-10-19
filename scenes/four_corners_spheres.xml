@@ -14,14 +14,21 @@
         <color name='blue'  red='0x00' green='0x00' blue='0xff' />
     </colors>
 
+    <materials>
+        <material name='solid_green'        type='solid' color='green' /> 
+        <material name='solid_red'          type='solid' color='red'   />
+        <material name='solid_white'        type='solid' color='white' />
+        <material name='solid_blue'         type='solid' color='blue'  />
+    </materials>
+
     <light_sources>
-        <sphere x='20.0' y='-25' z='50' radius='0.1' color='white' />
+        <sphere x='20.0' y='-25' z='50' radius='0.1' material='solid_white' />
     </light_sources>
 
     <objects>
-        <sphere x='  4' y='  4' z='  0' radius='4' color='white' />
-        <sphere x='  4' y=' -4' z='  8' radius='4' color='red'   />
-        <sphere x=' -4' y=' -4' z=' 16' radius='4' color='blue'  />
-        <sphere x=' -4' y='  4' z=' 32' radius='4' color='green' />
+        <sphere x='  4' y='  4' z='  0' radius='4' material='solid_white' />
+        <sphere x='  4' y=' -4' z='  8' radius='4' material='solid_red'   />
+        <sphere x=' -4' y=' -4' z=' 16' radius='4' material='solid_blue'  />
+        <sphere x=' -4' y='  4' z=' 32' radius='4' material='solid_green' />
     </objects>
 </scene>

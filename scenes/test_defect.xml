@@ -38,7 +38,7 @@
     </materials>
 
     <light_sources>
-        <sphere x='5.0' y='35' z='00' radius='0.1' color='white' />
+        <sphere x='5.0' y='35' z='00' radius='0.1' material='solid_white' />
     </light_sources>
 
     <objects>

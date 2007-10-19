@@ -9,17 +9,20 @@
 
     <camera x='0.0' y='-1.0' z='-10' />
 
-    <light_sources>
-        <sphere x='20.0' y='-25' z='-50' radius='0.1' color='white' />
-    </light_sources>
-
     <materials>
-        <material name='solidRed'    type='solid' color='red' />
-        <material name='solidWhite'    type='solid' color='white' />
+        <material name='solid_green'        type='solid' color='green' /> 
+        <material name='solid_red'          type='solid' color='red'   />
+        <material name='solid_white'        type='solid' color='white' />
+        <material name='solid_blue'         type='solid' color='blue'  />
     </materials>
 
+    <light_sources>
+        <sphere x='20.0' y='-25' z='-50' radius='0.1' material='solid_white' />
+    </light_sources>
+
+
     <objects>
-        <sphere x='0' y='-3' z='0' radius='3' material='solidRed' />
-        <plane p0='(2,0,3)' p1='(0,0,0)' p2='(2,0,4)' material='solidWhite' />
+        <sphere x='  0' y='  0' z='  0' radius='8' material='solid_red' />
+        <plane p0='(2,0,3)' p1='(0,0,0)' p2='(2,0,4)' material='solid_white' />
     </objects>
 </scene>

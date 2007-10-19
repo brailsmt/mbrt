@@ -6,18 +6,25 @@ This is version of mbrt 0.1.
 
 Dependancies
 ------------
-libsigc++-2.0
-libxml-2.0
-ncurses
+Required:
+    libsigc++-2.0
+    libxml-2.0
+    ncurses
+    Rant (requires Ruby)
+
+Optional:
+    Doxygen
+    cscope
+    lcov
 
 Building on Cygwin
 ------------------
 
+0) Cygwin is not an actively tested environment.  Early versions were known to work with Cygwin.
 1) You will need to download and build libsigc++ as Cygwin does not current install this library.  mbrt is known to work with version 2.0.18.
 2) Rant does not currently ship with Ruby, so you will need to obtain this from the rubygem or other package.
 3) The compiler will currently choke on a clean build because Cygwin's g++ creates rt.exe instead of rt for the final executable. The
     simplest solution is to execute  'ln -s rt.exe rt' from the trunk before your first build.
 4) All other dependancies should be resolved from a full Cygwin install.  If you are not running a full cygwin install, please see
     the Rantfile to determine what other dependencies will be needed.
-
 
