@@ -111,9 +111,9 @@ unsigned long trace_rays(Color * data, Point3D eye) {
             red = green = blue = 0.0;
             vector<Color>::iterator iter, end;
             for (iter = colors.begin(), end = colors.end(); iter != end; iter++) {
-                red += iter->get_rgb_red();
-                green += iter->get_rgb_green();
-                blue += iter->get_rgb_blue();
+                red += iter->get_red();
+                green += iter->get_green();
+                blue += iter->get_blue();
             }
             int colors_size = colors.size();
             data[(y*scene->get_viewport_pixel_width()) + x] = Color((red / colors_size), (green / colors_size), (blue / colors_size));

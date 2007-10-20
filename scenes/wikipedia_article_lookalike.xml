@@ -1,11 +1,11 @@
 <scene>
     <meta>
-        <!--
         <width  pixels="2048" />
         <height pixels="2048" />
-        -->
+        <!--
         <width  pixels="512" />
         <height pixels="512" />
+        -->
         <file name="renders/wikipedia_lookalike.ppm" />
         <subpixels square_of='2'/>
         <recurse max_depth="5" />

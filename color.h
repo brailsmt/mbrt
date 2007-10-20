@@ -95,16 +95,45 @@ class Color {
         /// Return red component scaled to 0..255
         /// @return red component
         inline uchar get_rgb_red () const {
-            return (uchar)((m_red/get_largest_color_component()) * 255);
+            double max = get_largest_color_component();
+            if(max > 1.0) {
+                return (uchar)((m_red/max) * 255); 
+            }
+            return (uchar)(m_red * 255);
         }
 
         /// Return green component scaled to 0..255
         /// @return green component
-        inline uchar get_rgb_green() const { return (uchar)((m_green/get_largest_color_component()) * 255); }
+        inline uchar get_rgb_green() const {
+            double max = get_largest_color_component();
+            if(max > 1.0) {
+                return (uchar)((m_green/max) * 255); 
+            }
+            return (uchar)(m_green * 255);
+        }
         
         /// Return blue component scaled to 0..255
         /// @return blue component
-        inline uchar get_rgb_blue () const { return (uchar)((m_blue/get_largest_color_component()) * 255); }
+        inline uchar get_rgb_blue () const {
+            double max = get_largest_color_component();
+            if(max > 1.0) {
+                return (uchar)((m_blue/max) * 255); 
+            }
+            return (uchar)(m_blue * 255);
+        }
+
+
+        /// Return red component scaled to 0..255
+        /// @return red component
+        inline double get_red () const { return m_red; }
+
+        /// Return green component scaled to 0..255
+        /// @return green component
+        inline double get_green() const { return m_green; }
+        
+        /// Return blue component scaled to 0..255
+        /// @return blue component
+        inline double get_blue () const { return m_blue; }
 
 };
 //}}}
