@@ -22,6 +22,7 @@ cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
 
+cconf.add_incdirs( "common" )
 cconf.add_cflags( "-g -rdynamic" )
 cconf.add_pkg_config( "libxml-2.0" )
 cconf.add_pkg_config( "sigc++-2.0" ) 
@@ -39,7 +40,7 @@ var['cxxtestgen'] = "/opt/cxxtest/cxxtestgen.pl"
 ################################
 
 # Get a listing of all the C++ files to build.
-src  = Rant::FileList[ '*.cpp' ] 
+src  = Rant::FileList[ 'core/*.cpp' ] 
 objs = src.ext( 'o' )
 
 desc "Build everything that has changed since the last build"

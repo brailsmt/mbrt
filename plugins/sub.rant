@@ -13,17 +13,17 @@ desc "Clean up build artifacts in mbrt/core."
 task :clean => %w( autoclean )
 
 desc "Build the plugins"
-task :default => %w(libmbrtplugins.so.0.0.1 libmbrtplugins.so)
+task :default => %w(plugin.so.0.0.1 plugin.so)
 
 #make the static library
-desc "Make the mbrtplugins.so library"
-file "libmbrtplugins.so.0.0.1" => objs do |task_info|
-    naked_soname="libmbrtplugins.so"
+desc "Make the plugin.so library"
+file "plugin.so.0.0.1" => objs do |task_info|
+    naked_soname="plugin.so"
     cconf = var['cconf']
     sys "#{cconf.cxx} #{cconf.ldflags} -shared -W1,-soname,#{naked_soname}.0 -o #{task_info.name} #{task_info.prerequisites}"
 end
 
-desc "Link libmbrtplugins.so.0.0.1 to libmbrtplugins.so"
-file "libmbrtplugins.so" => %w( libmbrtplugins.so.0.0.1 ) do |task_info|
+desc "Link plugin.so.0.0.1 to plugin.so"
+file "plugin.so" => %w( plugin.so.0.0.1 ) do |task_info|
     sys "ln -fs #{task_info.prerequisites[0]} #{task_info.name}"
 end
