@@ -21,7 +21,6 @@ subdirs SUBDIRS
 cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
-cconf.add_incdirs( %w(mbrt-common) )
 
 cconf.add_cflags( "-g -rdynamic" )
 cconf.add_pkg_config( "libxml-2.0" )
@@ -44,7 +43,7 @@ src  = Rant::FileList[ '*.cpp' ]
 objs = src.ext( 'o' )
 
 desc "Build everything that has changed since the last build"
-task :all => %w( cscope.out mbrt-plugins/default rt )
+task :all => %w( cscope.out plugins/default rt )
 
 desc "Build everything from scratch."
 task :dist_all => %w( clean dox cscope.out rt )
@@ -95,4 +94,3 @@ desc "Build the ray tracer (rt)"
 file :rt => [ subdirs, SUBLIBS.map { |sd| "plugins/lib#{sd}.so.0.0.1" }, objs ].flatten do |task_info|
     sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{objs.join(' ')} #{cconf.libdirs} #{cconf.libs}"
 end
-

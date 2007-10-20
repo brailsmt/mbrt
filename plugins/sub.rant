@@ -1,23 +1,16 @@
 require '../build.rb'
-import "md5"
 import "autoclean"
-#import "c/dependencies"
-#gen C::Dependencies
-#gen Action do source "c_dependencies" end
+import "c/dependencies"
+gen Action do source "../c_dependencies" end
 
 src  = Rant::FileList[ '*.cpp' ] 
 
 objs = src.ext( 'o' )
 mycconf = CompilerConfig.new(var)
-mycconf.add_incdirs( Rant::FileList[ "..", "." ] )
 
 gen AutoClean
-
-##default rule for .o files
-gen Rule, :o => :cpp do |task_info|
-    cconf = var['cconf']
-    sys "#{cconf.cxx} -fPIC #{cconf.cflags} #{mycconf.incdirs} #{cconf.incdirs} -c -o #{task_info.name} #{task_info.source}"
-end
+desc "Clean up build artifacts in mbrt/core."
+task :clean => %w( autoclean )
 
 desc "Build the plugins"
 task :default => %w(libmbrtplugins.so.0.0.1 libmbrtplugins.so)
@@ -32,6 +25,5 @@ end
 
 desc "Link libmbrtplugins.so.0.0.1 to libmbrtplugins.so"
 file "libmbrtplugins.so" => %w( libmbrtplugins.so.0.0.1 ) do |task_info|
-    #sys "sudo ldconfig -v -n ."
     sys "ln -fs #{task_info.prerequisites[0]} #{task_info.name}"
 end
