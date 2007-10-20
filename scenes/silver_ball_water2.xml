@@ -25,8 +25,8 @@
     </colors>
 
     <bumpmaps>
-        <ripple name='ripple' />
-        <concentric name='concentric' />
+        <bumpmap type='ripple' name='ripple' />
+        <bumpmap type='concentric' name='concentric' />
     </bumpmaps>
 
     <materials>
