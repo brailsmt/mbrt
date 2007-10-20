@@ -1,15 +1,15 @@
 <scene>
     <meta>
-        <width  pixels="1400" />
-        <height pixels="1400" />
-        <file name="renders/test_planes.ppm" />
-        <subpixels square_of='9'/>
+        <width  pixels="400" />
+        <height pixels="400" />
+        <subpixels square_of='3'/>
     </meta>
 
     <camera x='0.0' y='-4.0' z='-17.0'  />
 
     <bumpmaps>
         <ripple name='ripple' />
+        <concentric name='concentric' />
     </bumpmaps>
 
     <colors>
@@ -76,7 +76,7 @@
 
     <objects>
         <sphere x='0' y='-2.8' z='-10' radius='3' material='solidRed'   /> 
-        <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solid_green_dull" bumpmap='ripple'/>
+        <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solid_green_dull" bumpmap='concentric'/>
         <plane p0="(0.0,-200.01,0.0)" p1="(-1.0,-200.01,0.0)" p2="(0.0,-200.01,1.0)" material="clouds2"/>
     </objects>
 </scene>
