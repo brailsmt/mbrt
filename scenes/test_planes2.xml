@@ -8,8 +8,8 @@
     <camera x='0.0' y='-4.0' z='-17.0'  />
 
     <bumpmaps>
-        <ripple name='ripple' />
-        <concentric name='concentric' />
+        <bumpmap type='ripple' name='ripple' />
+        <bumpmap type='concentric' name='concentric' />
     </bumpmaps>
 
     <colors>

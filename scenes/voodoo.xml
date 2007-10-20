@@ -1,15 +1,15 @@
 <scene>
     <meta>
-        <width  pixels="512" />
-        <height pixels="512" />
+        <width  pixels="400" />
+        <height pixels="400" />
         <recurse max_depth='10' />
-        <subpixels square_of='5'/>
+        <subpixels square_of='3'/>
     </meta>
 
     <camera x='0.0' y='-0.5' z='-50.0'  />
 
     <bumpmaps>
-        <ripple name='ripple' />
+        <bumpmap type='ripple' name='ripple' />
     </bumpmaps>
 
     <colors>

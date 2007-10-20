@@ -20,7 +20,7 @@
     </colors>
 
     <bumpmaps>
-        <ripple name='ripple' />
+        <bumpmap type='ripple' name='ripple' />
     </bumpmaps>
 
     <materials>
