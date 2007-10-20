@@ -1,12 +1,12 @@
 <scene>
     <meta>
+        <!--
         <width  pixels="1024" />
         <height pixels="1024" />
-        <!--
-        <width  pixels="256" />
-        <height pixels="256" />
         <subpixels square_of='10'/>
         -->
+        <width  pixels="512" />
+        <height pixels="512" />
         <subpixels square_of='5'/>
 
         <file name="renders/silver_ball_water.ppm" />
@@ -18,6 +18,7 @@
 
     <colors>
         <color name='blue'   red='0x00' green='0x00' blue='0xaa' />
+        <color name='deepblue'   red='0x00' green='0x00' blue='0x44' />
         <color name='silver' red='0xc0' green='0xc0' blue='0xc0' />
         <color name='white'  red='0xff' green='0xff' blue='0xff' />
         <color name='black'  red='0x1a' green='0x1a' blue='0x1a' />
@@ -25,11 +26,12 @@
 
     <bumpmaps>
         <ripple name='ripple' />
+        <concentric name='concentric' />
     </bumpmaps>
 
     <materials>
         <material name='solidWhite'  type='solid' color='white' />
-        <material name='solidBlue'   type='solid' color='blue' />
+        <material name='solidBlue'   type='solid' color='deepblue' />
         <material name='solidSilver' type='solid' color='silver' /> 
         <material name='solidBlack' type='solid'  color='black' /> 
     </materials>
@@ -39,7 +41,9 @@
     </light_sources>
 
     <objects>
+        <!--
         <sphere center="(0, -3, -10)" radius='3' material='solidBlack'   />
-        <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solidBlue" bumpmap='ripple'/>
+        -->
+        <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solidSilver" bumpmap='concentric'/>
     </objects>
 </scene>

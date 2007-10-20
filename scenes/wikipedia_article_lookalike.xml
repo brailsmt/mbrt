@@ -1,7 +1,7 @@
 <scene>
     <meta>
-        <width  pixels="2048" />
-        <height pixels="2048" />
+        <width  pixels="1024" />
+        <height pixels="1024" />
         <!--
         <width  pixels="512" />
         <height pixels="512" />
@@ -33,7 +33,7 @@
     </materials>
 
     <light_sources>
-        <sphere x='8.0' y='-12' z='-16.2' radius='0.1' material='solidWhite'   />
+        <sphere x='8.0' y='-12' z='-16.2' radius='5.0' material='solidWhite'   />
     </light_sources>
 
     <objects>
