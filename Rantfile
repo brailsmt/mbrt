@@ -11,14 +11,18 @@ gen Action do
     source "c_dependencies"
 end
 
-
 SUBLIBS = %w( )
-SUBDIRS = %w( plugins )
+SUBDIRS = %w( common core plugins )
 subdirs SUBDIRS
 
+#########################
+# ./configure type stuff.
+#########################
 cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
+cconf.add_incdirs( %w(mbrt-common) )
+
 cconf.add_cflags( "-g -rdynamic" )
 cconf.add_pkg_config( "libxml-2.0" )
 cconf.add_pkg_config( "sigc++-2.0" ) 
@@ -31,14 +35,16 @@ cconf.add_libs( "-lncurses" )
 #store the compiler config in var
 var['cconf'] = cconf
 var['cxxtestgen'] = "/opt/cxxtest/cxxtestgen.pl"
+################################
+# End of ./configure type stuff.
+################################
 
+# Get a listing of all the C++ files to build.
 src  = Rant::FileList[ '*.cpp' ] 
 objs = src.ext( 'o' )
-rt_deps = objs
-
 
 desc "Build everything that has changed since the last build"
-task :all => %w( cscope.out plugins/default rt )
+task :all => %w( cscope.out mbrt-plugins/default rt )
 
 desc "Build everything from scratch."
 task :dist_all => %w( clean dox cscope.out rt )
@@ -49,10 +55,9 @@ task :default => %w( all )
 desc "Clean up all build artifacts"
 task :clean => %w(autoclean) do
     # Clean up artifacts that Rant can't track
-    sys "rm -f *.gc*"
-    sys "rm -f plugins/*.gc*"
+    sys "rm -rf *.gc*"
     sys "rm -rf coverage_reports"
-    sys "rm -f app.info core c_dependencies plugins/c_dependencies"
+    sys "rm -f app.info core c_dependencies */c_dependencies"
 end
 
 desc "Generate coverage reports"
