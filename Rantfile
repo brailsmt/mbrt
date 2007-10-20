@@ -12,7 +12,7 @@ gen Action do
 end
 
 SUBLIBS = %w( )
-SUBDIRS = %w( common core plugins )
+SUBDIRS = %w( common src plugins )
 subdirs SUBDIRS
 
 #########################
@@ -40,7 +40,7 @@ var['cxxtestgen'] = "/opt/cxxtest/cxxtestgen.pl"
 ################################
 
 # Get a listing of all the C++ files to build.
-src  = Rant::FileList[ 'core/*.cpp' ] 
+src  = Rant::FileList[ 'src/*.cpp' ] 
 objs = src.ext( 'o' )
 
 desc "Build everything that has changed since the last build"
@@ -57,7 +57,7 @@ task :clean => %w(autoclean) do
     # Clean up artifacts that Rant can't track
     sys "rm -rf *.gc*"
     sys "rm -rf coverage_reports"
-    sys "rm -f app.info core c_dependencies */c_dependencies"
+    sys "rm -f app.info src c_dependencies */c_dependencies"
 end
 
 desc "Generate coverage reports"
