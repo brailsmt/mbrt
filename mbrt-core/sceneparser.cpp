@@ -7,7 +7,6 @@
 #include "renderable.h"
 #include "scene.h"
 #include "xml_util.h"
-#include "raytrace_defs.h"
 
 #include "pluginfactory.h"
 
@@ -72,7 +71,7 @@ Renderable * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
                 if(material == NULL)
                 {
                     log_crit("Material of type '%s' unknown!\n", props["type"].c_str());
-                    exit_mbrt(EXIT_FAILURE);
+                    exit_mbrt(1);
                 }
 
                 scene->add_material(props["name"], material);
@@ -226,18 +225,13 @@ Renderable * SceneParser::parse_bumpmaps(Scene * scene, xmlNode * node) {
 
     // Parse all objects.
     while(child != node->last) {
-        if(strcmp((char *)child->name, "bumpmap") == 0) 
-        {
-            map<string, string> props = get_properties(child);
-            string type = props["type"];
-            log_debug("BumpMap of type '%s'.\n", type.c_str());
-            BumpMap * bmap = BumpMapFactory::get_instance()->create(type, child);
-            if(bmap == NULL) {
-                log_warn("BumpMap of type '%s' unknown...Skipping!\n", type.c_str());
-            }
-            else {
-                scene->add_bumpmap((char *)(type.c_str()), bmap);
-            }
+        log_debug("BumpMap of type '%s'.\n", child->name);
+        BumpMap * bmap = BumpMapFactory::get_instance()->create((char *)child->name, child);
+        if(bmap == NULL) {
+            log_warn("BumpMap of type '%s' unknown...Skipping!\n", child->name);
+        }
+        else {
+            scene->add_bumpmap((char *)child->name, bmap);
         }
 
         child = child->next;
