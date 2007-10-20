@@ -96,7 +96,3 @@ file :rt => [ subdirs, SUBLIBS.map { |sd| "plugins/lib#{sd}.so.0.0.1" }, objs ].
     sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{objs.join(' ')} #{cconf.libdirs} #{cconf.libs}"
 end
 
-desc "default rule for .o files"
-gen Rule, :o => :cpp do |task_info|
-    sys "#{cconf.cxx} #{cconf.incdirs} #{cconf.cflags} -c -o #{task_info.name} #{task_info.source}"
-end
