@@ -3,16 +3,14 @@ require 'build.rb'
 
 import %w(autoclean c/dependencies)
 
-gen AutoClean
-
-desc "Determine C++ dependencies"
-gen C::Dependencies, :search => %w(. plugins)
-gen Action do
-    source "c_dependencies"
-end
-
 SUBLIBS = %w( )
-SUBDIRS = %w( common src plugins )
+SUBDIRS = %w( plugins src common )
+
+gen C::Dependencies,
+    :search  => SUBDIRS,
+    :sources => sys["plugins/*.cpp", "src/*.cpp", "plugins/*.h", "src/*.h", "common/*.h"]
+gen Action do source "c_dependencies" end
+
 subdirs SUBDIRS
 
 #########################
@@ -22,10 +20,16 @@ cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
 
-cconf.add_incdirs( "common" )
 cconf.add_cflags( "-g -rdynamic" )
 cconf.add_pkg_config( "libxml-2.0" )
 cconf.add_pkg_config( "sigc++-2.0" ) 
+
+#enable profiling?
+cconf.optional_config("gprof", false) { cconf.add_cflags("-pg") }
+cconf.optional_config("gcov", false)  { 
+    cconf.add_cflags( "-fprofile-arcs -ftest-coverage " )
+    cconf.add_ldflags( "-fprofile-arcs -ftest-coverage " )
+}
 
 #Add our compiler flags for libnetpbm
 cconf.add_libs( SUBLIBS )
@@ -39,12 +43,8 @@ var['cxxtestgen'] = "/opt/cxxtest/cxxtestgen.pl"
 # End of ./configure type stuff.
 ################################
 
-# Get a listing of all the C++ files to build.
-src  = Rant::FileList[ 'src/*.cpp' ] 
-objs = src.ext( 'o' )
-
 desc "Build everything that has changed since the last build"
-task :all => %w( cscope.out plugins/default rt )
+task :all => ["cscope.out", SUBDIRS.map { |dir| "#{dir}/default" }, "rt" ].flatten
 
 desc "Build everything from scratch."
 task :dist_all => %w( clean dox cscope.out rt )
@@ -53,30 +53,27 @@ desc "Build everything from scratch"
 task :default => %w( all )
 
 desc "Clean up all build artifacts"
-task :clean => %w(autoclean) do
-    # Clean up artifacts that Rant can't track
-    sys "rm -rf *.gc*"
-    sys "rm -rf coverage_reports"
-    sys "rm -f app.info src c_dependencies */c_dependencies"
-end
+gen AutoClean, :clean
+#Add any additional files you want the "clean" task to clean up below.  These
+#are Ruby file globs.
+var[:clean].include "**/*.gc*",
+                    "coverage_reports",
+                    "app.info",
+                    "core",
+                    "c_dependencies",
+                    "rt"
 
 desc "Generate coverage reports"
-task :coverage => %w(clean config_coverage all run_scene gather_coverage)
+task :coverage => %w(run_scene gather_coverage)
 
-desc "Set flags for coverage reports"
-task :config_coverage do |task_info|
-    cconf.add_cflags( "-fprofile-arcs -ftest-coverage " )
-    cconf.add_ldflags( "-fprofile-arcs -ftest-coverage " )
-end
-    
-desc "Gather coverage reports"
+#desc "Gather coverage reports"
 task :gather_coverage do
    sys "lcov -c --directory . --output-file app.info"
    sys "mkdir -p ./coverage_reports"
    sys "genhtml -o coverage_reports app.info"
 end
 
-desc "Runs a scene file. Used for coverage reports."
+#desc "Runs a scene file. Used for coverage reports."
 task :run_scene do |task_info|
     sys "./rt -s scenes/test_reflection.xml"
 end
@@ -92,6 +89,25 @@ file :dox => Rant::FileList[ '**/*.cpp', "**/*.h" ] do |task_info|
 end
 
 desc "Build the ray tracer (rt)"
-file :rt => [ subdirs, SUBLIBS.map { |sd| "plugins/lib#{sd}.so.0.0.1" }, objs ].flatten do |task_info|
-    sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{objs.join(' ')} #{cconf.libdirs} #{cconf.libs}"
+task :rt do |task_info|
+    objs = sys["src/*.o"]
+    build_rt = proc { |objs| sys "#{cconf.cxx} #{cconf.cflags} -o #{task_info.name} #{cconf.libdirs} #{cconf.libs} #{objs.join " "}" }
+    if not File.exists?("rt")
+        build_rt.call(objs)
+    end
+
+    objs.each { |obj|
+        if File.mtime(obj) > File.mtime("rt")
+            build_rt.call(objs)
+            break
+        end
+    }
+end
+
+# Default rule for .o files.  Any subdir specific stuff should be put in
+# var["<subdir>_conf"].
+gen Rule, :o => :cpp do |task_info|
+    cconf = var['cconf']
+    mycconf = var["#{rant.current_subdir}_conf"]
+    sys "#{cconf.cxx} #{cconf.cflags} #{mycconf.cflags} #{cconf.incdirs} #{mycconf.incdirs} -c -o #{task_info.name} #{task_info.source}"
 end

@@ -6,7 +6,9 @@ gen Action do source "../c_dependencies" end
 src  = Rant::FileList[ '*.cpp' ] 
 
 objs = src.ext( 'o' )
-mycconf = CompilerConfig.new(var)
+var["#{rant.current_subdir}_conf"] = CompilerConfig.new(var)
+var["#{rant.current_subdir}_conf"].add_incdirs( Rant::FileList[ "../common" ] )
+var["#{rant.current_subdir}_conf"].add_cflags( "-fPIC" )
 
 gen AutoClean
 desc "Clean up build artifacts in mbrt/core."
@@ -27,3 +29,4 @@ desc "Link plugin.so.0.0.1 to plugin.so"
 file "plugin.so" => %w( plugin.so.0.0.1 ) do |task_info|
     sys "ln -fs #{task_info.prerequisites[0]} #{task_info.name}"
 end
+

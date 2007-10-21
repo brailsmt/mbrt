@@ -1,13 +1,12 @@
 require '../build.rb'
-import "md5"
 import "autoclean"
 import "c/dependencies"
 gen Action do source "../c_dependencies" end
 
 src  = Rant::FileList[ '*.cpp' ] 
 objs = src.ext( 'o' )
-mycconf = CompilerConfig.new(var)
-mycconf.add_incdirs( Rant::FileList[ "../common", "." ] )
+var["#{rant.current_subdir}_conf"] = CompilerConfig.new(var)
+var["#{rant.current_subdir}_conf"].add_incdirs( Rant::FileList[ "../common" ] )
 
 gen AutoClean
 desc "Clean up build artifacts in mbrt/core."
@@ -17,11 +16,3 @@ desc "Build everything from scratch"
 task :default => %w( all )
 
 task :all => objs
-
-
-##default rule for .o files
-gen Rule, :o => :cpp do |task_info|
-    cconf = var['cconf']
-    sys "#{cconf.cxx} #{cconf.cflags} #{mycconf.incdirs} #{cconf.incdirs} -c -o #{task_info.name} #{task_info.source}"
-end
-
