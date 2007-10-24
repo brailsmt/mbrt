@@ -97,9 +97,18 @@ class Polygon
     attr_accessor :vertices
     def initialize
         @vertices = Array.new
+        puts "here"
     end
     def <<(pt)
+        puts "there"
         @vertices << pt
+    end
+    def to_s
+        str = "<polygon material=\"solidBlue\">\n"
+        @vertices.each { |p|
+            str += "    <vertex at=\"" + p.to_s + "\"/>\n"
+        }
+        str += "</polygon>\n"
     end
 end
 #}}}
@@ -109,8 +118,15 @@ class Mesh
     def initialize
         @vertices_normals = Array.new
     end
-    def <<(pt, normal)
-        @vertices_normals << [pt, normal]
+    def <<(pt_normal)
+        @vertices_normals << pt_normal
+    end
+    def to_s
+        str  = "<mesh>\n"
+        @vertices_normals.each { |p|
+            str += "    <vertex at=\"#{p[0].to_s}\" normal=\"#{p[1].to_s}\"/>\n"
+        }
+        str += "</mesh>"
     end
 end
 #}}}
@@ -156,9 +172,12 @@ def main
     cname = "color"
     cnum = 0
     nff = File.open(ARGV[0])
-    nff.each { |line|
-        line = line.split('#')[0]
-        next if line =~ /^#/
+    while true
+        line = nff.readline.split('#')[0]
+        if line =~ /^#/
+            next
+        end
+
         case line
         when /^s/
             (type, x, y, z, r) = line.split
@@ -174,9 +193,33 @@ def main
             clr = Color.new(cname+cnum.to_s, r, g, b)
             mbrt.colors << clr
             mbrt.materials << Material.new(clr, diff, spec, ph, trans, refract)
+        when /^p /
+            (type, num_vertices) = line.split
+            p = Polygon.new()
+            1.upto(num_vertices.to_i) {
+                line = nff.readline.split('#')[0]
+                if line =~ /^#/
+                    next
+                end
+                (x, y, z) = line.split
+                p << Point.new(x, y, z)
+            }
+            mbrt.objects << p
+        when /^pp/
+            (type, num_vertices) = line.split
+            p = Mesh.new()
+            1.upto(num_vertices.to_i) {
+                line = nff.readline.split('#')[0]
+                if line =~ /^#/
+                    next
+                end
+                (x, y, z, nx, ny, nz) = line.split
+                p << [ Point.new(x, y, z), Point.new(nx, ny, nz) ]
+            }
+            mbrt.objects << p
         end
-    }
-
+    end
+rescue EOFError
     puts mbrt.to_s
 end
 
