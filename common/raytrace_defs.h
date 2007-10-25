@@ -84,6 +84,8 @@ struct raytrace_info {
     /// The total number of primary rays.
     unsigned long total_primary_rays;
 
+    unsigned long rendered_pixels;
+
     /// The time in seconds since the Epoch that the render began.
     time_t start_time;
 

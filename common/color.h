@@ -81,6 +81,12 @@ class Color {
 
         Color operator+ (const Color &other) { return Color( m_red + other.m_red, m_green + other.m_green, m_blue + other.m_blue); }
         Color operator-(const Color &other) { return Color( m_red - other.m_red, m_green - other.m_green, m_blue - other.m_blue); }
+        bool operator==(const Color &other) {
+            double FUDGE_FACTOR = 0.0001;
+            return (m_red >= other.m_red - FUDGE_FACTOR && m_red <= other.m_red + FUDGE_FACTOR)
+                && (m_green >= other.m_green - FUDGE_FACTOR && m_green <= other.m_green + FUDGE_FACTOR)
+                && (m_blue >= other.m_blue - FUDGE_FACTOR && m_blue <= other.m_blue + FUDGE_FACTOR);
+        } 
 
         /// Set a new red value
         /// @param new_red  The new value for the red component

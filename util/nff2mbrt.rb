@@ -94,17 +94,16 @@ end
 #}}}
 #{{{
 class Polygon
-    attr_accessor :vertices
-    def initialize
+    attr_accessor :vertices, :mname
+    def initialize(material_name)
         @vertices = Array.new
-        puts "here"
+        @mname = material_name
     end
     def <<(pt)
-        puts "there"
         @vertices << pt
     end
     def to_s
-        str = "<polygon material=\"solidBlue\">\n"
+        str = "<polygon material=\"#{mname}\">\n"
         @vertices.each { |p|
             str += "    <vertex at=\"" + p.to_s + "\"/>\n"
         }
@@ -152,21 +151,30 @@ end
 class Mbrt
     attr_accessor :meta, :camera, :colors, :materials, :light, :objects
     def initialize
+        @meta      = Meta.new
         @colors    = Array.new
         @materials = Array.new
         @light     = Array.new
         @objects   = Array.new
     end
     def to_s
-        str = ""
+        str = "<scene>\n"
+        str << @meta.to_s
+        str << "<colors>\n"
         @colors.each { |c| str << c.to_s + "\n" }
+        str << "</colors>\n"
+        str << "<materials>\n"
         @materials.each { |m| str << m.to_s + "\n" }
+        str << "</materials>\n"
+        str << "<objects>\n"
         @objects.each { |obj| str << obj.to_s + "\n" }
-        str
+        str << "</objects>\n"
+        str << "</scene>\n"
     end
 end
 #}}}
 
+#{{{
 def main
     mbrt = Mbrt.new
     cname = "color"
@@ -195,7 +203,7 @@ def main
             mbrt.materials << Material.new(clr, diff, spec, ph, trans, refract)
         when /^p /
             (type, num_vertices) = line.split
-            p = Polygon.new()
+            p = Polygon.new(cname+cnum.to_s)
             1.upto(num_vertices.to_i) {
                 line = nff.readline.split('#')[0]
                 if line =~ /^#/
@@ -217,11 +225,17 @@ def main
                 p << [ Point.new(x, y, z), Point.new(nx, ny, nz) ]
             }
             mbrt.objects << p
+        when /^v/
+            until line =~ /^resolution/
+                line = nff.readline.split('#')[0]
+            end
+            (mbrt.meta.width, mbrt.meta.height) = line.split
         end
     end
 rescue EOFError
     puts mbrt.to_s
 end
+#}}}
 
 main()
 

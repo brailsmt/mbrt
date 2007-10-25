@@ -66,7 +66,7 @@ var[:clean].include "**/*.gc*",
 desc "Generate coverage reports"
 task :coverage => %w(run_scene gather_coverage)
 
-#desc "Gather coverage reports"
+desc "Gather coverage reports"
 task :gather_coverage do
    sys "lcov -c --directory . --output-file app.info"
    sys "mkdir -p ./coverage_reports"
