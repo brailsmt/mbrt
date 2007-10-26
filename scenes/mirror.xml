@@ -1,8 +1,8 @@
 <scene>
     <meta>
-        <width  pixels="2048" />
-        <height pixels="2048" />
-        <subpixels square_of='10'/>
+        <width  pixels="248" />
+        <height pixels="248" />
+        <subpixels square_of='3'/>
 
         <file name="renders/silver_ball_water.ppm" />
         <recurse max_depth='15' />

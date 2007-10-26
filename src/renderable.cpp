@@ -5,7 +5,16 @@ using std::vector;
 
 //{{{
 double Renderable::get_diffuse(const Point3D& intersection_point) const {
-    double diffuse = m_material->get_diffuse(intersection_point);
+    double diffuse;
+    if(m_center_material)
+    {
+        diffuse = m_material->get_diffuse(intersection_point - m_center);
+    }
+    else
+    {
+        diffuse = m_material->get_diffuse(intersection_point);
+    }
+
     return (diffuse <= 0.0) ? 0.0 :
            (diffuse >= 1.0) ? 1.0 :
            diffuse;
@@ -13,7 +22,16 @@ double Renderable::get_diffuse(const Point3D& intersection_point) const {
 //}}}
 //{{{
 double Renderable::get_reflection(const Point3D& intersection_point) const {
-    double reflection = m_material->get_reflection(intersection_point);
+    double reflection ;
+    if(m_center_material)
+    {
+        reflection = m_material->get_reflection(intersection_point - m_center);
+    }
+    else
+    {
+        reflection = m_material->get_reflection(intersection_point);
+    }
+
     return (reflection <= 0.0) ? 0.0 :
            (reflection >= 1.0) ? 1.0 :
            reflection;
@@ -21,39 +39,58 @@ double Renderable::get_reflection(const Point3D& intersection_point) const {
 //}}}
 //{{{
 double Renderable::get_reflectivity(const Point3D& intersection_point) const {
-    return m_material->get_reflectivity(intersection_point);
+    if(m_center_material)
+        return m_material->get_reflectivity(intersection_point - m_center);
+    else
+        return m_material->get_reflectivity(intersection_point);
 }
 //}}}
 //{{{
 double Renderable::get_specular(const Point3D& intersection_point) const {
     // Really?
     // follow up: This currently doesn't appear to be used.
-    return 1.0;
+    if(m_center_material)
+        return 1.0;
+    else
+        return 1.0; // fah!
+
 }
 //}}}
 //{{{
 double Renderable::get_opacity(const Point3D& intersection_point) const {
-    return m_material->get_opacity(intersection_point);
+    if(m_center_material)
+        return m_material->get_opacity(intersection_point - m_center);
+    else
+        return m_material->get_opacity(intersection_point);
 }
 //}}}
 //{{{
 double Renderable::get_refraction_index(const Point3D& intersection_point) const {
-    return m_material == NULL ? 1.0 : (m_material->get_refraction_index(intersection_point));
+    if(m_center_material)
+        return m_material->get_refraction_index(intersection_point - m_center);
+    else
+        return m_material->get_refraction_index(intersection_point);
 }
 //}}}
 //{{{
 Color Renderable::get_color(const Point3D& intersection_point) const {
-    return m_material == NULL ? Color() : *(m_material->get_color(intersection_point));
+    if(m_center_material)
+        return *(m_material->get_color(intersection_point - m_center));
+    else
+        return *(m_material->get_color(intersection_point));
 }
 //}}}
 //{{{
 bool Renderable::is_light(const Point3D& intersection_point) const {
-    return m_material == NULL ? false : m_material->is_light(intersection_point);
+    if(m_center_material)
+        return  m_material->is_light(intersection_point - m_center);
+    else
+        return  m_material->is_light(intersection_point);
 }
 //}}}
 //{{{
 bool Renderable::set_is_light(bool v) {
-    if (m_material != NULL) m_material->set_is_light(v);
+    m_material->set_is_light(v);
 }
 //}}}
 
@@ -183,6 +220,14 @@ bool Renderable::initialize(xmlNode * node)
         m_bumpmap = NULL;
     }
 
+    if(props.find("center_material") != props.end())
+    {
+        m_center_material = true;
+    }
+    else
+    {
+        m_center_material = false;
+    }
 
     return true;  
 }

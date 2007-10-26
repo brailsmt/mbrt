@@ -113,6 +113,10 @@ class Renderable {
 
         BumpMap * m_bumpmap;
 
+        /// Material centering policy.  When set to true, materials will
+        /// be centered to the center of the primitive.
+        
+        bool m_center_material;
     private:
         /// Returns the final surface normal at point p, after being processed 
         /// for bump-mapping. 
