@@ -10,7 +10,6 @@ class BumpMap {
 
         /// Perturb the normal. 
         virtual Ray perturb_normal(const Ray& normal, const Point3D& intersection_point) = 0;
-
 };
 
 

@@ -24,13 +24,18 @@ end
 class Color
     attr_accessor :name, :red, :green, :blue
     def initialize(name, r, g, b)
+        $stderr.puts r, g, b
         @name  = name
-        @red   = r
-        @green = g
-        @blue  = b
+        @red   = r.to_f
+        @green = g.to_f
+        @blue  = b.to_f
+
+        $stderr.puts @red, @green, @blue
     end
     def to_s
-        "<color name='#{@name}' red='#{@red}' green='#{@red}' blue='#{@red}' />"
+        str = "<color name='#{@name}' red='#{@red}' green='#{@green}' blue='#{@blue}' />"
+        $stderr.puts str
+        str
     end
 end
 #}}}
@@ -44,14 +49,14 @@ end
 #}}}
 #{{{
 class Sphere
-    attr_accessor :origin, :r, :clr
-    def initialize(x, y, z, r, clr="def")
+    attr_accessor :origin, :r, :mname
+    def initialize(x, y, z, r, material_name="def")
         @origin = Point.new(x,y,z)
         @r = r
-        @color = clr
+        @mname = material_name
     end
     def to_s
-        "<sphere center='#{@origin.to_s}' radius='#{@r}' color='#{@color}' />"
+        "<sphere center='#{@origin.to_s}' radius='#{@r}' material='#{@mname}' />"
     end
 end
 #}}}
@@ -198,7 +203,7 @@ def main
         when /^f/
             (type, r, g, b, diff, spec, ph, trans, refract) = line.split
             cnum += 1
-            clr = Color.new(cname+cnum.to_s, r, g, b)
+            clr = Color.new(cname+cnum.to_s, r.to_f, g.to_f, b.to_f)
             mbrt.colors << clr
             mbrt.materials << Material.new(clr, diff, spec, ph, trans, refract)
         when /^p /
@@ -229,7 +234,7 @@ def main
             until line =~ /^resolution/
                 line = nff.readline.split('#')[0]
             end
-            (mbrt.meta.width, mbrt.meta.height) = line.split
+            (type, mbrt.meta.width, mbrt.meta.height) = line.split
         end
     end
 rescue EOFError

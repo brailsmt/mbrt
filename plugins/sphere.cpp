@@ -45,7 +45,7 @@ bool Sphere::collides_with(const Ray &ray, double &t) const {
 }
 //}}}
 //{{{
-Ray Sphere::get_normal(const Point3D &p) {
+Ray Sphere::get_normal(const Point3D &p) const {
     return Ray(p, p - m_center);
 }
 //}}}

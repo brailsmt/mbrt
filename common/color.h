@@ -34,23 +34,14 @@ class Color {
 
         /// Create a color from double components, ranging from 0.0 to 1.0
         Color(double _red, double _green, double _blue) : m_red(_red), m_green(_green), m_blue(_blue) {
-            set_red(m_red);
-            set_green(m_green);
-            set_blue(m_blue);
         }
 
         /// Create a color from integer components, ranging from 0 to 256
         Color(int _red, int _green, int _blue) : m_red(_red / 256.0), m_green(_green / 256.0), m_blue(_blue / 256.0) {
-            set_red(m_red);
-            set_green(m_green);
-            set_blue(m_blue);
         }
 
         /// Copy constructor
         Color(const Color &other) : m_red(other.m_red), m_green(other.m_green), m_blue(other.m_blue) {
-            set_red(m_red);
-            set_green(m_green);
-            set_blue(m_blue);
         }
 
         void operator=(const Color &other) {

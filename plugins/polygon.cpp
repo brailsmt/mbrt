@@ -188,7 +188,7 @@ bool Polygon::collides_with(const Ray &ray, double &t) const {
     //}}}
 
 //{{{
-Ray Polygon::get_normal(const Point3D &p) {
+Ray Polygon::get_normal(const Point3D &p) const {
     return Ray(p, m_normal.direction() );
 }
 //}}}

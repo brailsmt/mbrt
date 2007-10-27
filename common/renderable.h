@@ -48,7 +48,7 @@ class Renderable {
 
         /// Returns the surface normal at point p. Derived classes should override
         /// this to provide the correct surface normal for the given point.
-        virtual Ray get_normal(const Point3D &p) = 0;
+        virtual Ray get_normal(const Point3D &p) const = 0;
 
         /// Perform common initialization.  This method is <em>not</em>
         /// declared virtual as it should never be overridden.  

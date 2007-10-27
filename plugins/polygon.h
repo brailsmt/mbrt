@@ -57,7 +57,7 @@ class Polygon : public Renderable {
         virtual bool collides_with(const Ray &ray, double &t) const;
 
         /// Returns the surface normal at point p.
-        virtual Ray get_normal(const Point3D &p);
+        virtual Ray get_normal(const Point3D &p) const;
 
         /// Adds the vertex to the polygon.  The vertex must be coplanar to be
         /// added.

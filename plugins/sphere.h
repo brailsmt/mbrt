@@ -114,7 +114,7 @@ class Sphere : public Renderable {
         /// Return the surface normal of the sphere.  A sphere's surface normal is the vector
         /// from the center of the sphere to the intersection point, translated to the intersection
         /// point and normalized.
-        virtual Ray get_normal(const Point3D &p) ;
+        virtual Ray get_normal(const Point3D &p) const;
 };
 
 Renderable * new_sphere(xmlNode * node) {

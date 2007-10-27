@@ -95,9 +95,9 @@ Renderable * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
             map<string, string> props = get_properties(child);
 
             if ( props.empty() == false ) {
-                int red   = strtol(props["red" ].c_str(), NULL, 0);
-                int green = strtol(props["green"].c_str(), NULL, 0);
-                int blue  = strtol(props["blue" ].c_str(), NULL, 0);
+                double red   = strtod(props["red"  ].c_str(), NULL);
+                double green = strtod(props["green"].c_str(), NULL);
+                double blue  = strtod(props["blue" ].c_str(), NULL);
 
                 scene->add_color(props["name"], new Color(red, green, blue));
             }

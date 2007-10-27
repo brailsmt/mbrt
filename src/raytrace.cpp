@@ -52,6 +52,11 @@ unsigned long trace_rays(Color * data, Point3D eye) {
     double start_x = min_x + (dx * 0.5);
     double start_y = min_y + (dy * 0.5);
 
+    /// @todo  Extract the algorithm part of this function.  Then change the
+    /// algorithm used based on user input/configuration.  This will allow us
+    /// to compare algorithms and provide choice for users and flexibility for
+    /// future algorithms.
+
     // This is where the ray will intersect the viewing plane, the window that the 'eye' is
     // looking out of.
     Point3D screen_intersection(start_x, start_y, 0.0);
@@ -217,6 +222,7 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
 }
 //}}}
 
+/// Print statistics about the render.
 //{{{
 void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays) {
     int hours, minutes, seconds;
@@ -240,6 +246,8 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
     cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
 }
 //}}}
+
+/// Load plugins.
 //{{{
 void load_plugins() {
     glob_t glob_data;
@@ -278,17 +286,11 @@ void register_signal_handlers() {
 
 //{{{
 int main(int argc, char ** argv) {
-    openlog("mbrt", LOG_CONS, LOG_DEBUG);
-    log_info("******************  Starting mbrt  ******************\n");
-
-    register_signal_handlers();
-
-    load_plugins();
-
     time_t start_time = time(NULL);
     char filename[256] = "scene.xml";
     char output[256]   = {'\0'};
     srand(time(NULL));
+    int loglevel = LOG_ERR;
 
     extern char *optarg;
     extern int optind, opterr, optopt;
@@ -311,6 +313,15 @@ int main(int argc, char ** argv) {
             break;
         }
     }
+
+    openlog("mbrt", LOG_CONS, LOG_SYSLOG);
+    log_info("%i", loglevel);
+    log_info("******************  Starting mbrt  ******************\n");
+
+    register_signal_handlers();
+
+    load_plugins();
+
 
 
     // Read the scene description XML file and build the Scene object.

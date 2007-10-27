@@ -23,6 +23,7 @@ cconf.cxx = `which g++`.strip
 cconf.add_cflags( "-g -rdynamic" )
 cconf.add_pkg_config( "libxml-2.0" )
 cconf.add_pkg_config( "sigc++-2.0" ) 
+cconf.add_pkg_config( "ImageMagick++" ) 
 
 #enable profiling?
 cconf.optional_config("gprof", false) { cconf.add_cflags("-pg") }
