@@ -1,6 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include "raytrace_defs.h"
+
 typedef unsigned char uchar;
 //{{{
 /// This class represents a color.
@@ -34,6 +36,7 @@ class Color {
 
         /// Create a color from double components, ranging from 0.0 to 1.0
         Color(double _red, double _green, double _blue) : m_red(_red), m_green(_green), m_blue(_blue) {
+            int a = 3;
         }
 
         /// Create a color from integer components, ranging from 0 to 256

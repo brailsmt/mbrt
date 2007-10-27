@@ -176,7 +176,7 @@ Color Renderable::get_color_contribution(const Point3D &intersection_point, cons
                             log_warn("Diffusion %d", diffusion);
                         }
 
-                        rv += this->get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
+                        rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
                         // I don't think this does what you think it does.  It uses the reflection coefficient
                         // as the specular coefficient.  These are not the same thing.
                         rv += light->get_color(intersection_point) * specular_color * get_reflection(intersection_point);
