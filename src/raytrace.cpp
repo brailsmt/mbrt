@@ -17,7 +17,6 @@
 #include <string>
 
 #include "raytrace_defs.h"
-#include "imagewriter.h"
 #include "renderable.h"
 #include "ray.h"
 #include "scene.h"
