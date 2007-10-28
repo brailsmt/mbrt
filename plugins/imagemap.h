@@ -141,7 +141,6 @@ class ImageMap : public Material {
 
 Material * new_immagemap_material(std::map<std::string, std::string> props) {
     bool isLight = props.count("light") > 0;
-    Magick::Color * color;
 
     std::string image_name("");
     if(props.find("image") != props.end()) {

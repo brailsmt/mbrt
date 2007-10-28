@@ -55,7 +55,6 @@ void SceneParser::register_default_handlers() {
     m_node_handlers["camera"       ].connect(sigc::mem_fun(this, &SceneParser::parse_camera));
     m_node_handlers["light_sources"].connect(sigc::mem_fun(this, &SceneParser::parse_light_sources));
     m_node_handlers["objects"      ].connect(sigc::mem_fun(this, &SceneParser::parse_objects));
-    m_node_handlers["colors"       ].connect(sigc::mem_fun(this, &SceneParser::parse_colors));
     m_node_handlers["materials"    ].connect(sigc::mem_fun(this, &SceneParser::parse_materials));
     m_node_handlers["bumpmaps"     ].connect(sigc::mem_fun(this, &SceneParser::parse_bumpmaps));
 }
@@ -78,30 +77,6 @@ Renderable * SceneParser::parse_materials(Scene * scene, xmlNode * node) {
                 }
 
                 scene->add_material(props["name"], material);
-            }
-        }
-
-        child = child->next;
-    }
-
-    return NULL;
-}
-//}}}
-//{{{
-Renderable * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
-    xmlNode * child = node->children;
-
-    // Parse all colors which are the children of the node passed in.
-    while(child != node->last) {
-        if(strcmp((char *)child->name, "color") == 0) {
-            map<string, string> props = get_properties(child);
-
-            if ( props.empty() == false ) {
-                double red   = strtod(props["red"  ].c_str(), NULL);
-                double green = strtod(props["green"].c_str(), NULL);
-                double blue  = strtod(props["blue" ].c_str(), NULL);
-
-                scene->add_color(props["name"], new ColorRGB(red, green, blue));
             }
         }
 

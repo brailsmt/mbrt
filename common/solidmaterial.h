@@ -193,12 +193,7 @@ inline Material * new_solid_material(std::map<std::string, std::string> props) {
     bool isLight = props.count("light") > 0;
     Magick::Color * color;
 
-    if(props.find("rgb") != props.end()) {
-        color = new Magick::Color(props["rgb"]);
-    }
-    else {
-        color = Scene::get_instance()->get_color(props["color"]);
-    }
+    color = new Magick::Color(props["color"]);
 
     double reflection = props.count("reflection") > 0 ?
         (double)strtod(props["reflection"    ].c_str(), NULL)   : 1.0;
