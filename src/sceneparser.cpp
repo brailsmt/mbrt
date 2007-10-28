@@ -20,7 +20,7 @@ using Magick::Color;
 using Magick::ColorRGB;
 
 //{{{
-SceneParser::SceneParser(const char * scene_filename)
+SceneParser::SceneParser(string scene_filename)
     : m_node_handlers(),
       m_scene_filename(scene_filename)
 

@@ -72,7 +72,7 @@ class SceneParser : public sigc::trackable {
         ///
         /// @param scene_file_name This is the name of the file that contains the XML specification
         ///                        of the scene to be ray traced.
-        SceneParser(const char * scene_file_name);
+        SceneParser(std::string scene_file_name);
 
         //~SceneParser();
 

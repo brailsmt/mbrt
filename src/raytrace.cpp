@@ -14,6 +14,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <signal.h>
+#include <string>
 
 #include "raytrace_defs.h"
 #include "imagewriter.h"
@@ -25,6 +26,8 @@
 using std::vector;
 using std::cout;
 using std::endl;
+using std::string;
+using Magick::Image;
 using Magick::Color;
 using Magick::ColorRGB;
 
@@ -37,7 +40,7 @@ void trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
 /// @param data Image imformation that will be populated by tracing the rays.
 /// @param eye The origin of all rays shot into the scene.
 //{{{
-unsigned long trace_rays(ColorRGB * data, Point3D eye) {
+unsigned long trace_rays(Image & img, Point3D eye) {
     //The image canvas is located around the origin of world space coordinates (0,0,0)
     double min_x, max_x;
     double min_y, max_y;
@@ -150,9 +153,7 @@ unsigned long trace_rays(ColorRGB * data, Point3D eye) {
                 color = ColorRGB((red / colors_size), (green / colors_size), (blue / colors_size));
             }
 
-            /// @todo To allow large images, write this directly to file,
-            /// don't store it all in memory.
-            data[(y*scene->get_viewport_pixel_width()) + x] = color;
+            img.pixelColor(x, y, color);
 
             screen_intersection.x += dx;
         }
@@ -228,7 +229,7 @@ void trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
 
 /// Print statistics about the render.
 //{{{
-void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays) {
+void print_stats(string fname, int elapsed, long primary_rays, long traced_rays) {
     int hours, minutes, seconds;
     seconds = elapsed;
     hours = seconds / 3600;
@@ -241,7 +242,7 @@ void print_stats(char * fname, int elapsed, long primary_rays, long traced_rays)
     cout << endl;
     cout << endl;
 
-    printf("Rendering %s took %i seconds (%02i:%02i:%02i)\n", fname, elapsed, hours, minutes, seconds);
+    printf("Rendering %s took %i seconds (%02i:%02i:%02i)\n", fname.c_str(), elapsed, hours, minutes, seconds);
 
     cout.setf(cout.fixed);
     cout.precision(5);
@@ -291,11 +292,18 @@ void register_signal_handlers() {
 //{{{
 int main(int argc, char ** argv) {
     time_t start_time = time(NULL);
-    char filename[256] = "scene.xml";
-    char output[256]   = {'\0'};
+    string filename("scene.xml");
     srand(time(NULL));
-    int loglevel = LOG_ERR;
 
+    openlog("mbrt", LOG_CONS, LOG_SYSLOG);
+    log_info("******************  Starting mbrt  ******************\n");
+
+    // Do initialization stuff.
+    register_signal_handlers();
+    load_plugins();
+
+
+    // Process command line arguments.
     extern char *optarg;
     extern int optind, opterr, optopt;
     int option_index = 0;
@@ -305,54 +313,51 @@ int main(int argc, char ** argv) {
         {0, 0, 0, 0}
     };
 
+    string outfname("");
     int opt_val = -2;
     while ( (opt_val = getopt_long (argc, argv, "s:o:", long_options, &option_index)) != -1 ) {
         switch (opt_val) {
         case 's':
-            strncpy(filename, optarg, strlen(optarg));
+            filename = optarg;
             break;
         case 'o':
-            strncpy(output, optarg, strlen(optarg));
-            output[strlen(optarg)] = '\0';
+            outfname = optarg;
             break;
         }
     }
-
-    openlog("mbrt", LOG_CONS, LOG_SYSLOG);
-    log_info("%i", loglevel);
-    log_info("******************  Starting mbrt  ******************\n");
-
-    register_signal_handlers();
-
-    load_plugins();
-
-
-
-    // Read the scene description XML file and build the Scene object.
-    Scene * scene = Scene::get_instance(filename);
-
-    ColorRGB * data = new ColorRGB[scene->get_viewport_pixel_height() * scene->get_viewport_pixel_width()];
-    // This number is completely incorrect now that we have adaptive subsampling.
-    rt_info.total_primary_rays = ((scene->get_subpixel_sqrt() * scene->get_subpixel_sqrt()) * scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height());
-
     unsigned long traced_rays;
     int x, y;
     initscr();
     getmaxyx(stdscr, y, x);
-    mvprintw(y - 1, 0, "Tracing %s...", filename);
-    traced_rays = trace_rays(data, scene->get_camera());
+    mvprintw(y - 1, 0, "Tracing %s...", filename.c_str());
 
-    ImageWriterFactory factory;
-    ImageWriter * writer = factory(output);
-    writer->write_image(data);
-    delete writer, writer = NULL;
 
-    delete [] data;
+    ////////////
+    // Render //
+    ////////////
+    // Read the scene description XML file and build the Scene object.
+    Scene * scene = Scene::get_instance(filename);
+    if(outfname == "") {
+        outfname = scene->get_output_filename();
+    }
 
+
+    // Create the Image object.
+    Image img(scene->get_geometry(), "red");
+
+    // Trace the scene.
+    traced_rays = trace_rays(img, scene->get_camera());
+
+    // Save the image.
+    img.write(outfname);
+
+
+    // Do post render stuff.
     time_t end_time = time(NULL);
     int elapsed = end_time - start_time;
     int primary_rays = 4 * scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height();
     endwin();
+    cout << outfname << endl;
     print_stats(filename, elapsed, primary_rays, traced_rays);
 
     log_info("******************  Exiting mbrt  ******************\n");

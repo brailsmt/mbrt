@@ -66,7 +66,7 @@ class Scene {
         /// @param scene_file_name The name of the file which contains the XML definition of the
         ///                        scene.  This is ignored on all but the first use of
         ///                        get_intance().
-        static Scene * get_instance(const char * scene_file_name = "");
+        static Scene * get_instance(std::string scene_file_name = "");
 
         /// Destructor.
         ~Scene();
@@ -135,6 +135,10 @@ class Scene {
         /// Return the bumpmap named by the parameter.  The bumpmap is
         /// defined in the scene definition file.
         BumpMap * get_bumpmap(std::string name) { return m_bumpmaps[name]; }
+
+        /// Return the size of the image as an X11 geometry string.  This is
+        /// needed by ImageMagick.
+        std::string get_geometry();
 };
 //}}}
 

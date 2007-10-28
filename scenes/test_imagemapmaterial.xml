@@ -2,8 +2,8 @@
     <meta>
         <width  pixels="512" />
         <height pixels="512" />
-        <file name="renders/imagemapmaterial.ppm" />
-        <subpixels square_of='4'/>
+        <file name="renders/imagemapmaterial.png" />
+        <subpixels square_of='2'/>
         <recurse max_depth='1' />
     </meta>
 
