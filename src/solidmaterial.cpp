@@ -1,11 +1,12 @@
+#include <Magick++.h>
 #include "solidmaterial.h"
-#include "color.h"
 #include "scene.h"
 #include <string>
 #include <map>
 
-SolidMaterial::SolidMaterialStaticInit SolidMaterial::m_init;
+using Magick::Color;
 
+SolidMaterial::SolidMaterialStaticInit SolidMaterial::m_init;
 
 Color * SolidMaterial::get_color(const Point3D& intersection_point) const 
 { 

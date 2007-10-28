@@ -1,7 +1,6 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "color.h"
 #include "raytrace_defs.h"
 
 /// This class defines various properties of materials from which primitives are made.
@@ -25,14 +24,14 @@ class Material {
 
         /// Calculate color at given point on the material.
         /// @return Color at given point
-        virtual Color * get_color(const Point3D& intersection_point) const =0;
+        virtual Magick::Color * get_color(const Point3D& intersection_point) const =0;
 
         /// Calculate color at given point on the material given the surface
         /// normal passed in.  The default behavior of this is to call
         /// Material::get_color(Point3D) ignoring the normal.  If this
         /// behavior is not desired, override this method in child classes.
         /// @return Color at given point
-        virtual Color * get_color(const Point3D& intersection_point, const Renderable * const obj) const {
+        virtual Magick::Color * get_color(const Point3D& intersection_point, const Renderable * const obj) const {
             return get_color(intersection_point);
         };
 

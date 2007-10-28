@@ -2,9 +2,10 @@
 #include <math.h>
 #include <iostream>
 
+using Magick::Color;
+using Magick::ColorRGB;
+
 NoiseMaterial::StaticInit NoiseMaterial::m_init;
-
-
 
 double NoiseMaterial::choose_material(const Point3D& intersection_point) const
 {
@@ -23,18 +24,18 @@ Color * NoiseMaterial::get_color(const Point3D& intersection_point) const
     const char * noiseColorKey = "__NOISE_WORKING_COLOR";
 
     Scene * scene = Scene::get_instance();
-    Color * retVal = scene->get_color(noiseColorKey);
+    ColorRGB * retVal = (ColorRGB *)scene->get_color(noiseColorKey);
     if(retVal == NULL)
     {
-        retVal = new Color();
+        retVal = new ColorRGB();
         scene->add_color(noiseColorKey, retVal);
     }
 
     double coeff = choose_material(intersection_point);
 
-    Color * one = (m_material_one->get_color(intersection_point) );
-    Color * two = (m_material_two->get_color(intersection_point) );
-    (*retVal) = (*one * coeff) + (*two * (1.0-coeff) );
+    ColorRGB one = *m_material_one->get_color(intersection_point);
+    ColorRGB two = *m_material_two->get_color(intersection_point);
+    *retVal = (one * coeff) + (two * (1.0-coeff));
 
     return retVal;
 

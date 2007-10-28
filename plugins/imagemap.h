@@ -81,12 +81,12 @@ class ImageMap : public Material {
 		ImageMap(ImageMap &);
 		~ImageMap() {}
 
-        virtual Color * get_color(const Point3D& intersection_point) const {
+        virtual Magick::Color * get_color(const Point3D& intersection_point) const {
             Vector v(0,0,0);
             return get_color(intersection_point, NULL);
         }
 
-        virtual Color * get_color(const Point3D& intersection_point, const Renderable * const obj) const;
+        virtual Magick::Color * get_color(const Point3D& intersection_point, const Renderable * const obj) const;
 
         /// Determine if material emits light at given point.  Note: due to the
         /// rendering algoritm currently being used, varying this value based
@@ -141,7 +141,7 @@ class ImageMap : public Material {
 
 Material * new_immagemap_material(std::map<std::string, std::string> props) {
     bool isLight = props.count("light") > 0;
-    Color * color;
+    Magick::Color * color;
 
     std::string image_name("");
     if(props.find("image") != props.end()) {

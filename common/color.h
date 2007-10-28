@@ -1,10 +1,49 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+inline void operator*=(Magick::ColorRGB & color, double n) {
+    color.red  (color.red()   * n);
+    color.green(color.green() * n);
+    color.blue (color.blue()  * n);
+}
+
+inline Magick::ColorRGB operator* (const Magick::ColorRGB & color, double n) {
+    return Magick::ColorRGB(color.red() * n, color.green() * n, color.blue() * n);
+}
+
+inline void operator*=(Magick::ColorRGB & color, const Magick::ColorRGB & other) {
+    color.red(color.red() * other.red());
+    color.green(color.green() * other.green());
+    color.blue(color.blue() * other.blue());
+}
+inline Magick::ColorRGB operator* (const Magick::ColorRGB & color, const Magick::ColorRGB & other) {
+    return Magick::ColorRGB(
+            color.red()   * other.red(),
+            color.green() * other.green(),
+            color.blue()  * other.blue()
+            );
+}
+
+inline void operator+=(Magick::ColorRGB & color, const Magick::ColorRGB & other) {
+    color.red  ( color.red()   + other.red()   );
+    color.green( color.green() + other.green() );
+    color.blue ( color.blue()  + other.blue()  );
+}
+
+inline Magick::ColorRGB operator+ (const Magick::ColorRGB & color, const Magick::ColorRGB & other) {
+    return Magick::ColorRGB(
+            color.red()   + other.red(),
+            color.green() + other.green(),
+            color.blue()  + other.blue()
+            );
+}
+
+//{{{
+// Pre-ImageMagick++ color implementation
+#if 0
 #include "raytrace_defs.h"
 
 typedef unsigned char uchar;
-//{{{
 /// This class represents a color.
 class Color {
     private:
@@ -53,12 +92,6 @@ class Color {
             set_blue ( other.m_blue );
         }
 
-        void operator*=(const Color &other) {
-            set_red(m_red * other.m_red);
-            set_green(m_green * other.m_green);
-            set_blue(m_blue * other.m_blue);
-        }
-        Color operator* (const Color &other) { return Color(m_red * other.m_red, m_green * other.m_green, m_blue * other.m_blue); }
 
         void operator*=(double n) {
             set_red(m_red * n);
@@ -67,13 +100,6 @@ class Color {
         }
         Color operator* (double n) { return Color(m_red * n, m_green * n, m_blue * n); }
 
-        void operator+=(const Color &other) {
-            set_red ( m_red + other.m_red );
-            set_green( m_green + other.m_green );
-            set_blue ( m_blue + other.m_blue );
-        }
-
-        Color operator+ (const Color &other) { return Color( m_red + other.m_red, m_green + other.m_green, m_blue + other.m_blue); }
         Color operator-(const Color &other) { return Color( m_red - other.m_red, m_green - other.m_green, m_blue - other.m_blue); }
         bool operator==(const Color &other) {
             double FUDGE_FACTOR = 0.0001;
@@ -136,6 +162,7 @@ class Color {
         inline double get_blue () const { return m_blue; }
 
 };
+#endif
 //}}}
 
 #endif

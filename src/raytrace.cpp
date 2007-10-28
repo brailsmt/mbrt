@@ -4,6 +4,7 @@
 /// @date Fri Mar 23 00:10:18 -0500 2007
 /// &copy; 2007 Michael Brailsford
 
+#include <Magick++.h>
 #include <cstdlib>
 #include <ctime>
 #include <dlfcn.h>
@@ -19,21 +20,24 @@
 #include "renderable.h"
 #include "ray.h"
 #include "scene.h"
+#include "color.h"
 
 using std::vector;
 using std::cout;
 using std::endl;
+using Magick::Color;
+using Magick::ColorRGB;
 
 struct raytrace_info rt_info;
 
-void trace_ray(Color &pixel, const Ray &ray, int depth);
+void trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
 
 /// Trace a ray for each pixel in image.
 ///
 /// @param data Image imformation that will be populated by tracing the rays.
 /// @param eye The origin of all rays shot into the scene.
 //{{{
-unsigned long trace_rays(Color * data, Point3D eye) {
+unsigned long trace_rays(ColorRGB * data, Point3D eye) {
     //The image canvas is located around the origin of world space coordinates (0,0,0)
     double min_x, max_x;
     double min_y, max_y;
@@ -74,18 +78,18 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                 modifier = -1.0;
             }
 
-            Color color;
+            ColorRGB color;
             Point3D p = Point3D(screen_intersection.x, screen_intersection.y, screen_intersection.z);
             Ray ray(eye, p - eye);
             trace_ray(color, ray, 0);
 
             p = Point3D(screen_intersection.x + (dx * modifier), screen_intersection.y, screen_intersection.z);
-            Color next_color;
+            ColorRGB next_color;
             Ray next_ray(eye, p - eye);
             trace_ray(next_color, next_ray, 0);
 
             if(!(color == next_color)) {
-                vector<Color> colors;
+                vector<ColorRGB> colors;
                 // Implement stochastic anti-aliasing.  Which is just a fancy way
                 // to say break up the pixel into subpixels, determine the center
                 // point of the subpixel, add a random offset and shoot a ray
@@ -124,7 +128,7 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                         Ray ray(eye, subpixel - eye);
 
                         // Trace the ray into the scene, recording the pixel's color value.
-                        Color color;
+                        ColorRGB color;
                         trace_ray(color, ray, 0);
                         colors.push_back(color);
 
@@ -136,14 +140,14 @@ unsigned long trace_rays(Color * data, Point3D eye) {
                 // Average all the colors to get the color value at the window.
                 double red, green, blue;
                 red = green = blue = 0.0;
-                vector<Color>::iterator iter, end;
+                vector<ColorRGB>::iterator iter, end;
                 for (iter = colors.begin(), end = colors.end(); iter != end; iter++) {
-                    red   += iter->get_red();
-                    green += iter->get_green();
-                    blue  += iter->get_blue();
+                    red   += iter->red();
+                    green += iter->green();
+                    blue  += iter->blue();
                 }
                 int colors_size = colors.size();
-                color = Color((red / colors_size), (green / colors_size), (blue / colors_size));
+                color = ColorRGB((red / colors_size), (green / colors_size), (blue / colors_size));
             }
 
             /// @todo To allow large images, write this directly to file,
@@ -166,7 +170,7 @@ unsigned long trace_rays(Color * data, Point3D eye) {
 /// @param ray The ray to be traced.
 /// @param depth The current depth in the recursion of rays traced.
 //{{{
-void trace_ray(Color &pixel, const Ray &ray, int depth) {
+void trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
     Renderable * primitive = NULL;
     double dist = INF;
     Scene * scene = Scene::get_instance();
@@ -197,7 +201,7 @@ void trace_ray(Color &pixel, const Ray &ray, int depth) {
             Vector reflect;
             Vector refract;
 
-            // Determine the main color from the directly striking the object.  {{{
+            // Determine the main color from directly striking the object.  {{{
             pixel += primitive->get_color_contribution(intersection_point, ray, reflect, refract);
             //}}}
             // Reflect the ray, if the surface is reflective.   {{{
@@ -327,7 +331,7 @@ int main(int argc, char ** argv) {
     // Read the scene description XML file and build the Scene object.
     Scene * scene = Scene::get_instance(filename);
 
-    Color * data = new Color[scene->get_viewport_pixel_height() * scene->get_viewport_pixel_width()];
+    ColorRGB * data = new ColorRGB[scene->get_viewport_pixel_height() * scene->get_viewport_pixel_width()];
     // This number is completely incorrect now that we have adaptive subsampling.
     rt_info.total_primary_rays = ((scene->get_subpixel_sqrt() * scene->get_subpixel_sqrt()) * scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height());
 

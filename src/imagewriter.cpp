@@ -5,12 +5,13 @@
 
 #include "raytrace_defs.h"
 #include "imagewriter.h"
-#include "color.h"
 #include "scene.h"
 
 #include <iostream>
 
 using std::string;
+using Magick::Color;
+using Magick::ColorRGB;
 
 //{{{
 PpmImageWriter::PpmImageWriter(std::string _filename, int _height, int _width)
@@ -22,7 +23,7 @@ PpmImageWriter::PpmImageWriter(std::string _filename, int _height, int _width)
 //}}}
 
 //{{{
-bool PpmImageWriter::write_image(Color * data) {
+bool PpmImageWriter::write_image(ColorRGB * data) {
     bool rv = false;
     int x, y;
     getyx(stdscr, y, x);
@@ -42,9 +43,9 @@ bool PpmImageWriter::write_image(Color * data) {
         // Write the data.
         for ( int i = 0; i < (m_px_width * m_px_height); ++i) {
             uchar rgbdata[] = {
-                data[i].get_rgb_red(),
-                data[i].get_rgb_green(),
-                data[i].get_rgb_blue()
+                (int)(data[i].red()) * PPM_MAX_VAL,
+                (int)(data[i].green()) * PPM_MAX_VAL,
+                (int)(data[i].blue()) * PPM_MAX_VAL
             };
             fwrite(rgbdata, sizeof(rgbdata), 1, _file);
         }

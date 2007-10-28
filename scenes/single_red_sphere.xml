@@ -3,7 +3,7 @@
         <width  pixels="512" />
         <file name="renders/single_red_sphere.ppm" />
         <height pixels="512" />
-        <subpixels square_of='20'/>
+        <subpixels square_of='5'/>
         <recurse max_depth='1' />
     </meta>
 
@@ -22,7 +22,7 @@
 
     <materials>
         <material name='solid_red'          type='solid' color='red'   />
-        <material name='solid_white'          type='solid' color='red'   />
+        <material name='solid_white'          type='solid' color='white'   />
     </materials>
 
     <light_sources>

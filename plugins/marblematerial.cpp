@@ -1,6 +1,10 @@
 #include "marblematerial.h"
+#include <Magick++.h>
 #include <math.h>
 #include <iostream>
+#include "color.h"
+
+using Magick::Color;
 
 
 MarbleMaterial::StaticInit MarbleMaterial::m_init;

@@ -16,6 +16,8 @@
 using std::map;
 using std::vector;
 using std::string;
+using Magick::Color;
+using Magick::ColorRGB;
 
 //{{{
 SceneParser::SceneParser(const char * scene_filename)
@@ -99,7 +101,7 @@ Renderable * SceneParser::parse_colors(Scene * scene, xmlNode * node) {
                 double green = strtod(props["green"].c_str(), NULL);
                 double blue  = strtod(props["blue" ].c_str(), NULL);
 
-                scene->add_color(props["name"], new Color(red, green, blue));
+                scene->add_color(props["name"], new ColorRGB(red, green, blue));
             }
         }
 

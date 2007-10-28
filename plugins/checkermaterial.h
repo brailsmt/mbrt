@@ -2,7 +2,6 @@
 #ifndef CHECKERMATERIAL_H
 #define CHECKERMATERIAL_H
 
-#include "color.h"
 #include "raytrace_defs.h"
 #include "material.h"
 #include "pluginfactory.h"
@@ -67,7 +66,7 @@ class CheckeredMaterial : public Material {
     }
 
     /// See material.h for a full description of this method.
-    virtual Color * get_color(const Point3D& intersesction_point) const; 
+    virtual Magick::Color * get_color(const Point3D& intersesction_point) const; 
 
     /// Always returns false.
     virtual bool is_light(const Point3D& intersesction_point) const; 

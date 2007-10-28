@@ -1,5 +1,8 @@
+#include <Magick++.h>
 #include "checkermaterial.h"
 #include <iostream>
+
+using Magick::Color;
 
 CheckeredMaterial::StaticInit CheckeredMaterial::m_init;
 

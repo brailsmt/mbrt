@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 #include <string>
-#include "color.h"
+#include <Magick++.h>
 
 /// The max depth to which we will bounce rays.  After MAX_DEPTH reflections/refractions, stop.
 const int MAX_DEPTH = 15;
@@ -14,7 +14,6 @@ const int MAX_DEPTH = 15;
 class Ray;
 class Renderable;
 class Point3D;
-class Color;
 class Material;
 class BumpMap;
 
@@ -31,7 +30,7 @@ class Scene {
         std::vector<Renderable *> scene;
 
         /// This is a map of all colors available for the scene.
-        std::map<std::string, Color *> m_colors;
+        std::map<std::string, Magick::Color *> m_colors;
 
         /// This is a map of all materials available for the scene.
         std::map<std::string, Material *> m_materials;
@@ -115,10 +114,10 @@ class Scene {
 
         /// Return the color named by the parameter.  The color's name is
         /// defined in the scene definition file.
-        Color * get_color(std::string name) { return m_colors[name]; }
+        Magick::Color * get_color(std::string name) { return m_colors[name]; }
 
         /// Add a color to the available colors.
-        void add_color(std::string name, Color * color) { m_colors[name] = color; }
+        void add_color(std::string name, Magick::Color * color) { m_colors[name] = color; }
         
         /// Return the material named by the parameter.  The material is
         /// defined in the scene definition file.

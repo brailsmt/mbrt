@@ -6,8 +6,8 @@
 #ifndef IMAGEWRITER_H
 #define IMAGEWRITER_H
 
+#include <Magick++.h>
 #include "scene.h"
-class Color;
 
 #include <string>
 #include <map>
@@ -27,7 +27,7 @@ class ImageWriter {
         /// Write the image data to file.
         ///
         /// @param data Image imformation that will be written.
-        virtual bool write_image (Color * data) = 0;
+        virtual bool write_image (Magick::ColorRGB * data) = 0;
 
         virtual ~ImageWriter() {};
 };
@@ -50,7 +50,7 @@ class PpmImageWriter : public ImageWriter {
         /// Write the image data to a ppm file.
         ///
         /// @param data Image imformation that will be written.
-        virtual bool write_image (Color * data);
+        virtual bool write_image (Magick::ColorRGB * data);
 };
 
 class ImageWriterFactory {

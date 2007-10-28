@@ -3,7 +3,6 @@
 #include "scene.h"
 #include "material.h"
 #include "sceneparser.h"
-#include "color.h"
 #include <iostream>
 #include <cstdlib>
 

@@ -1,5 +1,9 @@
 #include "renderable.h"
 #include <vector>
+#include "color.h"
+
+using Magick::Color;
+using Magick::ColorRGB;
 
 using std::vector;
 
@@ -73,7 +77,7 @@ double Renderable::get_refraction_index(const Point3D& intersection_point) const
 }
 //}}}
 //{{{
-Color Renderable::get_color(const Point3D& intersection_point) const {
+Magick::Color Renderable::get_color(const Point3D& intersection_point) const {
     return *(m_material->get_color(intersection_point, this));
 }
 //}}}
@@ -105,10 +109,10 @@ Ray Renderable::get_final_normal(const Point3D& p)
 }
 //}}}
 
-Color Renderable::get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) {
+Magick::ColorRGB Renderable::get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) {
     // Determine the color of the pixel at the point of intersection.
     double ambient_factor = 0.2;
-    Color rv = get_color(intersection_point) * ambient_factor;
+    Magick::ColorRGB rv = get_color(intersection_point) * ambient_factor;
     Scene * scene = Scene::get_instance();
 
     if ( is_light(intersection_point) == false ) {
@@ -176,7 +180,7 @@ Color Renderable::get_color_contribution(const Point3D &intersection_point, cons
                             log_warn("Diffusion %d", diffusion);
                         }
 
-                        rv += get_color(intersection_point) * light->get_color(intersection_point) * diffusion;
+                        rv += get_color(intersection_point) * (light->get_color(intersection_point) * diffusion);
                         // I don't think this does what you think it does.  It uses the reflection coefficient
                         // as the specular coefficient.  These are not the same thing.
                         rv += light->get_color(intersection_point) * specular_color * get_reflection(intersection_point);

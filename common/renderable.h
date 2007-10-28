@@ -3,7 +3,6 @@
 
 #include "raytrace_defs.h"
 #include "material.h"
-#include "color.h"
 #include "bumpmap.h"
 #include "ray.h"
 #include "xml_util.h"
@@ -21,7 +20,7 @@ class Renderable {
         virtual bool collides_with(const Ray &ray, double &t) const = 0;
 
         /// Returns the color of the Renderable.
-        virtual Color get_color(const Point3D& intersection_point) const ;
+        virtual Magick::Color get_color(const Point3D& intersection_point) const ;
 
         /// Returns the diffusion factor of the primitive.
         virtual double get_diffuse(const Point3D& intersection_point) const;
@@ -69,7 +68,7 @@ class Renderable {
         ///
         /// @return The color which is the result of applying diffuse and specular lighting the the
         /// primitive.
-        virtual Color get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) ;
+        virtual Magick::ColorRGB get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) ;
 
         bool is_in_shadow(const Ray &ray_to_light, const Point3D intersection_point) {
             double dist = INF;

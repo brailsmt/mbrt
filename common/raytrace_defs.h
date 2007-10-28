@@ -2,12 +2,12 @@
 #ifndef RAYTRACE_DEFS_H
 #define RAYTRACE_DEFS_H
 
+#include <Magick++.h>
 #include <ncurses.h>
 #include <time.h>
 #include <syslog.h>
 
 #include "point3d.h"
-#include "color.h"
 #include "scene.h"
 
 /// Typical uchar typedef.

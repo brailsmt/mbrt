@@ -7,6 +7,9 @@
 #include "imagemap.h"
 #include <cmath>
 
+using Magick::Color;
+using Magick::ColorRGB;
+
 ImageMap::StaticInit ImageMap::m_init;
 
 //{{{
@@ -25,7 +28,7 @@ Color * ImageMap::get_color(const Point3D &intersection_point, const Renderable 
 
     if(longitude == 0.0 || longitude == 1.0) {
         Magick::ColorRGB clr = m_image.pixelColor(0,0);
-        return new Color(clr.red(), clr.green(), clr.blue());
+        return new ColorRGB(clr.red(), clr.green(), clr.blue());
     }
 
     double theta = acos((dot_product(normal, equator))/sin(phi)) * (0.5 * M_1_PI);
@@ -37,14 +40,14 @@ Color * ImageMap::get_color(const Point3D &intersection_point, const Renderable 
     }
 
     int x, y;
-    x = lattitude * m_image.baseColumns();
-    y = longitude * m_image.baseRows();
+    x = (int)(lattitude * m_image.baseColumns());
+    y = (int)(longitude * m_image.baseRows());
     if(x > m_image.baseColumns() || y > m_image.baseRows() || x < 0 || y < 0) {
         return new Color(1, 0, 0);
     }
     else {
         Magick::ColorRGB clr = m_image.pixelColor(x, y);
-        return new Color(clr.red(), clr.green(), clr.blue());
+        return new ColorRGB(clr.red(), clr.green(), clr.blue());
     }
 }
 //}}}
