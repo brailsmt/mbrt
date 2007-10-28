@@ -43,9 +43,9 @@ bool PpmImageWriter::write_image(ColorRGB * data) {
         // Write the data.
         for ( int i = 0; i < (m_px_width * m_px_height); ++i) {
             uchar rgbdata[] = {
-                (int)(data[i].red()) * PPM_MAX_VAL,
-                (int)(data[i].green()) * PPM_MAX_VAL,
-                (int)(data[i].blue()) * PPM_MAX_VAL
+                (int)(data[i].red() * PPM_MAX_VAL),
+                (int)(data[i].green() * PPM_MAX_VAL),
+                (int)(data[i].blue() * PPM_MAX_VAL)
             };
             fwrite(rgbdata, sizeof(rgbdata), 1, _file);
         }
