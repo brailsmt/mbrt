@@ -99,7 +99,7 @@ class MarbleMaterial : public Material{
         void choose_materials(double noise_amount, Material ** one  , Material ** two) const;
         
         /// Get color from point.
-        virtual Magick::Color * get_color(const Point3D& intersesction_point) const ; 
+        virtual Magick::Color get_color(const Point3D& intersesction_point) const ; 
 
         /// Return if material emits light.  Always returns false.
         virtual bool is_light(const Point3D& intersesction_point) const ; 

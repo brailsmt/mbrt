@@ -43,8 +43,11 @@ double MarbleMaterial::interpolate_value(double noise_amount, double one, double
     return one * scale + two * (1.0 - scale);
 }
 
-Color * MarbleMaterial::get_color(const Point3D& intersection_point) const 
+Color MarbleMaterial::get_color(const Point3D& intersection_point) const 
 { 
+    // TODO:  Rewokr this in light of no longer using global color map in
+    // Scene.
+
     // !!!THREAD SAFETY ALERT!!!
     // we are using one global color here.  This
     // will absolutely break if we go multi-threaded.
@@ -55,11 +58,11 @@ Color * MarbleMaterial::get_color(const Point3D& intersection_point) const
     const char * noiseColorKey = "__MARBLE_WORKING_COLOR";
 
     Scene * scene = Scene::get_instance();
-    Color * retVal = scene->get_color(noiseColorKey);
-    if(retVal == NULL)
+    // This just constructs a new color using Magick::Color(std::string).
+    Color retVal(scene->get_color(noiseColorKey));
+    if(!retVal.isValid())
     {
-        retVal = new Color();
-        scene->add_color(noiseColorKey, retVal);
+        retVal = Color("red");
     }
 
     double noise = m_noise.get_noise(intersection_point * m_noise_scale);
@@ -80,11 +83,10 @@ Color * MarbleMaterial::get_color(const Point3D& intersection_point) const
         scale = (noise - m_break_point) * m_material_two_scale;
     }
 
-    Color * color_one = (one->get_color(intersection_point) );
-    Color * color_two = (two->get_color(intersection_point) );
-    (*retVal) = (*color_one * scale) + (*color_two * (1.0-scale) );
+    Color color_one = (one->get_color(intersection_point) );
+    Color color_two = (two->get_color(intersection_point) );
 
-    return retVal;
+    return (color_one * scale) + (color_two * (1.0-scale) );
 
 }
 

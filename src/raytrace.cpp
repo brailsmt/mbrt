@@ -312,6 +312,7 @@ int main(int argc, char ** argv) {
         {0, 0, 0, 0}
     };
 
+    log_info("5*****************  Starting mbrt  ******************\n");
     string outfname("");
     int opt_val = -2;
     while ( (opt_val = getopt_long (argc, argv, "s:o:", long_options, &option_index)) != -1 ) {
@@ -324,25 +325,33 @@ int main(int argc, char ** argv) {
             break;
         }
     }
+    log_info("4*****************  Starting mbrt  ******************\n");
     unsigned long traced_rays;
     int x, y;
     initscr();
     getmaxyx(stdscr, y, x);
     mvprintw(y - 1, 0, "Tracing %s...", filename.c_str());
 
+    log_info("3*****************  Starting mbrt  ******************\n");
 
     ////////////
     // Render //
     ////////////
     // Read the scene description XML file and build the Scene object.
+    log_info("3.9*****************  Starting mbrt  ******************\n");
     Scene * scene = Scene::get_instance(filename);
+    log_info("3.8*****************  Starting mbrt  ******************\n");
     if(outfname == "") {
+    log_info("3.7*****************  Starting mbrt  ******************\n");
         outfname = scene->get_output_filename();
     }
+    log_info("3.6*****************  Starting mbrt  ******************\n");
 
+    log_info("2*****************  Starting mbrt  ******************\n");
 
     // Create the Image object.
     Image img(scene->get_geometry(), "red");
+    log_info("1*****************  Starting mbrt  ******************\n");
 
     // Trace the scene.
     traced_rays = trace_rays(img, scene->get_camera());

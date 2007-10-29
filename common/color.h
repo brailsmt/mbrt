@@ -1,6 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include <Magick++.h>
+
 inline void operator*=(Magick::ColorRGB & color, double n) {
     color.red  (color.red()   * n);
     color.green(color.green() * n);

@@ -12,8 +12,11 @@ double NoiseMaterial::choose_material(const Point3D& intersection_point) const
     return m_noise.get_noise(intersection_point * m_scale);
 }
 
-Color * NoiseMaterial::get_color(const Point3D& intersection_point) const 
+Color NoiseMaterial::get_color(const Point3D& intersection_point) const 
 { 
+    // TODO: I don't think this is needed anymore after switching to Magick++
+    // colors and getting rid of the global color map in the scene.
+#if 0
     // !!!THREAD SAFETY ALERT!!!
     // we are using one global color here.  This
     // will absolutely break if we go multi-threaded.
@@ -24,20 +27,19 @@ Color * NoiseMaterial::get_color(const Point3D& intersection_point) const
     const char * noiseColorKey = "__NOISE_WORKING_COLOR";
 
     Scene * scene = Scene::get_instance();
-    ColorRGB * retVal = (ColorRGB *)scene->get_color(noiseColorKey);
-    if(retVal == NULL)
+    ColorRGB retVal(noiseColorKey);
+    if(!is_valid(retVal))
     {
-        retVal = new ColorRGB();
-        scene->add_color(noiseColorKey, retVal);
+        retVal = Color("red");
     }
 
+#endif
     double coeff = choose_material(intersection_point);
 
-    ColorRGB one = *m_material_one->get_color(intersection_point);
-    ColorRGB two = *m_material_two->get_color(intersection_point);
-    *retVal = (one * coeff) + (two * (1.0-coeff));
+    ColorRGB one = m_material_one->get_color(intersection_point);
+    ColorRGB two = m_material_two->get_color(intersection_point);
 
-    return retVal;
+    return (one * coeff) + (two * (1.0-coeff));
 
 }
 

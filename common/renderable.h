@@ -68,7 +68,7 @@ class Renderable {
         ///
         /// @return The color which is the result of applying diffuse and specular lighting the the
         /// primitive.
-        virtual Magick::ColorRGB get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) ;
+        virtual Magick::Color get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) ;
 
         bool is_in_shadow(const Ray &ray_to_light, const Point3D intersection_point) {
             double dist = INF;

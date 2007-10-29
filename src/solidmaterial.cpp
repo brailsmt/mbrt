@@ -8,7 +8,7 @@ using Magick::Color;
 
 SolidMaterial::SolidMaterialStaticInit SolidMaterial::m_init;
 
-Color * SolidMaterial::get_color(const Point3D& intersection_point) const 
+Color SolidMaterial::get_color(const Point3D& intersection_point) const 
 { 
         return m_color; 
 }

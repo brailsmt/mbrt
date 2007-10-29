@@ -19,7 +19,7 @@ Sphere::~Sphere() {}
 //{{{
 bool Sphere::collides_with(const Ray &ray, double &t) const {
     bool rv = false;
-    Point3D v = ray.origin() - m_center;
+    Point3D v = ray.origin() - (m_center);
     Vector d = ray.direction();
     double d_dot_d = dot_product(d, d);
 

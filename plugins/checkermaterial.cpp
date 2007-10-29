@@ -30,7 +30,7 @@ int CheckeredMaterial::choose_material(const Point3D& intersection_point) const
     return bit;
 }
 
-Color * CheckeredMaterial::get_color(const Point3D& intersection_point) const 
+Color CheckeredMaterial::get_color(const Point3D& intersection_point) const 
 { 
     if(choose_material(intersection_point) > 0)
         return m_material_one->get_color(intersection_point); 

@@ -45,7 +45,7 @@ class SolidMaterial : public Material
         double m_reflectivity;
 
         /// This is the color of the material.
-        Magick::Color * m_color;
+        Magick::Color m_color;
 
         /// Is this material a light source?
         bool m_is_light_source;
@@ -73,13 +73,13 @@ class SolidMaterial : public Material
         SolidMaterial(bool is_light)
                 : m_reflection_coefficient(1.0),
                   m_diffusion_factor(0.25f),
-                  m_color(new Magick::Color()),
+                  m_color(),
                   m_is_light_source(is_light),
                   m_reflectivity(35.0),
                   m_refraction_index(1.35),
                   m_opacity(OPAQUE) {}
 
-        SolidMaterial(Magick::Color * m_color, double reflect = 1.0f, double diffuse = 0.25f, bool is_light = false, double opacity = OPAQUE)
+        SolidMaterial(Magick::Color m_color, double reflect = 1.0f, double diffuse = 0.25f, bool is_light = false, double opacity = OPAQUE)
                 : m_reflection_coefficient(reflect),
                   m_diffusion_factor(diffuse),
                   m_color(m_color),
@@ -91,7 +91,7 @@ class SolidMaterial : public Material
         /// Fully construct a material with no defaults.
         //
         // Do not remove this constructor. Used in create... method of solidmaterial.cpp
-        SolidMaterial(Magick::Color * m_color, 
+        SolidMaterial(Magick::Color m_color, 
                 bool is_light , 
                 double reflection, 
                 double diffuse , 
@@ -120,7 +120,7 @@ class SolidMaterial : public Material
 
         /// Calculate color at given point on the material.
         /// @return Color at given point
-        virtual Magick::Color * get_color(const Point3D& intersection_point) const;
+        virtual Magick::Color get_color(const Point3D& intersection_point) const;
 
         /// Determine if material emits light at given point.  Note: due to the
         /// rendering algoritm currently being used, varying this value based
@@ -191,9 +191,7 @@ class SolidMaterial : public Material
 
 inline Material * new_solid_material(std::map<std::string, std::string> props) {
     bool isLight = props.count("light") > 0;
-    Magick::Color * color;
-
-    color = new Magick::Color(props["color"]);
+    Magick::Color color(props["color"]);
 
     double reflection = props.count("reflection") > 0 ?
         (double)strtod(props["reflection"    ].c_str(), NULL)   : 1.0;

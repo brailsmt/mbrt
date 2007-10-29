@@ -78,7 +78,7 @@ double Renderable::get_refraction_index(const Point3D& intersection_point) const
 //}}}
 //{{{
 Magick::Color Renderable::get_color(const Point3D& intersection_point) const {
-    return *(m_material->get_color(intersection_point, this));
+    return m_material->get_color(intersection_point, this);
 }
 //}}}
 //{{{
@@ -109,7 +109,7 @@ Ray Renderable::get_final_normal(const Point3D& p)
 }
 //}}}
 
-Magick::ColorRGB Renderable::get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) {
+Magick::Color Renderable::get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) {
     // Determine the color of the pixel at the point of intersection.
     double ambient_factor = 0.2;
     Magick::ColorRGB rv = get_color(intersection_point) * ambient_factor;

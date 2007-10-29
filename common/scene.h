@@ -29,9 +29,6 @@ class Scene {
         /// This is the scene, which is a collection of Renderables.
         std::vector<Renderable *> scene;
 
-        /// This is a map of all colors available for the scene.
-        std::map<std::string, Magick::Color *> m_colors;
-
         /// This is a map of all materials available for the scene.
         std::map<std::string, Material *> m_materials;
         
@@ -114,11 +111,8 @@ class Scene {
 
         /// Return the color named by the parameter.  The color's name is
         /// defined in the scene definition file.
-        Magick::Color * get_color(std::string name) { return m_colors[name]; }
+        Magick::Color get_color(std::string name) { return Magick::Color(name); }
 
-        /// Add a color to the available colors.
-        void add_color(std::string name, Magick::Color * color) { m_colors[name] = color; }
-        
         /// Return the material named by the parameter.  The material is
         /// defined in the scene definition file.
         Material * get_material(std::string name) { return m_materials[name]; }

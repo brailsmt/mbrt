@@ -48,7 +48,7 @@ class SceneParser : public sigc::trackable {
         /// @param node The xml node that contains configuration for this element
         Renderable * noop(Scene * scene, xmlNode * node);
 
-        /// Parse a set of color nodes and return them in a map<char *, Color *>.
+        /// Parse a set of color nodes and return them in a map<char *, Color>.
         ///
         /// @param scene The scene that the object will affect.
         /// @param node The xml node that contains configuration for this element
