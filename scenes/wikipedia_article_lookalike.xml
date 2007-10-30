@@ -7,7 +7,7 @@
         <width  pixels="512" />
         <height pixels="384" />
         <file name="renders/wikipedia_lookalike.png" />
-        <subpixels square_of='3'/>
+        <subpixels square_of='2'/>
         <recurse max_depth="7" />
     </meta>
 

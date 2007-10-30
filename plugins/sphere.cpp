@@ -19,23 +19,21 @@ Sphere::~Sphere() {}
 //{{{
 bool Sphere::collides_with(const Ray &ray, double &t) const {
     bool rv = false;
-    Point3D v = ray.origin() - (m_center);
-    Vector d = ray.direction();
-    double d_dot_d = dot_product(d, d);
+    Point3D v = ray.origin() - m_center;
 
-    double b = dot_product(v, d);
+    double b = 2 * dot_product(v, ray.direction());
     double b_squared = b * b;
-    double _ac = (d_dot_d) * (dot_product(v, v) - m_radius * m_radius);
+    double _ac = 4 * (dot_product(v, v) - m_radius * m_radius);
 
     if ( b_squared > _ac ) {
 
-        double tmp = sqrtf( b_squared - _ac );
-        double t2 = -b + tmp;
+        double discriminant = sqrtf( b_squared - _ac );
+        double t2 = (-b + discriminant) * 0.5;
 
-        if ( t2 > -0.00001 ) {
-            double t1 = -b - tmp;
+        if ( t2 > 0.0 ) {
+            double t1 = (-b - discriminant) * 0.5;
             if ( t1 < t ) {
-                t = t1 / d_dot_d;
+                t = t1;
                 rv = true;
             }
         }
