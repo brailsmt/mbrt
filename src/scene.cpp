@@ -64,7 +64,7 @@ Renderable * Scene::find_collision(const Ray &ray, double &dist) const {
 //{{{
 std::string Scene::get_geometry() {
     ostringstream str;
-    str << pixel_height << "x" << pixel_width;
+    str << pixel_width << "x" << pixel_height;
     return str.str();
 }
 //}}}

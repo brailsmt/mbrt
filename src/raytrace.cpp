@@ -45,9 +45,9 @@ unsigned long trace_rays(Image & img, Point3D eye) {
     double min_y, max_y;
     Scene * scene = Scene::get_instance();
 
-    max_x = 15;
+    max_x = 16;
     min_x = -max_x;
-    max_y = 15;
+    max_y = 16 * ((double)scene->get_viewport_pixel_height() / (double)scene->get_viewport_pixel_width());
     min_y = -max_y;
 
     // dx and dy are the amount to add to each pixel to go to the next pixel
