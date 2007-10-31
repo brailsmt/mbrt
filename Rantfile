@@ -62,7 +62,9 @@ var[:clean].include "**/*.gc*",
                     "app.info",
                     "core",
                     "c_dependencies",
-                    "rt"
+                    "rt",
+                    "doc/dox.tbz2",
+                    "doc/**"
 
 desc "Generate coverage reports"
 task :coverage => %w(run_scene gather_coverage)
@@ -80,14 +82,26 @@ task :run_scene do |task_info|
 end
 
 desc "Build the cscope database"
-file "cscope.out" => Rant::FileList[ '**/*.cpp', '**/*.h' ] do |task_info|
+file "cscope.out" => Rant::FileList[ '{plugins,common,src}/*.{h,cpp}' ] do |task_info|
     sys 'cscope -R -I/usr/include -b `find . | grep \'\.cpp$\|\.h$\'`'
 end
 
 desc "Build documentation"
-file :dox => Rant::FileList[ '**/*.cpp', "**/*.h" ] do |task_info|
-    sys "doxygen > doxygen.log"
+file :dox => Rant::FileList[ '{plugins,common,src}/*.{h,cpp}' ] do |task_info|
+    sys "doxygen > doxygen.log 2>&1"
+    sys "cd doc; mv html doxygen; tar cjvf dox.tbz2 doxygen/ > /dev/null"
 end
+
+desc "Publish API documentation to sourceforge."
+task :publish_dox => %w( dox ) do
+    sys 'scp doc/dox.tbz2 shell.sf.net:/home/groups/m/mb/mbrt/htdocs'
+    sys 'ssh shell.sf.net "rm -rf /home/groups/m/mb/mbrt/htdocs/doxygen; cd /home/groups/m/mb/mbrt/htdocs; tar xjvf dox.tbz2 > /dev/null; rm dox.tbz2"'
+end
+
+desc "Publish website to sourceforge."
+task :publish_site do
+end
+
 
 desc "Build the ray tracer (rt)"
 task :rt do |task_info|
@@ -105,8 +119,7 @@ task :rt do |task_info|
     }
 end
 
-# Default rule for .o files.  Any subdir specific stuff should be put in
-# var["<subdir>_conf"].
+# Default rule for .o files.  Any subdir specific stuff should be put in var["<subdir>_conf"].
 gen Rule, :o => :cpp do |task_info|
     cconf = var['cconf']
     mycconf = var["#{rant.current_subdir}_conf"]
