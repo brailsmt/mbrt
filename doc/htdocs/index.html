@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>MBRT:  Muy Bueno Ray Tracer</title>
+    </head>
+    <body>
+        <h2>What is this tripe?</h2>
+        This is the very weak homepage for mbrt, the little ray tracer that
+        could.  Right now there isn't much to say.  mbrt is a ray tracer.  It
+        isn't anywhere near what pov-ray is, but it'd be sweet to get at least 
+        a few users.  :)
+        <h2>What does mbrt do?</h2>
+        It traces rays.  A ray tracer is like a cow in a "joke" my Physics
+        professor told us once.  When a Physicist is asked how much milk the average cow can
+        hold, the physicisy begins with "To simplify, let us begin by
+        stating that a cow approximates a perfect sphere and the milk capacity of
+        said cow approaches the volume of the sphere."  :)  A ray tracer is
+        much the same, we make some massively insane approximations and call
+        it good, then see what we get.  Surprisingly, we can get pretty darn
+        close to what we expect to see in the real world.
+        <h2>What are the goals for mbrt?</h2>
+        They are pretty loosely defined at the moment.  We currently have
+        implemented a plugin system for renderable objects and materials.
+        This means that it is easy for someone to write the code for detecting
+        a collision with some renderable object and plug it into mbrt and it
+        will render just as though it were a built in renderable object.  In
+        addition to nifty little feature, we also plan to make mbrt
+        networkable.  So you can set up render farms of all the old machines
+        you have lieing around and render an image on the image farm.  In
+        addition we plan on making it multithreaded as well.  We would like to
+        support a wide array of renderable objects and scene descriptions.  In
+        our wildest dreams, mbrt will one day gain a modicum of noteriety and
+        be useful as a general ray tracer by many people.
+        <h2>Stay Tuned</h2>
+        We have made great progress in the last month.  We added the plugin
+        system, we added support for many types of bumpmaps and texture
+        mapping, polygons and planes, we added some adaptive supersampling
+        performance improvements, coverage reports and profiling, and we added
+        support for reading and writing many image formats.  There is a lot
+        left to do, and we are working feverishly to improve the architecture
+        and performance as well as advance the feature set as quickly as
+        possible.
+
+        <h2>Documentation</h2>
+        mbrt uses Doxygen to generate API documentation, feel free to view the <a
+            href="doxygen/index.html">mbrt API</a> online.
+    </body>
+</html>

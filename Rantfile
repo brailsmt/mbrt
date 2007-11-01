@@ -100,6 +100,9 @@ end
 
 desc "Publish website to sourceforge."
 task :publish_site do
+    sys 'cd doc/htdocs; tar cjvf ../htdocs.tbz2 .'
+    sys 'scp doc/htdocs.tbz2 shell.sf.net:/home/groups/m/mb/mbrt/htdocs'
+    sys 'ssh shell.sf.net "rm -f /home/groups/m/mb/mbrt/htdocs; cd /home/groups/m/mb/mbrt/htdocs; tar xjvf htdocs.tbz2 > /dev/null; rm htdocs.tbz2"'
 end
 
 
