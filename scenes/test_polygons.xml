@@ -6,7 +6,7 @@
         -->
         <width  pixels="512" />
         <height pixels="512" />
-        <file name="renders/test_polygons.ppm" />
+        <file name="renders/test_polygons.png" />
         <subpixels square_of='2'/>
         <recurse max_depth="1" />
     </meta>

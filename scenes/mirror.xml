@@ -1,14 +1,14 @@
 <scene>
     <meta>
-        <width  pixels="248" />
-        <height pixels="248" />
-        <subpixels square_of='3'/>
+        <width  pixels="512" />
+        <height pixels="512" />
+        <subpixels square_of='1'/>
 
-        <file name="renders/silver_ball_water.ppm" />
-        <recurse max_depth='15' />
+        <file name="renders/mirror.png" />
+        <recurse max_depth='1' />
     </meta>
 
-    <camera x='0.0' y='-5.50' z='-60.0'  />
+    <camera x='0.0' y='-5.50' z='-30.0'  />
 
 
     <colors>

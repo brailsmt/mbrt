@@ -22,7 +22,7 @@
     </colors>
 
     <materials>
-        <material name='imagemap'    type='image' image='util/warning.ppm'   />
+        <material name='imagemap'    type='image' image='util/warning.png'   />
         <material name='checker'     type='image' image='util/earth.jpg'   />
         <material name='solid_white' type='solid' color='white'   />
         <material name='solidblack' type='solid' color='black'   />

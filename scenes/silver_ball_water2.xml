@@ -9,7 +9,7 @@
         <height pixels="512" />
         <subpixels square_of='5'/>
 
-        <file name="renders/silver_ball_water.ppm" />
+        <file name="renders/silver_ball_water.png" />
         <recurse max_depth='5' />
     </meta>
 

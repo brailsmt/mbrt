@@ -1,15 +1,15 @@
 <scene>
     <meta>
-        <width  pixels="1024" />
-        <height pixels="1024" />
+        <width  pixels="512" />
+        <height pixels="512" />
         <!--
         <width  pixels="256" />
         <height pixels="256" />
         <subpixels square_of='10'/>
         -->
-        <subpixels square_of='5'/>
+        <subpixels square_of='1'/>
 
-        <file name="renders/silver_ball_water.ppm" />
+        <file name="renders/silver_ball_water.png" />
         <recurse max_depth='5' />
     </meta>
 
@@ -31,7 +31,7 @@
         <material name='solidWhite'  type='solid' color='white' />
         <material name='solidBlue'   type='solid' color='blue' />
         <material name='solidSilver' type='solid' color='silver' /> 
-        <material name='solidBlack' type='solid'  color='black' /> 
+        <material name='solidBlack' type='solid'  reflectivity="70" color='black' /> 
     </materials>
 
     <light_sources>
@@ -40,6 +40,6 @@
 
     <objects>
         <sphere center="(0, -3, -10)" radius='3' material='solidBlack'   />
-        <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solidBlue" bumpmap='ripple'/>
+        <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="solidBlue"/>
     </objects>
 </scene>

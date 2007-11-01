@@ -64,7 +64,7 @@ var[:clean].include "**/*.gc*",
                     "c_dependencies",
                     "rt",
                     "doc/dox.tbz2",
-                    "doc/**"
+                    "doc/doxygen/**"
 
 desc "Generate coverage reports"
 task :coverage => %w(run_scene gather_coverage)

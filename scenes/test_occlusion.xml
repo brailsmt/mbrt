@@ -2,7 +2,7 @@
     <meta>
         <width  pixels="512" />
         <height pixels="512" />
-        <file name="renders/test_occlusion.ppm" />
+        <file name="renders/test_occlusion.png" />
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />

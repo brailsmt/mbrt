@@ -2,7 +2,7 @@
     <meta>
         <width  pixels="400" />
         <height pixels="400" />
-        <file name="renders/test_center_material.ppm" />
+        <file name="renders/test_center_material.png" />
         <subpixels square_of='3'/>
     </meta>
 
