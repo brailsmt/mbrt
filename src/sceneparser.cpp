@@ -150,6 +150,10 @@ Renderable * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
     map<string, string> props = get_properties(node);
     if(props.find("location") != props.end()) {
         Point3D coords(props["location"]);
+        Point3D direction(props["look_at"]);
+
+        // From the location of the camera and the look_at coordinate we can
+        // determine the camera orientation.
         scene->set_camera(coords.x, coords.y, coords.z);
         log_debug("(%f, %f, %f)", coords.x, coords.y, coords.z);
     }

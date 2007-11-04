@@ -21,6 +21,7 @@
 #include "ray.h"
 #include "scene.h"
 #include "color.h"
+#include "matrix.h"
 
 using std::vector;
 using std::cout;
@@ -37,14 +38,18 @@ void trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
 /// Trace a ray for each pixel in image.
 ///
 /// @param data Image imformation that will be populated by tracing the rays.
-/// @param eye The origin of all rays shot into the scene.
+/// @param camera The origin of all rays shot into the scene.
 //{{{
-unsigned long trace_rays(Image & img, Point3D eye) {
+unsigned long trace_rays(Image & img, Point3D camera) {
     //The image canvas is located around the origin of world space coordinates (0,0,0)
     double min_x, max_x;
     double min_y, max_y;
     Scene * scene = Scene::get_instance();
 
+    // This defines the window that the camera is looking out of.  It is a
+    // window that is fixed at 32x32 units wide.  Each unit varies its
+    // dimension based on the number of pixels used to paint the image on the
+    // window.
     max_x = 16;
     min_x = -max_x;
     max_y = 16 * ((double)scene->get_viewport_pixel_height() / (double)scene->get_viewport_pixel_width());
@@ -63,10 +68,15 @@ unsigned long trace_rays(Image & img, Point3D eye) {
     /// to compare algorithms and provide choice for users and flexibility for
     /// future algorithms.
 
-    // This is where the ray will intersect the viewing plane, the window that the 'eye' is
+    // This is where the ray will intersect the viewing plane, the window that the 'camera' is
     // looking out of.
     Point3D screen_intersection(start_x, start_y, 0.0);
     rt_info.rendered_pixels = 0;
+    Matrix xfrm = Matrix::translate(camera) * Matrix::rotate_x(M_PI_2);
+    xfrm.to_log();
+    log_info("%s", xfrm.transform(Point3D(0,0,0)).to_string().c_str());
+    log_info("%s", xfrm.transform(Point3D(1,2,3)).to_string().c_str());
+
     for (int y = 0; y < scene->get_viewport_pixel_height(); ++y) {
         screen_intersection.x = start_x;
         for (int x = 0; x < scene->get_viewport_pixel_width(); ++x) {
@@ -82,12 +92,12 @@ unsigned long trace_rays(Image & img, Point3D eye) {
 
             ColorRGB color;
             Point3D p = Point3D(screen_intersection.x, screen_intersection.y, screen_intersection.z);
-            Ray ray(eye, p - eye);
+            Ray ray(camera, xfrm.transform(p)-camera);
             trace_ray(color, ray, 0);
 
             p = Point3D(screen_intersection.x + (dx * modifier), screen_intersection.y, screen_intersection.z);
             ColorRGB next_color;
-            Ray next_ray(eye, p - eye);
+            Ray next_ray(camera, xfrm.transform(p)-camera);
             trace_ray(next_color, next_ray, 0);
 
             if(!(color == next_color)) {
@@ -125,9 +135,9 @@ unsigned long trace_rays(Image & img, Point3D eye) {
                         // THIS IS NOT FOCAL LENGTH!  DON'T CHANGE BACK.
                         Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
 
-                        // Calculate the ray from the eye to the point where it
+                        // Calculate the ray from the camera to the point where it
                         // intersect the viewport.
-                        Ray ray(eye, subpixel - eye);
+                        Ray ray(camera, xfrm.transform(subpixel)-camera);
 
                         // Trace the ray into the scene, recording the pixel's color value.
                         ColorRGB color;
@@ -164,7 +174,7 @@ unsigned long trace_rays(Image & img, Point3D eye) {
 }
 //}}}
 
-/// Trace a ray from the coordinate of the eye, through every pixel in the image.
+/// Trace a ray from the coordinate of the camera, through every pixel in the image.
 ///
 /// @param pixel The pixel in the image which will be calculated by tracing the ray.
 /// @param ray The ray to be traced.

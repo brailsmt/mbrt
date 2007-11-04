@@ -3,8 +3,8 @@
         <width  pixels="1024" />
         <height pixels="1024" />
         <file name="renders/red_ball_on_checkerboard.png" />
-        <subpixels square_of='5'/>
-        <recurse max_depth="1" />
+        <subpixels square_of='2'/>
+        <recurse max_depth="4" />
     </meta>
 
     <camera x='0.0' y='-2.0' z='-17.0'  />

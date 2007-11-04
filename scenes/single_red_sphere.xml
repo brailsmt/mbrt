@@ -7,10 +7,10 @@
         <recurse max_depth='1' />
     </meta>
 
-    <camera x='0.0' y='-1.0' z='-10' />
+    <camera x='10.0' y='-1.0' z='-10' />
 
     <materials>
-        <material name='moon'        type='image' image='util/moon.png' />
+        <!--<material name='moon'        type='image' image='util/moon.png' />-->
         <material name='solid_red'   type='solid' color='red'   />
         <material name='solid_white' type='solid' color='white' />
     </materials>
@@ -21,6 +21,6 @@
 
 
     <objects>
-        <sphere x='  0' y=' 0' z='  0' radius='4' material='moon' />
+        <sphere x='  0' y=' 0' z='10' radius='4' material='solid_red' />
     </objects>
 </scene>

@@ -93,6 +93,7 @@ class Point3D {
 };
 //}}}
 
+
 // This is inline, it must be defined in the header.
 /// Calculate the distant from this point to another point.
 ///
