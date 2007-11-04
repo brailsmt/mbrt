@@ -7,11 +7,11 @@
         <width  pixels="512" />
         <height pixels="384" />
         <file name="renders/wikipedia_lookalike.png" />
-        <subpixels square_of='3'/>
+        <subpixels square_of='1'/>
         <recurse max_depth='7' />
     </meta>
 
-    <camera x='0' y='8.5' z='0' look_at='(0, 0, -2)' />
+    <camera location='(3, 6, -8)' look_at='(0, 0, -2)' />
 
     <materials>
         <material name='solidBlue'   type='solid' color='blue'  />
@@ -24,13 +24,13 @@
     </materials>
 
     <light_sources>
-        <sphere x='8.0' y='12' z='-16.2' radius='0.1' material='solidWhite'   />
+        <sphere center='(8.0, 12, -16.2)' radius='0.1' material='solidWhite'   />
     </light_sources>
 
     <objects>
-        <sphere x='-2.5' y='1' z='0' radius='1' material='solidRed'   />
-        <sphere x='   0' y='1' z='0' radius='1' material='solidGreen'   />
-        <sphere x=' 2.5' y='1' z='0' radius='1' material='solidBlue'   />
+        <sphere center='(-2.5, 1, 0)' radius='1' material='solidRed'   />
+        <sphere center='(   0, 1, 0)' radius='1' material='solidGreen'   />
+        <sphere center='( 2.5, 1, 0)' radius='1' material='solidBlue'   />
         <plane p0="(0.01,0.01,0.01)" p1="(1.01,0.01,0.01)" p2="(0.01,0.01,1.01)" material="checkered"/>
     </objects>
 </scene>
