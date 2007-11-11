@@ -71,7 +71,7 @@ class Renderable {
         virtual Magick::Color get_color_contribution(const Point3D &intersection_point, const Ray &ray, Vector &reflect, Vector &refract) ;
 
         bool is_in_shadow(const Ray &ray_to_light, const Point3D intersection_point) {
-            double dist = INF;
+            double dist = INFINITY;
             Renderable * prim = NULL;
             Scene * scene = Scene::get_instance();
 

@@ -7,7 +7,7 @@
         <recurse max_depth='1' />
     </meta>
 
-    <camera x='10.0' y='-1.0' z='-10' />
+    <camera location='(0.0, 0.0, -10.0)' look_at='(0,0,0)'/>
 
     <materials>
         <!--<material name='moon'        type='image' image='util/moon.png' />-->
@@ -21,6 +21,12 @@
 
 
     <objects>
-        <sphere x='  0' y=' 0' z='10' radius='4' material='solid_red' />
+        <sphere center='(  0,   0,  10)' radius='4' material='solid_red' />
+        <!--
+        <sphere center='(  0,  10,   0)' radius='4' material='solid_red' />
+        <sphere center='(  0, -10,   0)' radius='4' material='solid_red' />
+        <sphere center='( 10,   0,   0)' radius='4' material='solid_red' />
+        <sphere center='(-10,   0,   0)' radius='4' material='solid_red' />
+        -->
     </objects>
 </scene>

@@ -4,7 +4,6 @@
 #include <cmath>
 #include <sstream>
 #include <algorithm>
-#include "raytrace_defs.h"
 
 class Point3D;
 typedef Point3D Vector;
@@ -41,7 +40,7 @@ class Point3D {
         /// Creates a point in three space by parsing a string of the form
         /// "(x, y, z)".
         Point3D(std::string str) {
-            syslog(LOG_INFO, "%s", str.c_str());
+            //syslog(LOG_INFO, "%s", str.c_str());
             // remove all whitespace
             std::string::iterator end;
             std::remove_if(str.begin(), end, iswhitespace);

@@ -154,17 +154,13 @@ Renderable * SceneParser::parse_camera(Scene * scene, xmlNode * node) {
 
         // From the location of the camera and the look_at coordinate we can
         // determine the camera orientation.
-        scene->set_camera(coords.x, coords.y, coords.z);
-        log_debug("(%f, %f, %f)", coords.x, coords.y, coords.z);
+        scene->set_camera(Camera(coords, direction));
     }
     else {
-        scene->set_camera((double)strtod(props["x"].c_str(), NULL),
-                          (double)strtod(props["y"].c_str(), NULL),
-                          (double)strtod(props["z"].c_str(), NULL));
-
-        log_debug("(%f, %f, %f)", (double)strtod(props["x"].c_str(), NULL),
-                                  (double)strtod(props["y"].c_str(), NULL),
-                                  (double)strtod(props["z"].c_str(), NULL));
+        Point3D coords((double)strtod(props["x"].c_str(), NULL),
+                       (double)strtod(props["y"].c_str(), NULL),
+                       (double)strtod(props["z"].c_str(), NULL));
+        scene->set_camera(Camera(coords));
     }
 
     log_debug("Leaving SceneParser::parse_camera()\n");

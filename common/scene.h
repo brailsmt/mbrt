@@ -2,11 +2,14 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "camera.h"
 #include "raytrace_defs.h"
+
 #include <map>
 #include <vector>
 #include <string>
 #include <Magick++.h>
+
 
 /// The max depth to which we will bounce rays.  After MAX_DEPTH reflections/refractions, stop.
 const int MAX_DEPTH = 15;
@@ -36,7 +39,7 @@ class Scene {
         std::map<std::string, BumpMap *> m_bumpmaps;
         
         /// This is the point which describes the camera or eye which is looking into the scene.
-        Point3D camera;
+        Camera camera;
 
         /// This is the width, in pixels, of the rendered image.
         int pixel_width;
@@ -83,8 +86,8 @@ class Scene {
         /// Return the point from which all rays originate.
         ///
         /// @return The point which all rays originate.
-        Point3D get_camera () const { return camera; }
-        void set_camera (double x, double y, double z) { camera = Point3D(x, y, z); }
+        Camera get_camera () const { return camera; }
+        void set_camera (Camera _camera) { camera = _camera; }
 
         /// Return the filename for the rendered image.
         ///

@@ -10,7 +10,7 @@
 #include <string>
 #include <cstdio>
 
-#include "point3d.h"
+#include "raytrace_defs.h"
 
 /// Represents a 4x4 matrix and provides that operations required to compose
 /// matrices for transformations in the 3D space.
@@ -24,22 +24,10 @@ class Matrix {
         Matrix(double _00, double _01, double _02,
                double _10, double _11, double _12,
                double _20, double _21, double _22) {
-            matrix[0][0] = _00;
-            matrix[0][1] = _01;
-            matrix[0][2] = _02;
-            matrix[0][3] =   1;
-            matrix[1][0] = _10;
-            matrix[1][1] = _11;
-            matrix[1][2] = _12;
-            matrix[1][3] =   1;
-            matrix[2][0] = _20;
-            matrix[2][1] = _21;
-            matrix[2][2] = _22;
-            matrix[2][3] =   1;
-            matrix[3][0] =   0;
-            matrix[3][1] =   0;
-            matrix[3][2] =   0;
-            matrix[3][3] =   1;
+            matrix[0][0] = _00; matrix[0][1] = _01; matrix[0][2] = _02; matrix[0][3] =   0;
+            matrix[1][0] = _10; matrix[1][1] = _11; matrix[1][2] = _12; matrix[1][3] =   0;
+            matrix[2][0] = _20; matrix[2][1] = _21; matrix[2][2] = _22; matrix[2][3] =   0;
+            matrix[3][0] =   0; matrix[3][1] =   0; matrix[3][2] =   0; matrix[3][3] =   1;
         }
         //}}}
 
@@ -49,22 +37,10 @@ class Matrix {
                double _10,     double _11,     double _12,     double _13,
                double _20,     double _21,     double _22,     double _23,
                double _30 = 0, double _31 = 0, double _32 = 0, double _33 = 1) {
-            matrix[0][0] = _00;
-            matrix[0][1] = _01;
-            matrix[0][2] = _02;
-            matrix[0][3] = _03;
-            matrix[1][0] = _10;
-            matrix[1][1] = _11;
-            matrix[1][2] = _12;
-            matrix[1][3] = _13;
-            matrix[2][0] = _20;
-            matrix[2][1] = _21;
-            matrix[2][2] = _22;
-            matrix[2][3] = _23;
-            matrix[3][0] = _30;
-            matrix[3][1] = _31;
-            matrix[3][2] = _32;
-            matrix[3][3] = _33;
+            matrix[0][0] = _00; matrix[0][1] = _01; matrix[0][2] = _02; matrix[0][3] = _03;
+            matrix[1][0] = _10; matrix[1][1] = _11; matrix[1][2] = _12; matrix[1][3] = _13;
+            matrix[2][0] = _20; matrix[2][1] = _21; matrix[2][2] = _22; matrix[2][3] = _23;
+            matrix[3][0] = _30; matrix[3][1] = _31; matrix[3][2] = _32; matrix[3][3] = _33;
         }
         //}}}
 
@@ -72,22 +48,10 @@ class Matrix {
         /// Constructs the identity matrix.
         //{{{
         Matrix() {
-            matrix[0][0] = 1;
-            matrix[0][1] = 0;
-            matrix[0][2] = 0;
-            matrix[0][3] = 0;
-            matrix[1][0] = 0;
-            matrix[1][1] = 1;
-            matrix[1][2] = 0;
-            matrix[1][3] = 0;
-            matrix[2][0] = 0;
-            matrix[2][1] = 0;
-            matrix[2][2] = 1;
-            matrix[2][3] = 0;
-            matrix[3][0] = 0;
-            matrix[3][1] = 0;
-            matrix[3][2] = 0;
-            matrix[3][3] = 1;
+            matrix[0][0] = 1; matrix[0][1] = 0; matrix[0][2] = 0; matrix[0][3] = 0;
+            matrix[1][0] = 0; matrix[1][1] = 1; matrix[1][2] = 0; matrix[1][3] = 0;
+            matrix[2][0] = 0; matrix[2][1] = 0; matrix[2][2] = 1; matrix[2][3] = 0;
+            matrix[3][0] = 0; matrix[3][1] = 0; matrix[3][2] = 0; matrix[3][3] = 1;
         }
         //}}}
 
@@ -161,7 +125,7 @@ class Matrix {
         Matrix operator*(const Matrix &B) const {
             Matrix rv;
 
-            log_info("here");
+            //log_info("here");
             for(int i = 0; i < 4; i++) {
                 for(int j = 0; j < 4; j++) {
                     rv.matrix[i][j] = this->matrix[0][j] * B.matrix[i][0] + 
@@ -174,10 +138,23 @@ class Matrix {
             return rv;
         }
         //}}}
+        //{{{
+        void operator*=(const Matrix &B) {
+            //log_info("here");
+            for(int i = 0; i < 4; i++) {
+                for(int j = 0; j < 4; j++) {
+                    matrix[i][j] = matrix[0][j] * B.matrix[i][0] + 
+                                   matrix[1][j] * B.matrix[i][1] + 
+                                   matrix[2][j] * B.matrix[i][2] + 
+                                   matrix[3][j] * B.matrix[i][3];
+                }
+            }
+        }
+        //}}}
 
         /// Transform the point passed in.
         //{{{
-        Point3D transform(const Point3D &pt) {
+        Point3D transform(const Point3D &pt) const {
             return Point3D(pt.x * matrix[0][0] + pt.y * matrix[0][1] + pt.z * matrix[0][2] + matrix[0][3],
                            pt.x * matrix[1][0] + pt.y * matrix[1][1] + pt.z * matrix[1][2] + matrix[1][3],
                            pt.x * matrix[2][0] + pt.y * matrix[2][1] + pt.z * matrix[2][2] + matrix[2][3]);
@@ -187,10 +164,10 @@ class Matrix {
 
         //{{{
         void to_log() {
-            log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3]);
-            log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3]);
-            log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]);
-            log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]);
+            //log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3]);
+            //log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3]);
+            //log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]);
+            //log_info("[%0-1.02f, %0-1.02f, %0-1.02f, %0-1.02f]", matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]);
         }
         //}}}
 };

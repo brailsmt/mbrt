@@ -8,7 +8,9 @@
 #include <syslog.h>
 
 #include "point3d.h"
+#include "matrix.h"
 #include "scene.h"
+#include "ray.h"
 
 /// Typical uchar typedef.
 typedef unsigned char uchar;
@@ -19,12 +21,8 @@ static const int HEIGHT = 512;
 /// The default width in pixels for the image.
 static const int WIDTH = 512;
 
-/// Inifinity for our purposes.
-const double INF = 1000000000.0;
-
 /// This determines how many iterations pass before reporting progress.
-const int REPORT_FACTOR = 5000;
-
+const int REPORT_FACTOR = 10000;
 
 /// This is the square root for the the default number of subpixels.
 const int SUBPIXEL_SQRT = 2;
@@ -37,13 +35,6 @@ const double OPAQUE = 0.0;
 
 /// Defines a completely transparent substance.
 const double TRANSPARENT = 1.0;
-
-/// The fields in this enum describe the sequence of color bytes in a color row
-enum {
-    RED = 0,
-    GREEN,
-    BLUE
-};
 
 /// Macro to log with the info severity.
 #define log_info(fmt, ...)    syslog(LOG_INFO, fmt,##__VA_ARGS__)
@@ -86,6 +77,9 @@ struct raytrace_info {
 
     /// Track the number of image pixels have been rendered.
     unsigned long rendered_pixels;
+
+    /// This the is the total number of pixels to be rendered.
+    unsigned long total_pixels;
 
     /// The time in seconds since the Epoch that the render began.
     time_t start_time;

@@ -83,7 +83,10 @@ end
 
 desc "Build the cscope database"
 file "cscope.out" => Rant::FileList[ '{plugins,common,src}/*.{h,cpp}' ] do |task_info|
-    sys 'cscope -R -I/usr/include -b `find . | grep \'\.cpp$\|\.h$\'`'
+    File.open("cscope.files", "w+") { |file|
+        file.puts task_info.deps
+    }
+    sys 'cscope -I/usr/include -b'
 end
 
 desc "Build documentation"

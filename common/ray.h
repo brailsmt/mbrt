@@ -2,10 +2,10 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "raytrace_defs.h"
-
 #include <iostream>
 #include <sstream>
+
+#include "point3d.h"
 
 /// Classic ray, with an origin and direction.
 //{{{

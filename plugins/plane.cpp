@@ -13,7 +13,7 @@ Plane::StaticInit Plane::m_init;
 Plane::Plane(Point3D p1, Point3D p2, Point3D p3, std::string color, std::string material_name, std::string bumpmap_name) 
     : m_point(p1)
 {
-    m_normal = Ray(p1, cross_product((p3 - p1), (p2 - p1)));
+    m_normal = Ray(p1, cross_product((p2 - p1), (p3 - p1)));
     m_d = dot_product(m_point, m_normal.direction());
 
     Scene * scene = Scene::get_instance();

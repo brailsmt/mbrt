@@ -40,20 +40,20 @@ void trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
 /// @param data Image imformation that will be populated by tracing the rays.
 /// @param camera The origin of all rays shot into the scene.
 //{{{
-unsigned long trace_rays(Image & img, Point3D camera) {
-    //The image canvas is located around the origin of world space coordinates (0,0,0)
-    double min_x, max_x;
-    double min_y, max_y;
+unsigned long trace_rays(Image & img, const Camera & camera) {
     Scene * scene = Scene::get_instance();
+    rt_info.rendered_pixels = 0;
 
     // This defines the window that the camera is looking out of.  It is a
-    // window that is fixed at 32x32 units wide.  Each unit varies its
+    // window that is fixed at 10x10 units wide.  Each unit varies its
     // dimension based on the number of pixels used to paint the image on the
     // window.
-    max_x = 16;
-    min_x = -max_x;
-    max_y = 16 * ((double)scene->get_viewport_pixel_height() / (double)scene->get_viewport_pixel_width());
-    min_y = -max_y;
+    /// @todo Make the viewport size configurable to fit the natural scale of any
+    /// image the user might want to render.
+    double max_x = 5;
+    double min_x = -max_x;
+    double max_y = 5 * ((double)scene->get_viewport_pixel_height() / (double)scene->get_viewport_pixel_width());
+    double min_y = -max_y;
 
     // dx and dy are the amount to add to each pixel to go to the next pixel
     double dx = (max_x - min_x) / scene->get_viewport_pixel_width();
@@ -71,11 +71,6 @@ unsigned long trace_rays(Image & img, Point3D camera) {
     // This is where the ray will intersect the viewing plane, the window that the 'camera' is
     // looking out of.
     Point3D screen_intersection(start_x, start_y, 0.0);
-    rt_info.rendered_pixels = 0;
-    Matrix xfrm = Matrix::translate(camera) * Matrix::rotate_x(M_PI_2);
-    xfrm.to_log();
-    log_info("%s", xfrm.transform(Point3D(0,0,0)).to_string().c_str());
-    log_info("%s", xfrm.transform(Point3D(1,2,3)).to_string().c_str());
 
     for (int y = 0; y < scene->get_viewport_pixel_height(); ++y) {
         screen_intersection.x = start_x;
@@ -92,13 +87,11 @@ unsigned long trace_rays(Image & img, Point3D camera) {
 
             ColorRGB color;
             Point3D p = Point3D(screen_intersection.x, screen_intersection.y, screen_intersection.z);
-            Ray ray(camera, xfrm.transform(p)-camera);
-            trace_ray(color, ray, 0);
+            trace_ray(color, camera.ray_through(p), 0);
 
             p = Point3D(screen_intersection.x + (dx * modifier), screen_intersection.y, screen_intersection.z);
             ColorRGB next_color;
-            Ray next_ray(camera, xfrm.transform(p)-camera);
-            trace_ray(next_color, next_ray, 0);
+            trace_ray(next_color, camera.ray_through(p), 0);
 
             if(!(color == next_color)) {
                 vector<ColorRGB> colors;
@@ -135,13 +128,9 @@ unsigned long trace_rays(Image & img, Point3D camera) {
                         // THIS IS NOT FOCAL LENGTH!  DON'T CHANGE BACK.
                         Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
 
-                        // Calculate the ray from the camera to the point where it
-                        // intersect the viewport.
-                        Ray ray(camera, xfrm.transform(subpixel)-camera);
-
                         // Trace the ray into the scene, recording the pixel's color value.
                         ColorRGB color;
-                        trace_ray(color, ray, 0);
+                        trace_ray(color, camera.ray_through(subpixel), 0);
                         colors.push_back(color);
 
                         sx += sdx;
@@ -182,7 +171,7 @@ unsigned long trace_rays(Image & img, Point3D camera) {
 //{{{
 void trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
     Renderable * primitive = NULL;
-    double dist = INF;
+    double dist = INFINITY;
     Scene * scene = Scene::get_instance();
     int max_depth = scene->get_max_recurse_depth();
 
@@ -195,13 +184,24 @@ void trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
         // Track statistics.    {{{
         rt_info.traced_rays++;
         if (rt_info.traced_rays % REPORT_FACTOR == 0) {
-            int x, y;
-            getyx(stdscr, y, x);
             long t = (long)difftime(time(NULL), rt_info.start_time);
-            mvprintw(y - 1, 0, "Elapsed time:  %02i:%02i:%02i", t / 3600, (t / 60) % 60, t % 60);
-            mvprintw(y, x + 2, "%02.2f%% done", 100 * (double)(rt_info.rendered_pixels) / (double)(scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height()));
-            move(y, x);
-            refresh();
+            static bool pcts[10] = {false};
+            int pct = (int)(100 * ((double)rt_info.rendered_pixels / (double)rt_info.total_pixels));
+            if (pct % 10 == 0) {
+
+                if(pcts[(int)(pct*0.1)]) {
+                    cout << '.';
+                }
+                else {
+                    cout << pct;
+                    pcts[(int)(pct*0.1)] = true;
+                }
+
+            }
+            else {
+                cout << '.';
+            }
+            cout.flush();
         }
         //}}}
 
@@ -245,6 +245,7 @@ void print_stats(string fname, int elapsed, long primary_rays, long traced_rays)
     seconds %= 3600;
     minutes = seconds / 60;
     seconds %= 60;
+
     cout << endl;
     cout << endl;
     cout << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
@@ -322,7 +323,7 @@ int main(int argc, char ** argv) {
         {0, 0, 0, 0}
     };
 
-    log_info("5*****************  Starting mbrt  ******************\n");
+    log_info("Processing options...\n");
     string outfname("");
     int opt_val = -2;
     while ( (opt_val = getopt_long (argc, argv, "s:o:", long_options, &option_index)) != -1 ) {
@@ -335,35 +336,25 @@ int main(int argc, char ** argv) {
             break;
         }
     }
-    log_info("4*****************  Starting mbrt  ******************\n");
-    unsigned long traced_rays;
-    int x, y;
-    initscr();
-    getmaxyx(stdscr, y, x);
-    mvprintw(y - 1, 0, "Tracing %s...", filename.c_str());
 
-    log_info("3*****************  Starting mbrt  ******************\n");
+    unsigned long traced_rays;
 
     ////////////
     // Render //
     ////////////
+    log_info("Reading %s...", filename.c_str());
     // Read the scene description XML file and build the Scene object.
-    log_info("3.9*****************  Starting mbrt  ******************\n");
     Scene * scene = Scene::get_instance(filename);
-    log_info("3.8*****************  Starting mbrt  ******************\n");
+    rt_info.total_pixels = scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height();
     if(outfname == "") {
-    log_info("3.7*****************  Starting mbrt  ******************\n");
         outfname = scene->get_output_filename();
     }
-    log_info("3.6*****************  Starting mbrt  ******************\n");
-
-    log_info("2*****************  Starting mbrt  ******************\n");
 
     // Create the Image object.
     Image img(scene->get_geometry(), "red");
-    log_info("1*****************  Starting mbrt  ******************\n");
 
     // Trace the scene.
+    log_info("Rendering...\n");
     traced_rays = trace_rays(img, scene->get_camera());
 
     // Save the image.
@@ -374,7 +365,6 @@ int main(int argc, char ** argv) {
     time_t end_time = time(NULL);
     int elapsed = end_time - start_time;
     int primary_rays = 4 * scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height();
-    endwin();
     cout << outfname << endl;
     print_stats(filename, elapsed, primary_rays, traced_rays);
 
