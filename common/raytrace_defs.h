@@ -106,7 +106,6 @@ inline double jitter(double limit) {
 /// Provide a way to cleanly shutdown ncurses and exit the application.
 //{{{
 inline void exit_mbrt(int code) {
-    endwin();
     log_info("******************  Aborting mbrt with status (%i)  ******************\n", code);
     closelog();
     exit(code);
