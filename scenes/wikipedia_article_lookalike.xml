@@ -5,9 +5,11 @@
         <file name="renders/wikipedia_lookalike.png" />
         <subpixels square_of='2'/>
         <recurse max_depth='7' />
+        <window width="15" height="15" />
+        <report every="1000" />
     </meta>
 
-    <camera location='(-3, -6, -8)' look_at='(0, 0, -2)' />
+    <camera location='(-3, -6, -18)' look_at='(10, 10, 20)' />
 
     <materials>
         <material name='solidBlue'   type='solid' color='blue'  />

@@ -30,6 +30,7 @@ using std::string;
 using Magick::Image;
 using Magick::Color;
 using Magick::ColorRGB;
+using Magick::Exception;
 
 struct raytrace_info rt_info;
 
@@ -50,9 +51,9 @@ unsigned long trace_rays(Image & img, const Camera & camera) {
     // window.
     /// @todo Make the viewport size configurable to fit the natural scale of any
     /// image the user might want to render.
-    double max_x = 5;
+    double max_x = scene->get_window_width() * 0.5;
     double min_x = -max_x;
-    double max_y = 5 * ((double)scene->get_viewport_pixel_height() / (double)scene->get_viewport_pixel_width());
+    double max_y = (scene->get_window_height() * 0.5) * ((double)scene->get_viewport_pixel_height() / (double)scene->get_viewport_pixel_width());
     double min_y = -max_y;
 
     // dx and dy are the amount to add to each pixel to go to the next pixel
@@ -148,7 +149,13 @@ unsigned long trace_rays(Image & img, const Camera & camera) {
                     blue  += iter->blue();
                 }
                 int colors_size = colors.size();
-                color = ColorRGB((red / colors_size), (green / colors_size), (blue / colors_size));
+                try {
+                    color = ColorRGB((red / colors_size), (green / colors_size), (blue / colors_size));
+                }
+                catch(Exception e) {
+                    color = ColorRGB(1,0,0);
+                    cout << e.what();
+                }
             }
 
             img.pixelColor(x, y, color);
@@ -163,6 +170,65 @@ unsigned long trace_rays(Image & img, const Camera & camera) {
 }
 //}}}
 
+/// Track statistics.
+/// {{{
+void track_stats(int depth) {
+    if ( depth == 0 ) {
+        rt_info.primary_rays++;
+    }
+
+    rt_info.traced_rays++;
+
+    if (rt_info.traced_rays % REPORT_FACTOR == 0) {
+        long t = (long)difftime(time(NULL), rt_info.start_time);
+        static bool pcts[10] = {false};
+        int pct = (int)(100 * ((double)rt_info.rendered_pixels / (double)rt_info.total_pixels));
+        if (pct % 10 == 0) {
+
+            if(pcts[(int)(pct*0.1)]) {
+                cout << '.';
+            }
+            else {
+                cout << pct;
+                pcts[(int)(pct*0.1)] = true;
+            }
+
+        }
+        else {
+            cout << '.';
+        }
+        cout.flush();
+    }
+}
+//}}}
+
+/// Print statistics about the render.
+//{{{
+void print_stats(string fname, int elapsed, long primary_rays, long traced_rays) {
+    int hours, minutes, seconds;
+    seconds = elapsed;
+    hours = seconds / 3600;
+    seconds %= 3600;
+    minutes = seconds / 60;
+    seconds %= 60;
+
+    cout << endl;
+    cout << endl;
+    cout << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
+    cout << endl;
+    cout << endl;
+
+    printf("Rendering %s took %i seconds (%02i:%02i:%02i)\n", fname.c_str(), elapsed, hours, minutes, seconds);
+
+    cout.setf(cout.fixed);
+    cout.precision(5);
+    cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
+    cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
+    cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
+}
+//}}}
+
+
 /// Trace a ray from the coordinate of the camera, through every pixel in the image.
 ///
 /// @param pixel The pixel in the image which will be calculated by tracing the ray.
@@ -176,34 +242,7 @@ void trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
     int max_depth = scene->get_max_recurse_depth();
 
     if (depth <= max_depth) {
-
-        if ( depth == 0 ) {
-            rt_info.primary_rays++;
-        }
-
-        // Track statistics.    {{{
-        rt_info.traced_rays++;
-        if (rt_info.traced_rays % REPORT_FACTOR == 0) {
-            long t = (long)difftime(time(NULL), rt_info.start_time);
-            static bool pcts[10] = {false};
-            int pct = (int)(100 * ((double)rt_info.rendered_pixels / (double)rt_info.total_pixels));
-            if (pct % 10 == 0) {
-
-                if(pcts[(int)(pct*0.1)]) {
-                    cout << '.';
-                }
-                else {
-                    cout << pct;
-                    pcts[(int)(pct*0.1)] = true;
-                }
-
-            }
-            else {
-                cout << '.';
-            }
-            cout.flush();
-        }
-        //}}}
+        track_stats(depth);
 
         if ((primitive = scene->find_collision(ray, dist)) != NULL) {
             Vector dir = ray.direction();
@@ -233,32 +272,6 @@ void trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
             //}}}
         }
     }
-}
-//}}}
-
-/// Print statistics about the render.
-//{{{
-void print_stats(string fname, int elapsed, long primary_rays, long traced_rays) {
-    int hours, minutes, seconds;
-    seconds = elapsed;
-    hours = seconds / 3600;
-    seconds %= 3600;
-    minutes = seconds / 60;
-    seconds %= 60;
-
-    cout << endl;
-    cout << endl;
-    cout << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
-    cout << endl;
-    cout << endl;
-
-    printf("Rendering %s took %i seconds (%02i:%02i:%02i)\n", fname.c_str(), elapsed, hours, minutes, seconds);
-
-    cout.setf(cout.fixed);
-    cout.precision(5);
-    cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
-    cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
-    cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
 }
 //}}}
 

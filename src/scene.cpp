@@ -36,6 +36,7 @@ Scene::Scene()
       subpixels(SUBPIXEL_SQRT),
       max_depth(MAX_DEPTH)
 {
+    window_dims.first = window_dims.second = 10;
 }
 //}}}
 //{{{

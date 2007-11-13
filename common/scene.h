@@ -56,6 +56,12 @@ class Scene {
         /// This is the maximum levels of recursion allowed for this scene.
         int max_depth;
 
+        /// This is the width and height of the window in world space.
+        std::pair<double, double> window_dims;
+
+        /// This is frequency with which progress will be reported.
+        int report_freq;
+
         /// Loads a scene from the XML file named by scene_file_name.
         Scene();
 
@@ -136,6 +142,27 @@ class Scene {
         /// Return the size of the image as an X11 geometry string.  This is
         /// needed by ImageMagick.
         std::string get_geometry();
+
+        /// Set the size of the window through which the camera looks at the
+        /// scene.
+        void set_window_size(double w, double h) {
+            window_dims.first  = w;
+            window_dims.second = h;
+        }
+
+        /// Return the window width.
+        double get_window_width() { return window_dims.first; }
+        /// Return the window height.
+        double get_window_height() { return window_dims.second; }
+
+        /// Set the frequency with which progress is reported in terms of
+        /// rays.
+        void set_report_frequency(int freq) {
+            report_freq = freq;
+        }
+
+        int get_report_frequency() { return report_freq; }
+
 };
 //}}}
 

@@ -42,11 +42,11 @@ class Camera {
 
         Camera(Point3D loc, Point3D look_at) : location(loc) {
             // Determine the amount of rotation about the x-axis.
-            xfrm *= Matrix::rotate_x(0);//-sin((direction.x - coords.x)/(direction.y - coords.y)));
+            xfrm *= Matrix::rotate_x(sin((loc.x - look_at.x)/(loc.y - look_at.y)));
             // Determine the amount of rotation about the y-axis.
-            xfrm *= Matrix::rotate_y(0);//+sin((direction.y - coords.y)/(direction.z - coords.z)));
+            xfrm *= Matrix::rotate_y(-sin((loc.y - look_at.y)/(loc.z - look_at.z)));
             // Determine the amount of rotation about the z-axis.
-            xfrm *= Matrix::rotate_z(0);//-sin((direction.z - coords.z)/(direction.x - coords.x)));
+            //xfrm *= Matrix::rotate_z(-sin((loc.z - look_at.z)/(loc.x - look_at.x)));
         }
 
 		virtual ~Camera() {}

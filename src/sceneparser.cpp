@@ -16,8 +16,6 @@
 using std::map;
 using std::vector;
 using std::string;
-using Magick::Color;
-using Magick::ColorRGB;
 
 //{{{
 SceneParser::SceneParser(string scene_filename)
@@ -135,6 +133,13 @@ Renderable * SceneParser::parse_meta(Scene * scene, xmlNode * node) {
         }
         else if(strcmp((char *)child->name, "recurse") == 0) {
             scene->set_max_recurse_depth(strtol(props["max_depth"].c_str(), NULL, 0));
+        }
+        else if(strcmp((char *)child->name, "window") == 0) {
+            scene->set_window_size(strtol(props["width"].c_str(), NULL, 0),
+                    strtol(props["height"].c_str(), NULL, 0));
+        }
+        else if(strcmp((char *)child->name, "report") == 0) {
+            scene->set_report_frequency(strtol(props["every"].c_str(), NULL, 0));
         }
 
         child = child->next;
