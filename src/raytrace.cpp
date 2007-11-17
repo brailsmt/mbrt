@@ -158,7 +158,13 @@ unsigned long trace_rays(Image & img, const Camera & camera) {
                 }
             }
 
-            img.pixelColor(x, y, color);
+            try {
+                img.pixelColor(x, y, color);
+            }
+            catch(Exception e) {
+                img.pixelColor(x, y, ColorRGB(1,0,0));
+                cout << e.what();
+            }
 
             screen_intersection.x += dx;
         }

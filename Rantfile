@@ -20,7 +20,7 @@ cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
 
-cconf.add_cflags( "-g -rdynamic" )
+cconf.add_cflags( "-g -rdynamic -I/usr/lib/ruby/1.8/i686-linux/" )
 cconf.add_pkg_config( "libxml-2.0" )
 cconf.add_pkg_config( "sigc++-2.0" ) 
 cconf.add_pkg_config( "ImageMagick++" ) 
@@ -34,7 +34,7 @@ cconf.optional_config("gcov", false)  {
 
 #Add our compiler flags for libnetpbm
 cconf.add_libs( SUBLIBS )
-cconf.add_libs( "-lm" ) 
+cconf.add_libs( "-lm -lruby" ) 
 
 #store the compiler config in var
 var['cconf'] = cconf

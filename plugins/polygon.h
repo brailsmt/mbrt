@@ -112,7 +112,7 @@ Renderable * new_polygon(xmlNode * node) {
 }
 //}}}
 //{{{
-void delete_plane(Polygon * polygon) {
+void delete_polygon(Polygon * polygon) {
     delete polygon, polygon = NULL;
 }
 //}}}
