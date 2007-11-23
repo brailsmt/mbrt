@@ -150,8 +150,7 @@ inline double dot_product(const Vector &A, const Vector &B) {
 /// The cross product of two vectors is the normal vector to
 /// a plane defined by the two vectors
 //{{{
-inline 
-Vector cross_product(const Vector& one, const Vector& two)
+inline Vector cross_product(const Vector& one, const Vector& two)
 {
     return Vector(one.y * two.z - one.z * two.y,
                   one.z * two.x - one.x * two.z,

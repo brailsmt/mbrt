@@ -6,9 +6,10 @@
 # version:    $Revision$
 # contents:   
 
-$-I << './ifaces'
-require 'mbrt'
+require 'ifaces/mbrt.rb'
+#include Mbrt
 
+#scene = Scene::get_instance
 puts "Hello World!"
 
 =begin

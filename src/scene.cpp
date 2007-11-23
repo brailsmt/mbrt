@@ -7,7 +7,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
-#include <ruby.h>
 
 using std::string;
 using std::vector;
@@ -17,19 +16,10 @@ using std::ostringstream;
 Scene * Scene::inst = NULL;
 
 //{{{
-Scene * Scene::get_instance(string scene_file_name) {
+Scene * Scene::get_instance() {
     if ( inst == NULL ) {
         log_debug("get_instance()\n");
         inst = new Scene();
-        if (scene_file_name.find(".rb") != string::npos) {
-            ruby_init();
-            ruby_script("mbrt");
-            rb_load_file(scene_file_name.c_str());
-            ruby_run();
-        }
-        else {
-            SceneParser sp(scene_file_name);
-        }
     }
 
     return inst;

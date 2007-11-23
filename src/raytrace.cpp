@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <string>
+#include <ruby.h>
 
 #include "raytrace_defs.h"
 #include "renderable.h"
@@ -363,7 +364,13 @@ int main(int argc, char ** argv) {
     ////////////
     log_info("Reading %s...", filename.c_str());
     // Read the scene description XML file and build the Scene object.
-    Scene * scene = Scene::get_instance(filename);
+    Scene * scene = Scene::get_instance();
+
+    ruby_init();
+    ruby_script("mbrt");
+    rb_load_file(filename.c_str());
+    ruby_run();
+
     rt_info.total_pixels = scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height();
     if(outfname == "") {
         outfname = scene->get_output_filename();
