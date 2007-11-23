@@ -6,7 +6,7 @@
 %nodefaultctor Scene;
 class Scene {
     public:
-        static Scene * get_instance(std::string scene_file_name = "");
+        static Scene * get_instance();
 
         Camera get_camera () const;
         void set_camera (Camera _camera);
@@ -32,4 +32,6 @@ class Scene {
         void set_window_size(double w, double h);
         double get_window_width();
         double get_window_height();
+
+        void add_primitive(Renderable * prim);
 };

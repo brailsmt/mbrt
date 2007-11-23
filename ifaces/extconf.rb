@@ -11,9 +11,9 @@ require 'mkmf'
 $CPPFLAGS = "-I../plugins -I../common -I../src -I/usr/include/libxml2 -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -fPIC"
 $LDFLAGS = "-lxml2 -lsigc-2.0 -lMagick++ -lWand -lMagick ../plugins/plugin.so ../src/renderable.o  ../src/scene.o ../src/sceneparser.o"
 
-dir_config("mbrt")
+dir_config("mbrt_wrap")
 
-create_makefile("mbrt")
+create_makefile("mbrt_wrap")
 
 =begin
 	change log
