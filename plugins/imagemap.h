@@ -12,7 +12,7 @@
 #include "solidmaterial.h"
 #include "pluginfactory.h"
 
-inline Material * new_immagemap_material(std::map<std::string, std::string> props);
+inline Material * new_imagemap_material(std::map<std::string, std::string> props);
 
 /// This class maps an image directly to a Renderable.
 class ImageMap : public Material {
@@ -24,7 +24,7 @@ class ImageMap : public Material {
             StaticInit()
             {
                 log_info("Registering as \"image\" ");
-                MaterialFactory::get_instance()->registerPlugin("image", sigc::ptr_fun(new_immagemap_material));
+                MaterialFactory::get_instance()->registerPlugin("image", sigc::ptr_fun(new_imagemap_material));
             }
     };
 
@@ -139,7 +139,7 @@ class ImageMap : public Material {
         virtual void set_opacity(double opacity);
 };
 
-Material * new_immagemap_material(std::map<std::string, std::string> props) {
+Material * new_imagemap_material(std::map<std::string, std::string> props) {
     bool isLight = props.count("light") > 0;
 
     std::string image_name("");
