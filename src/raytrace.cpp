@@ -367,7 +367,6 @@ int main(int argc, char ** argv) {
     Scene * scene = Scene::get_instance();
 
     ruby_init();
-    ruby_script("mbrt");
     rb_load_file(filename.c_str());
     ruby_run();
 

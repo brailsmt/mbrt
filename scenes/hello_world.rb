@@ -6,10 +6,37 @@
 # version:    $Revision$
 # contents:   
 
-require 'ifaces/mbrt.rb'
-#include Mbrt
+$: << Dir.pwd
 
-#scene = Scene::get_instance
+require 'ifaces/mbrt.rb'
+include Mbrt
+
+scene = Scene::get_instance
+
+# Set up the scene meta information
+meta = SceneMeta.new
+meta.pixel_dimension = Dimension.new(1024, 1024)
+meta.output_fname = "renders/single_red_sphere_rb.png"
+meta.subpixels = 1
+meta.max_depth = 1
+# Add the meta information to the scene
+scene << meta
+
+# Add the camera to the scene
+scene << Camera.new(Point3D.new(0,0,-50), Point3D.new(0,0,-2))
+
+# Add Materials to the scene
+scene << Material
+
+# Add the light sources
+light = Sphere.new(Point3D.new(20,-25,-50), 0.1)
+#light.set_is_light(1)
+scene << light
+
+# Add the objects to the scene
+scene << Sphere.new(Point3D.new(0,0,0), 1)
+
+puts scene
 puts "Hello World!"
 
 =begin

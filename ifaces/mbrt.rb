@@ -7,9 +7,21 @@
 # contents:   This file contains ruby code to help round out the mbrt ruby
 #             interface.  
 
+$: << "/usr/lib/ruby/site_ruby/1.8"
+$: << "/usr/lib/ruby/site_ruby/1.8/i686-linux"
+$: << "/usr/lib/ruby/site_ruby"
+$: << "/usr/lib/ruby/1.8"
+$: << "/usr/lib/ruby/1.8/i686-linux"
+$: << "/home/brailsmt/lib/ruby"
+$: << Dir.pwd + "/ifaces/"
+$: << Dir.pwd + "/plugins/"
+
+require 'dl'
 
 module Mbrt
 
+
+    DL.dlopen("plugins/plugin.so")
     require 'mbrt_wrap.so'
     include Mbrt_wrap
 
@@ -35,7 +47,7 @@ module Mbrt
                 set_pixel_height(obj.pixel_dimension.y)
                 set_subpixel_sqrt(obj.subpixels)
                 set_max_recurse_depth(obj.max_depth)
-                set_window_size(obj.win_dimension.x, obj.win_dimension.y)
+                #set_window_size(obj.win_dimension.x, obj.win_dimension.y)
             end
         end
     end
