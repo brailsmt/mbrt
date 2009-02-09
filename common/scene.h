@@ -162,7 +162,6 @@ class Scene {
         }
 
         int get_report_frequency() { return report_freq; }
-
 };
 //}}}
 

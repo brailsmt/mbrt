@@ -11,6 +11,8 @@ class Scene {
         Camera get_camera () const;
         void set_camera (Camera _camera);
 
+        std::string get_geometry();
+
         std::string get_output_filename() const;
         void set_output_filename(std::string fname);
 
@@ -34,4 +36,7 @@ class Scene {
         double get_window_height();
 
         void add_primitive(Renderable * prim);
+
+        std::string get_output_filename() const { return output_filename; }
+        void set_output_filename(std::string fname) { output_filename = fname; }
 };

@@ -11,6 +11,7 @@
 
 #include "pluginfactory.h"
 
+#include <cstring>
 #include <iostream>
 
 using std::map;

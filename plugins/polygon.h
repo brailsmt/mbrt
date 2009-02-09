@@ -10,6 +10,7 @@
 #include "raytrace_defs.h"
 #include "xml_util.h"
 #include "pluginfactory.h"
+#include <cstring>
 #include <vector>
 #include "point3d.h"
 

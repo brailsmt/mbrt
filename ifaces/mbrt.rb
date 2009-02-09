@@ -8,10 +8,10 @@
 #             interface.  
 
 $: << "/usr/lib/ruby/site_ruby/1.8"
-$: << "/usr/lib/ruby/site_ruby/1.8/i686-linux"
+$: << "/usr/lib/ruby/site_ruby/1.8/x86_64-linux"
 $: << "/usr/lib/ruby/site_ruby"
 $: << "/usr/lib/ruby/1.8"
-$: << "/usr/lib/ruby/1.8/i686-linux"
+$: << "/usr/lib/ruby/1.8/x86_64-linux"
 $: << "/home/brailsmt/lib/ruby"
 $: << Dir.pwd + "/ifaces/"
 $: << Dir.pwd + "/plugins/"
@@ -47,6 +47,7 @@ module Mbrt
                 set_pixel_height(obj.pixel_dimension.y)
                 set_subpixel_sqrt(obj.subpixels)
                 set_max_recurse_depth(obj.max_depth)
+                set_output_filename(obj.output_fname)
                 #set_window_size(obj.win_dimension.x, obj.win_dimension.y)
             end
         end

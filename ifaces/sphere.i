@@ -1,5 +1,6 @@
 
 %{
+#include "renderable.h"
 #include "sphere.h"
 %}
 
@@ -8,4 +9,5 @@
 %ignore Sphere::collides_with(const Ray &ray, double &t) const;
 %ignore Sphere::get_normal(const Point3D &p) const;
 
+%include "renderable.h"
 %include "sphere.h"

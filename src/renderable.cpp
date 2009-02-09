@@ -90,7 +90,7 @@ bool Renderable::is_light(const Point3D& intersection_point) const {
 }
 //}}}
 //{{{
-bool Renderable::set_is_light(bool v) {
+void Renderable::set_is_light(bool v) {
     m_material->set_is_light(v);
 }
 //}}}
@@ -177,7 +177,7 @@ Magick::Color Renderable::get_color_contribution(const Point3D &intersection_poi
                         double diffusion = get_diffuse(intersection_point) * theta;
                         if(diffusion > 1.0)
                         {
-                            log_warn("Diffusion %d", diffusion);
+                            log_warn("Diffusion %f", diffusion);
                         }
 
                         rv += get_color(intersection_point) * (light->get_color(intersection_point) * diffusion);

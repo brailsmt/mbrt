@@ -43,7 +43,7 @@ class Renderable {
         /// Returns if the primitive emits light
         virtual bool is_light(const Point3D& intersection_point) const ;
 
-        virtual bool set_is_light(bool ) ;
+        virtual void set_is_light(bool);
 
         /// Returns the surface normal at point p. Derived classes should override
         /// this to provide the correct surface normal for the given point.
