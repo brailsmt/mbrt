@@ -4,7 +4,7 @@ require 'build.rb'
 import %w(autoclean c/dependencies)
 
 SUBLIBS = %w( )
-SUBDIRS = %w( plugins src common ifaces )
+SUBDIRS = %w( plugins src common )
 
 gen C::Dependencies,
     :search  => SUBDIRS,
@@ -20,7 +20,7 @@ cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
 
-cconf.add_cflags( "-g -fPIC -rdynamic -I/usr/lib/ruby/1.8/x86_64-linux/" )
+cconf.add_cflags( "-g -rdynamic" )
 cconf.add_pkg_config( "libxml-2.0" )
 cconf.add_pkg_config( "sigc++-2.0" ) 
 cconf.add_pkg_config( "ImageMagick++" ) 
@@ -34,7 +34,7 @@ cconf.optional_config("gcov", false)  {
 
 #Add our compiler flags for libnetpbm
 cconf.add_libs( SUBLIBS )
-cconf.add_libs( "-lm -lruby1.8" ) 
+cconf.add_libs( "-lm" ) 
 
 #store the compiler config in var
 var['cconf'] = cconf
@@ -59,13 +59,11 @@ gen AutoClean, :clean
 var[:clean].include "**/*.gc*",
                     "coverage_reports",
                     "app.info",
-                    "**/core",
+                    "core",
                     "c_dependencies",
                     "rt",
                     "doc/dox.tbz2",
-                    "doc/doxygen/**",
-                    "ifaces/*.cxx",
-                    "ifaces/Makefile"
+                    "doc/doxygen/**"
 
 desc "Generate coverage reports"
 task :coverage => %w(run_scene gather_coverage)
