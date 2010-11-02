@@ -30,6 +30,7 @@ renders/test_planes2.ppm: all scenes/test_planes2.xml
 
 show-planes2: all renders/test_planes2.ppm
 	feh renders/test_planes2.ppm &
+
 todo:
 	grep -niI TODO ./*.cpp ./*.h plugins/*.cpp plugins/*.h
 	grep -niI TODO ./*.cpp ./*.h plugins/*.cpp plugins/*.h | wc

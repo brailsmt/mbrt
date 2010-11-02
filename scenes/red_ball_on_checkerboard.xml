@@ -3,7 +3,7 @@
         <width  pixels="1024" />
         <height pixels="1024" />
         <file name="renders/red_ball_on_checkerboard.png" />
-        <subpixels square_of='2'/>
+        <subpixels square_of='4'/>
         <recurse max_depth="4" />
     </meta>
 
