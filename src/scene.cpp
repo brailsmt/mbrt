@@ -16,10 +16,11 @@ using std::ostringstream;
 Scene * Scene::inst = NULL;
 
 //{{{
-Scene * Scene::get_instance() {
+Scene * Scene::get_instance(string scene_file_name) {
     if ( inst == NULL ) {
         log_debug("get_instance()\n");
         inst = new Scene();
+        SceneParser sp(scene_file_name);
     }
 
     return inst;

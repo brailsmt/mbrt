@@ -35,6 +35,8 @@ cconf.optional_config("gcov", false)  {
 #Add our compiler flags for libnetpbm
 cconf.add_libs( SUBLIBS )
 cconf.add_libs( "-lm" ) 
+cconf.add_libs( "-lncurses" )
+cconf.add_libs( "-lrt" ) 
 
 #store the compiler config in var
 var['cconf'] = cconf

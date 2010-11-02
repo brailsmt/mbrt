@@ -72,7 +72,7 @@ class Scene {
         /// @param scene_file_name The name of the file which contains the XML definition of the
         ///                        scene.  This is ignored on all but the first use of
         ///                        get_intance().
-        static Scene * get_instance();
+        static Scene * get_instance(std::string scene_file_name = "");
 
         /// Destructor.
         ~Scene();
