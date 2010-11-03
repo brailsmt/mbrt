@@ -50,9 +50,7 @@ public:
     }
 
     inline void setTotalPixels(int width, int height) { 
-        pthread_mutex_lock(&stats_mutex);
         total_pixels = width * height; 
-        pthread_mutex_unlock(&stats_mutex);
     }
 
     inline void incrementRenderedPixels(int inc = 1) {
@@ -70,22 +68,17 @@ public:
         secondary_rays += inc; 
         pthread_mutex_unlock(&stats_mutex);
     }
-    inline void incrementTracedRays(int inc = 1) { 
-        pthread_mutex_lock(&stats_mutex);
-        traced_rays += inc; 
-        pthread_mutex_unlock(&stats_mutex);
-    }
 
     inline void incrementRays(int primary, int secondary) {
         pthread_mutex_lock(&stats_mutex);
 
-        primary_rays   += primary; 
-        secondary_rays += secondary; 
+        primary_rays   += primary;
+        secondary_rays += secondary;
 
         pthread_mutex_unlock(&stats_mutex);
     }
 
-    inline long getTracedRays()       { return traced_rays;        } 
+    inline long getTracedRays()       { return primary_rays + secondary_rays; } 
     inline long getPrimaryRays()      { return primary_rays;       } 
     inline long getSecondaryRays()    { return secondary_rays;     } 
     inline long getTotalPrimaryRays() { return total_primary_rays; } 

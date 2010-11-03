@@ -3,6 +3,8 @@
         <width  pixels="512" />
         <height pixels="512" />
         <file name="renders/four_corners_spheres.png" />
+        <subpixels square_of='3'/>
+        <recurse max_depth="50" />
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />

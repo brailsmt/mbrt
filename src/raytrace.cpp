@@ -65,10 +65,6 @@ void * shoot_ray(void * arg) {
     int x             = args->x;
     int y             = args->y;
 
-    //int sval = 0;
-    //sem_getvalue(&thread_pool_semaphore, &sval);
-    //log_info("shoot_ray (%d, %d), semval = %d", x, y, sval);
-
     // Shoot a ray through the center of the pixel and the next pixel
     // and compare the color values, if they match, there is no need
     // to subdivide the pixel.  If they don't match, then subdivide.
@@ -161,7 +157,6 @@ void * shoot_ray(void * arg) {
 }
 //}}}
 
-
 /// Trace a ray from the coordinate of the camera, through every pixel in the image.
 ///
 /// @param pixel The pixel in the image which will be calculated by tracing the ray.
@@ -210,6 +205,7 @@ unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
     return rays;
 }
 //}}}
+
 /// Trace a ray for each pixel in image.
 ///
 /// @param data Image imformation that will be populated by tracing the rays.
@@ -263,9 +259,6 @@ void trace_rays(ColorRGB ** colors, const Camera & camera) {
             arg->y           = y;
 
             // See if there are threads to still use and block until there are.
-            int sval = 0;
-            sem_getvalue(&thread_pool_semaphore, &sval);
-            log_info("semval = %d", x, y, sval);
             sem_wait(&thread_pool_semaphore);
 
             // need:  camera, screen_intersection, dx, dy, img
@@ -313,6 +306,7 @@ void print_final_stats(string fname, time_t end) {
     seconds %= 60;
 
     unsigned long traced_rays = rt_info.getTracedRays();
+    log_info("traced_rays = %lu", traced_rays);
     cout << endl;
     cout << endl;
     cout << "Traced " << traced_rays << " light rays into the scene!" << endl;
@@ -324,6 +318,7 @@ void print_final_stats(string fname, time_t end) {
     cout.setf(cout.fixed);
     cout.precision(5);
     unsigned long primary_rays = rt_info.getPrimaryRays();
+    log_info("primary_rays = %lu", primary_rays);
     cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
     cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
     cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
