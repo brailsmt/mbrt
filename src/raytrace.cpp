@@ -19,6 +19,7 @@
 #include <semaphore.h>
 
 #include "raytrace_defs.h"
+#include "renderstatistics.h"
 #include "renderable.h"
 #include "ray.h"
 #include "scene.h"
@@ -34,13 +35,12 @@ using Magick::Color;
 using Magick::ColorRGB;
 using Magick::Exception;
 
-struct raytrace_info rt_info;
+RenderStatistics rt_info;
 
-void trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
+unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
 
 sem_t thread_pool_semaphore;
 pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t console_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /// This is required to make the rendering multi-threaded.
 struct thread_arg {
@@ -77,13 +77,18 @@ void * shoot_ray(void * arg) {
         modifier = -1.0;
     }
 
+    int primary_rays = 0;
+    unsigned long secondary_rays = 0;
     ColorRGB color;
     Point3D p = Point3D(screen_intersection.x, screen_intersection.y, screen_intersection.z);
-    trace_ray(color, camera->ray_through(p), 0);
+    primary_rays++;
+    secondary_rays += trace_ray(color, camera->ray_through(p), 0);
 
     p = Point3D(screen_intersection.x + (dx * modifier), screen_intersection.y, screen_intersection.z);
     ColorRGB next_color;
-    trace_ray(next_color, camera->ray_through(p), 0);
+    primary_rays++;
+    secondary_rays += trace_ray(next_color, camera->ray_through(p), 0);
+
 
     if(!(color == next_color)) {
         vector<ColorRGB> colors;
@@ -122,7 +127,8 @@ void * shoot_ray(void * arg) {
 
                 // Trace the ray into the scene, recording the pixel's color value.
                 ColorRGB color;
-                trace_ray(color, camera->ray_through(subpixel), 0);
+                primary_rays++;
+                secondary_rays += trace_ray(color, camera->ray_through(subpixel), 0);
                 colors.push_back(color);
 
                 sx += sdx;
@@ -149,19 +155,69 @@ void * shoot_ray(void * arg) {
         }
     }
 
+    rt_info.incrementRays(primary_rays, secondary_rays);
+
     *_color = color;
 }
 //}}}
 
+
+/// Trace a ray from the coordinate of the camera, through every pixel in the image.
+///
+/// @param pixel The pixel in the image which will be calculated by tracing the ray.
+/// @param ray The ray to be traced.
+/// @param depth The current depth in the recursion of rays traced.
+//{{{
+unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
+    Renderable * primitive = NULL;
+    double dist = INFINITY;
+    Scene * scene = Scene::get_instance();
+    int max_depth = scene->get_max_recurse_depth();
+    unsigned long rays = 0;
+
+    if (depth <= max_depth) {
+        rays++;
+
+        if ((primitive = scene->find_collision(ray, dist)) != NULL) {
+            Vector dir = ray.direction();
+            Point3D intersection_point = ray.origin() + (dir * dist);
+            Vector reflect;
+            Vector refract;
+
+            // Determine the main color from directly striking the object.  {{{
+            pixel += primitive->get_color_contribution(intersection_point, ray, reflect, refract);
+            //}}}
+            // Reflect the ray, if the surface is reflective.   {{{
+            double reflection_coefficient = primitive->get_reflection(intersection_point);
+
+            //TODO we seem to be missing an important part: applying the coefficient.
+            if (reflection_coefficient > 0.0) {
+                depth++;
+                rays += trace_ray(pixel, Ray(intersection_point, reflect), depth);
+                depth--;
+            }
+            //}}}
+            // Trace the refracted ray, if the primitive is transparent.    {{{
+            if (primitive->get_opacity(intersection_point) > OPAQUE) {
+                depth++;
+                rays += trace_ray(pixel, Ray(intersection_point, refract), depth);
+                depth--;
+            }
+            //}}}
+        }
+    }
+
+    return rays;
+}
+//}}}
 /// Trace a ray for each pixel in image.
 ///
 /// @param data Image imformation that will be populated by tracing the rays.
 /// @param camera The origin of all rays shot into the scene.
 //{{{
-unsigned long trace_rays(ColorRGB ** colors, const Camera & camera) {
+void trace_rays(ColorRGB ** colors, const Camera & camera) {
     log_info("trace_rays");
     Scene * scene = Scene::get_instance();
-    rt_info.rendered_pixels = 0;
 
     // This defines the window that the camera is looking out of.  It is a
     // window that is fixed at 10x10 units wide.  Each unit varies its
@@ -194,7 +250,7 @@ unsigned long trace_rays(ColorRGB ** colors, const Camera & camera) {
     for (int y = 0; y < scene->get_viewport_pixel_height(); ++y) {
         screen_intersection.x = start_x;
         for (int x = 0; x < scene->get_viewport_pixel_width(); ++x) {
-            rt_info.rendered_pixels++;
+            rt_info.incrementRenderedPixels();
 
             pthread_t render_thread;
             struct thread_arg * arg = new thread_arg;
@@ -224,53 +280,42 @@ unsigned long trace_rays(ColorRGB ** colors, const Camera & camera) {
 
         screen_intersection.y += dy;
     }
-
-    return rt_info.traced_rays;
 }
 //}}}
 
 /// Track statistics.
 /// {{{
-void track_stats(int depth) {
-    Scene * scene = Scene::get_instance("");
-    if ( depth == 0 ) {
-        rt_info.primary_rays++;
-    }
-
-    // Track statistics.
-    rt_info.traced_rays++;
-    if (rt_info.traced_rays % REPORT_FACTOR == 0) {
+void * update_stats(void *) {
+    while(1) {
         int x, y;
-
-        pthread_mutex_lock(&console_mutex);
         getyx(stdscr, y, x);
-        long t = (long)difftime(time(NULL), rt_info.start_time);
+        long t = (long)difftime(time(NULL), rt_info.getStartTime());
         mvprintw(y - 1, 0, "Elapsed time:  %02i:%02i:%02i", t / 3600, (t / 60) % 60, t % 60);
-        mvprintw(y, x + 2, "%02.2f%% done", 100 * (double)(rt_info.rendered_pixels) / (double)(scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height()));
+        mvprintw(y, x + 2, "%02.2f%% done", 100 * (double)rt_info.getRenderedPixels() / (double)rt_info.getTotalPixels());
         move(y, x);
-        pthread_mutex_unlock(&console_mutex);
-
         refresh();
-    }
-    if ( depth == 0 ) {
-        rt_info.primary_rays++;
+
+        // sleep for a 50,000 microseconds
+        usleep(50000);
     }
 }
 //}}}
 
 /// Print statistics about the render.
 //{{{
-void print_stats(string fname, int elapsed, long primary_rays, long traced_rays) {
+void print_final_stats(string fname, time_t end) {
     int hours, minutes, seconds;
+    int elapsed = end - rt_info.getStartTime();
     seconds = elapsed;
     hours = seconds / 3600;
     seconds %= 3600;
     minutes = seconds / 60;
     seconds %= 60;
 
+    unsigned long traced_rays = rt_info.getTracedRays();
     cout << endl;
     cout << endl;
-    cout << "Traced " << rt_info.traced_rays << " light rays into the scene!" << endl;
+    cout << "Traced " << traced_rays << " light rays into the scene!" << endl;
     cout << endl;
     cout << endl;
 
@@ -278,58 +323,13 @@ void print_stats(string fname, int elapsed, long primary_rays, long traced_rays)
 
     cout.setf(cout.fixed);
     cout.precision(5);
+    unsigned long primary_rays = rt_info.getPrimaryRays();
     cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
     cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
     cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
 }
 //}}}
 
-
-/// Trace a ray from the coordinate of the camera, through every pixel in the image.
-///
-/// @param pixel The pixel in the image which will be calculated by tracing the ray.
-/// @param ray The ray to be traced.
-/// @param depth The current depth in the recursion of rays traced.
-//{{{
-void trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
-    Renderable * primitive = NULL;
-    double dist = INFINITY;
-    Scene * scene = Scene::get_instance();
-    int max_depth = scene->get_max_recurse_depth();
-
-    if (depth <= max_depth) {
-        track_stats(depth);
-
-        if ((primitive = scene->find_collision(ray, dist)) != NULL) {
-            Vector dir = ray.direction();
-            Point3D intersection_point = ray.origin() + (dir * dist);
-            Vector reflect;
-            Vector refract;
-
-            // Determine the main color from directly striking the object.  {{{
-            pixel += primitive->get_color_contribution(intersection_point, ray, reflect, refract);
-            //}}}
-            // Reflect the ray, if the surface is reflective.   {{{
-            double reflection_coefficient = primitive->get_reflection(intersection_point);
-
-            //TODO we seem to be missing an important part: applying the coefficient.
-            if (reflection_coefficient > 0.0) {
-                depth++;
-                trace_ray(pixel, Ray(intersection_point, reflect), depth);
-                depth--;
-            }
-            //}}}
-            // Trace the refracted ray, if the primitive is transparent.    {{{
-            if (primitive->get_opacity(intersection_point) > OPAQUE) {
-                depth++;
-                trace_ray(pixel, Ray(intersection_point, refract), depth);
-                depth--;
-            }
-            //}}}
-        }
-    }
-}
-//}}}
 
 /// Load plugins.
 //{{{
@@ -417,6 +417,12 @@ int main(int argc, char ** argv) {
     getmaxyx(stdscr, y, x);
     mvprintw(y - 1, 0, "Tracing %s...", filename.c_str());
 
+    // Initialize the semaphore.
+    log_info("Number of threads:  %d\n", num_threads);
+    if(sem_init(&thread_pool_semaphore, 0, num_threads) == -1) {
+        return -1;
+    }
+
     ////////////
     // Render //
     ////////////
@@ -424,7 +430,7 @@ int main(int argc, char ** argv) {
     // Read the scene description XML file and build the Scene object.
     Scene * scene = Scene::get_instance(filename);
 
-    rt_info.total_pixels = scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height();
+    rt_info.setTotalPixels(scene->get_viewport_pixel_width(), scene->get_viewport_pixel_height());
     if(outfname == "") {
         outfname = scene->get_output_filename();
     }
@@ -435,16 +441,14 @@ int main(int argc, char ** argv) {
         colors[i] = new ColorRGB[scene->get_viewport_pixel_height()];
     }
 
-    log_info("Number of threads:  %d\n", num_threads);
-    // Initialize the semaphore.
-    if(sem_init(&thread_pool_semaphore, 0, num_threads) == -1) {
-        return -1;
-    }
-
     // Trace the scene.
     log_info("Rendering...\n");
 
-    traced_rays = trace_rays(colors, scene->get_camera());
+    pthread_t update_ui_thread;
+    pthread_create(&update_ui_thread, NULL, update_stats, NULL);
+    pthread_detach(update_ui_thread);
+
+    trace_rays(colors, scene->get_camera());
 
     // Wait until the semaphore is finished being used, indicating all threads
     // have ended.
@@ -472,10 +476,10 @@ int main(int argc, char ** argv) {
     // Do post render stuff.
     time_t end_time = time(NULL);
     int elapsed = end_time - start_time;
-    int primary_rays = 4 * scene->get_viewport_pixel_width() * scene->get_viewport_pixel_height();
     endwin();
+
     cout << outfname << endl;
-    print_stats(filename, elapsed, primary_rays, traced_rays);
+    print_final_stats(filename, end_time);
 
     log_info("******************  Exiting mbrt  ******************\n");
     closelog();

@@ -60,40 +60,6 @@ const double TRANSPARENT = 1.0;
 /// Macro to log with the emerg severity.
 #define log_emerg(fmt, ...)   syslog(LOG_EMERG, fmt,##__VA_ARGS__)
 
-/// This struct contains information about the rendering process.
-//{{{
-struct raytrace_info {
-    /// The number of rays traced.
-    unsigned long traced_rays;
-
-    /// The number of primary rays traced.
-    unsigned long primary_rays;
-
-    /// The number of secondary rays traced.
-    unsigned long secondary_rays;
-
-    /// The total number of primary rays.
-    unsigned long total_primary_rays;
-
-    /// Track the number of image pixels have been rendered.
-    unsigned long rendered_pixels;
-
-    /// This the is the total number of pixels to be rendered.
-    unsigned long total_pixels;
-
-    /// The time in seconds since the Epoch that the render began.
-    time_t start_time;
-
-    /// Initialize the info struct.
-    raytrace_info() :
-            traced_rays(0),
-            primary_rays(0),
-            secondary_rays(0),
-            total_primary_rays(0),
-            start_time(time(NULL)) {}
-};
-//}}}
-
 /// Generate a jitter within the range [-limit, limit).
 //{{{
 inline double jitter(double limit) {

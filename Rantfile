@@ -20,7 +20,7 @@ cconf = CompilerConfig.new(var)
 cconf.cc  = `which gcc`.strip
 cconf.cxx = `which g++`.strip
 
-cconf.add_cflags( "-g -rdynamic" )
+cconf.add_cflags( "-g -rdynamic -std=c++0x" )
 cconf.add_pkg_config( "libxml-2.0" )
 cconf.add_pkg_config( "sigc++-2.0" ) 
 cconf.add_pkg_config( "ImageMagick++" ) 
