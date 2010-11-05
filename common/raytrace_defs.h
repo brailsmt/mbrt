@@ -22,7 +22,7 @@ static const int HEIGHT = 512;
 static const int WIDTH = 512;
 
 /// This determines how many iterations pass before reporting progress.
-const int REPORT_FACTOR = 10000;
+const int REPORT_FACTOR = 100000;
 
 /// This is the square root for the the default number of subpixels.
 const int SUBPIXEL_SQRT = 2;

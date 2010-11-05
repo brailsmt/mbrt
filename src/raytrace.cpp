@@ -4,6 +4,7 @@
 /// @date Fri Mar 23 00:10:18 -0500 2007
 /// &copy; 2007 Michael Brailsford
 
+#include <pthread.h>
 #include <Magick++.h>
 #include <cstdlib>
 #include <ctime>
@@ -15,7 +16,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include <string>
-#include <pthread.h>
 #include <semaphore.h>
 
 #include "raytrace_defs.h"
@@ -31,7 +31,6 @@ using std::cout;
 using std::endl;
 using std::string;
 using Magick::Image;
-using Magick::Color;
 using Magick::ColorRGB;
 using Magick::Exception;
 
@@ -44,13 +43,14 @@ pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /// This is required to make the rendering multi-threaded.
 struct thread_arg {
-    ColorRGB * color;
+    Image * img;
     const Camera * camera;
     Point3D screen_intersection;
     double dx;
     double dy;
     int x;
     int y;
+    int num_threads;
 };
 
 //{{{
@@ -59,11 +59,11 @@ void * shoot_ray(void * arg) {
     struct thread_arg * args = (struct thread_arg *)arg;
     Point3D screen_intersection = args->screen_intersection;
     const Camera * camera = args->camera;
-    ColorRGB * _color = args->color;
-    double dx         = args->dx;
-    double dy         = args->dy;
-    int x             = args->x;
-    int y             = args->y;
+    Image * img = args->img;
+    double dx   = args->dx;
+    double dy   = args->dy;
+    int x       = args->x;
+    int y       = args->y;
 
     // Shoot a ray through the center of the pixel and the next pixel
     // and compare the color values, if they match, there is no need
@@ -143,7 +143,7 @@ void * shoot_ray(void * arg) {
         }
         int colors_size = colors.size();
         try {
-            color = ColorRGB((red / colors_size), (green / colors_size), (blue / colors_size));
+            color = ColorRGB(red/colors_size, green/colors_size, blue/colors_size);
         }
         catch(Exception e) {
             color = ColorRGB(1,0,0);
@@ -153,7 +153,19 @@ void * shoot_ray(void * arg) {
 
     rt_info.incrementRays(primary_rays, secondary_rays);
 
-    *_color = color;
+    if(args->num_threads > 1) {
+        pthread_mutex_lock(&image_mutex);
+        img->pixelColor(x, y, color);
+        pthread_mutex_unlock(&image_mutex);
+
+        // Release this thread's semaphore
+        sem_post(&thread_pool_semaphore);
+    }
+    else {
+        img->pixelColor(x, y, color);
+    }
+
+    delete args, args = NULL;
 }
 //}}}
 
@@ -211,8 +223,7 @@ unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
 /// @param data Image imformation that will be populated by tracing the rays.
 /// @param camera The origin of all rays shot into the scene.
 //{{{
-void trace_rays(ColorRGB ** colors, const Camera & camera) {
-    log_info("trace_rays");
+void trace_rays(Image * img, const Camera & camera, int num_threads) {
     Scene * scene = Scene::get_instance();
 
     // This defines the window that the camera is looking out of.  It is a
@@ -248,25 +259,28 @@ void trace_rays(ColorRGB ** colors, const Camera & camera) {
         for (int x = 0; x < scene->get_viewport_pixel_width(); ++x) {
             rt_info.incrementRenderedPixels();
 
-            pthread_t render_thread;
             struct thread_arg * arg = new thread_arg;
             arg->screen_intersection = screen_intersection;
-            arg->color       = &colors[x][y];
-            arg->camera      = &camera;
-            arg->dx          = dx;
-            arg->dy          = dy;
-            arg->x           = x;
-            arg->y           = y;
+            arg->img    = img;
+            arg->camera = &camera;
+            arg->dx     = dx;
+            arg->dy     = dy;
+            arg->x      = x;
+            arg->y      = y;
+            arg->num_threads = num_threads;
 
-            // See if there are threads to still use and block until there are.
-            sem_wait(&thread_pool_semaphore);
+            if(num_threads > 1) {
+                // See if there are threads to still use and block until there are.
+                sem_wait(&thread_pool_semaphore);
 
-            // need:  camera, screen_intersection, dx, dy, img
-            pthread_create(&render_thread, NULL, shoot_ray, (void *)arg);
-            pthread_detach(render_thread);
-
-            // Release this thread's semaphore
-            sem_post(&thread_pool_semaphore);
+                // need:  camera, screen_intersection, dx, dy, img
+                pthread_t render_thread;
+                pthread_create(&render_thread, NULL, shoot_ray, (void *)arg);
+                pthread_detach(render_thread);
+            }
+            else {
+                shoot_ray((void *)arg);
+            }
 
             screen_intersection.x += dx;
         }
@@ -306,7 +320,6 @@ void print_final_stats(string fname, time_t end) {
     seconds %= 60;
 
     unsigned long traced_rays = rt_info.getTracedRays();
-    log_info("traced_rays = %lu", traced_rays);
     cout << endl;
     cout << endl;
     cout << "Traced " << traced_rays << " light rays into the scene!" << endl;
@@ -318,8 +331,7 @@ void print_final_stats(string fname, time_t end) {
     cout.setf(cout.fixed);
     cout.precision(5);
     unsigned long primary_rays = rt_info.getPrimaryRays();
-    log_info("primary_rays = %lu", primary_rays);
-    cout << "Average rays per primary ray      :  " << (double)traced_rays / (double)primary_rays << endl;
+    cout << "Average rays per primary ray        :  " << (double)traced_rays / (double)primary_rays << endl;
     cout << "Average time per " << REPORT_FACTOR << " primary rays:  " << ((double)elapsed / (double)primary_rays) * REPORT_FACTOR << "s" << endl;
     cout << "Average time per " << REPORT_FACTOR << " rays        :  " << ((double)elapsed / (double)traced_rays ) * REPORT_FACTOR << "s" << endl;
 }
@@ -430,12 +442,6 @@ int main(int argc, char ** argv) {
         outfname = scene->get_output_filename();
     }
 
-    // Allocate space for the colors
-    ColorRGB ** colors = new ColorRGB*[scene->get_viewport_pixel_width()];
-    for(int i = 0; i < scene->get_viewport_pixel_width(); i++) {
-        colors[i] = new ColorRGB[scene->get_viewport_pixel_height()];
-    }
-
     // Trace the scene.
     log_info("Rendering...\n");
 
@@ -443,7 +449,9 @@ int main(int argc, char ** argv) {
     pthread_create(&update_ui_thread, NULL, update_stats, NULL);
     pthread_detach(update_ui_thread);
 
-    trace_rays(colors, scene->get_camera());
+    // Create the Image object.
+    Image img(scene->get_geometry(), "red");
+    trace_rays(&img, scene->get_camera(), num_threads);
 
     // Wait until the semaphore is finished being used, indicating all threads
     // have ended.
@@ -452,21 +460,10 @@ int main(int argc, char ** argv) {
         usleep(500);
     }
 
-    // Create the Image object.
-    Image img(scene->get_geometry(), "red");
-    for(int i = 0; i < scene->get_viewport_pixel_width(); i++) {
-        for(int j = 0; j < scene->get_viewport_pixel_height(); j++) {
-            img.pixelColor(i, j, colors[i][j]);
-        }
-    }
-
     // Save the image.
+    log_info("Saving image...");
     img.write(outfname);
-
-    for(int i = 0; i < scene->get_viewport_pixel_width(); i++) {
-        delete[] colors[i];
-    }
-    delete[] colors;
+    log_info("Done saving image...");
 
     // Do post render stuff.
     time_t end_time = time(NULL);

@@ -1,10 +1,14 @@
 <scene>
     <meta>
-        <width  pixels="512" />
-        <height pixels="512" />
+        <!--
+        <width  pixels="2048" />
+        <height pixels="2048" />
+        -->
+        <width  pixels="128" />
+        <height pixels="128" />
         <file name="renders/four_corners_spheres.png" />
-        <subpixels square_of='3'/>
-        <recurse max_depth="50" />
+        <subpixels square_of='25'/>
+        <recurse max_depth="5" />
     </meta>
 
     <camera x='0.0' y='0.0' z='-100' />
@@ -34,3 +38,33 @@
         <sphere x=' -4' y='  4' z=' 32' radius='4' material='solid_green' />
     </objects>
 </scene>
+<!--
+Traced 20269326 light rays into the scene!
+
+
+1 thread:
+Rendering scenes/four_corners_spheres.xml took 59 seconds (00:00:59)
+Average rays per primary ray       :  2.98588
+Average time per 10000 primary rays:  0.08691s
+Average time per 10000 rays        :  0.02911s
+
+2 threads:
+Rendering scenes/four_corners_spheres.xml took 48 seconds (00:00:48)
+Average rays per primary ray       :  2.98588
+Average time per 10000 primary rays:  0.07071s
+Average time per 10000 rays        :  0.02368s
+
+3 threads:
+Rendering scenes/four_corners_spheres.xml took 86 seconds (00:01:26)
+Average rays per primary ray       :  2.98588
+Average time per 10000 primary rays:  0.12669s
+Average time per 10000 rays        :  0.04243s
+
+
+Rendering scenes/four_corners_spheres.xml took 61 seconds (00:01:01)
+Average rays per primary ray        :  3.08412
+Average time per 100000 primary rays:  0.89859s
+Average time per 100000 rays        :  0.29136s
+
+
+-->
