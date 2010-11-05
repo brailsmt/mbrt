@@ -41,16 +41,7 @@ unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
 sem_t thread_pool_semaphore;
 pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/// This is so we can map the RGB values directly into memory.
-//{{{
-struct rgb {
-    unsigned int red;
-    unsigned int green;
-    unsigned int blue;
-};
-//}}}
-
-/// Pointer the in-memory color data.
+/// Pointer to the in-memory color data.
 struct rgb * imgblob = NULL;
 
 /// This is required to make the rendering multi-threaded.
@@ -87,12 +78,11 @@ void * shoot_ray(void * arg) {
 
         int primary_rays = 0;
         unsigned long secondary_rays = 0;
-        ColorRGB color;
         Point3D p = Point3D(screen_intersection.x, screen_intersection.y, screen_intersection.z);
         primary_rays++;
-        secondary_rays += trace_ray(x, y, camera->ray_through(p), 0);
+        secondary_rays += trace_ray(imgblob[(y * width) + x], camera->ray_through(p), 0);
 
-        /// @todo This needs to be optimized away, it doubles the rays traced...
+        struct rgb * color      = imgblob[(y * width) + x];
         struct rgb * prev_color = imgblob[(y * width) + (x - modifier)];
 
 
@@ -195,7 +185,7 @@ void * shoot_ray(void * arg) {
 /// @param ray The ray to be traced.
 /// @param depth The current depth in the recursion of rays traced.
 //{{{
-unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
+unsigned long trace_ray(struct rgb * pixel, const Ray &ray, int depth) {
     Renderable * primitive = NULL;
     double dist = INFINITY;
     Scene * scene = Scene::get_instance();
