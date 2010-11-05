@@ -1,13 +1,13 @@
 <scene>
     <meta>
-        <!--
         <width  pixels="2048" />
         <height pixels="2048" />
-        -->
+        <!--
         <width  pixels="128" />
         <height pixels="128" />
+        -->
         <file name="renders/four_corners_spheres.png" />
-        <subpixels square_of='25'/>
+        <subpixels square_of='4'/>
         <recurse max_depth="5" />
     </meta>
 
@@ -66,5 +66,60 @@ Average rays per primary ray        :  3.08412
 Average time per 100000 primary rays:  0.89859s
 Average time per 100000 rays        :  0.29136s
 
+
+1 thread:
+Rendering scenes/four_corners_spheres.xml took 54 seconds (00:00:54)
+Average rays per primary ray        :  3.08412
+Average time per 100000 primary rays:  0.79548s
+Average time per 100000 rays        :  0.25793s
+2 threads:
+Rendering scenes/four_corners_spheres.xml took 30 seconds (00:00:30)
+Average rays per primary ray        :  3.08415
+Average time per 100000 primary rays:  0.44193s
+Average time per 100000 rays        :  0.14329s
+3 threads:
+Rendering scenes/four_corners_spheres.xml took 21 seconds (00:00:21)
+Average rays per primary ray        :  3.08414
+Average time per 100000 primary rays:  0.30935s
+Average time per 100000 rays        :  0.10030s
+4 threads:
+Rendering scenes/four_corners_spheres.xml took 20 seconds (00:00:20)
+Average rays per primary ray        :  3.08414
+Average time per 100000 primary rays:  0.29462s
+Average time per 100000 rays        :  0.09553s
+5 threads:
+Rendering scenes/four_corners_spheres.xml took 20 seconds (00:00:20)
+Average rays per primary ray        :  3.08414
+Average time per 100000 primary rays:  0.29462s
+Average time per 100000 rays        :  0.09553s
+
+
+1:
+Traced 159456087 light rays into the scene!
+Rendering scenes/four_corners_spheres.xml took 401 seconds (00:06:41)
+Average rays per primary ray        :  3.07504
+Average time per 100000 primary rays:  0.77331s
+Average time per 100000 rays        :  0.25148s
+
+2:
+Traced 159456001 light rays into the scene!
+Rendering scenes/four_corners_spheres.xml took 289 seconds (00:04:49)
+Average rays per primary ray        :  3.07504
+Average time per 100000 primary rays:  0.55732s
+Average time per 100000 rays        :  0.18124s
+
+4:
+Traced 159455982 light rays into the scene!
+Rendering scenes/four_corners_spheres.xml took 197 seconds (00:03:17)
+Average rays per primary ray        :  3.07504
+Average time per 100000 primary rays:  0.37991s
+Average time per 100000 rays        :  0.12355s
+
+8:
+Traced 159456024 light rays into the scene!
+Rendering scenes/four_corners_spheres.xml took 162 seconds (00:02:42)
+Average rays per primary ray        :  3.07504
+Average time per 100000 primary rays:  0.31241s
+Average time per 100000 rays        :  0.10160s
 
 -->

@@ -41,14 +41,24 @@ unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth);
 sem_t thread_pool_semaphore;
 pthread_mutex_t image_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+/// This is so we can map the RGB values directly into memory.
+//{{{
+struct rgb {
+    unsigned int red;
+    unsigned int green;
+    unsigned int blue;
+};
+//}}}
+
+/// Pointer the in-memory color data.
+struct rgb * imgblob = NULL;
+
 /// This is required to make the rendering multi-threaded.
 struct thread_arg {
-    Image * img;
     const Camera * camera;
     Point3D screen_intersection;
     double dx;
     double dy;
-    int x;
     int y;
     int num_threads;
 };
@@ -59,112 +69,122 @@ void * shoot_ray(void * arg) {
     struct thread_arg * args = (struct thread_arg *)arg;
     Point3D screen_intersection = args->screen_intersection;
     const Camera * camera = args->camera;
-    Image * img = args->img;
-    double dx   = args->dx;
-    double dy   = args->dy;
-    int x       = args->x;
-    int y       = args->y;
+    double dx    = args->dx;
+    double dy    = args->dy;
+    int y        = args->y;
+    int nthreads = args->num_threads;
 
-    // Shoot a ray through the center of the pixel and the next pixel
-    // and compare the color values, if they match, there is no need
-    // to subdivide the pixel.  If they don't match, then subdivide.
-    double modifier = 1.0;
-    if(x + 1 == scene->get_viewport_pixel_width()) {
-        modifier = -1.0;
-    }
+    int width = scene->get_viewport_pixel_width();
+    //{{{
+    for (int x = 0; x < width; ++x) {
+        // Shoot a ray through the center of the pixel and the next pixel
+        // and compare the color values, if they match, there is no need
+        // to subdivide the pixel.  If they don't match, then subdivide.
+        double modifier = 1.0;
+        if(x == 0) {
+            modifier = -1.0;
+        }
 
-    int primary_rays = 0;
-    unsigned long secondary_rays = 0;
-    ColorRGB color;
-    Point3D p = Point3D(screen_intersection.x, screen_intersection.y, screen_intersection.z);
-    primary_rays++;
-    secondary_rays += trace_ray(color, camera->ray_through(p), 0);
+        int primary_rays = 0;
+        unsigned long secondary_rays = 0;
+        ColorRGB color;
+        Point3D p = Point3D(screen_intersection.x, screen_intersection.y, screen_intersection.z);
+        primary_rays++;
+        secondary_rays += trace_ray(x, y, camera->ray_through(p), 0);
 
-    p = Point3D(screen_intersection.x + (dx * modifier), screen_intersection.y, screen_intersection.z);
-    ColorRGB next_color;
-    primary_rays++;
-    secondary_rays += trace_ray(next_color, camera->ray_through(p), 0);
+        /// @todo This needs to be optimized away, it doubles the rays traced...
+        struct rgb * prev_color = imgblob[(y * width) + (x - modifier)];
 
 
-    if(!(color == next_color)) {
-        vector<ColorRGB> colors;
-        // Implement stochastic anti-aliasing.  Which is just a fancy way
-        // to say break up the pixel into subpixels, determine the center
-        // point of the subpixel, add a random offset and shoot a ray
-        // through it.
+        //{{{
+        if(!(color == prev_color)) {
+            vector<ColorRGB> colors;
+            // Implement stochastic anti-aliasing.  Which is just a fancy way
+            // to say break up the pixel into subpixels, determine the center
+            // point of the subpixel, add a random offset and shoot a ray
+            // through it.
 
-        // dx and dy are the distance from the center of this pixel to the center of the next
-        // pixel.  dx/2 and dy/2 are the distance from the center of this pixel to the boundary
-        // of this pixel.  So the pixel is bounded by (x - dx/2, y - dy/2) and (x + dx/2, y + dy/2).
-        //
-        // To break this pixel further into subpixels, start at (x-dx/2, y - dy/2), or the top
-        // left corner of the pixel.  To this add dx/2 divided by the number of x subpixels, and
-        // dy/2 divided by the number of y subpixels.  This determines the center of the top
-        // most subpixel.  From that point, add dx/number of x subpixels to reach each
-        // successive pixel.
+            // dx and dy are the distance from the center of this pixel to the center of the next
+            // pixel.  dx/2 and dy/2 are the distance from the center of this pixel to the boundary
+            // of this pixel.  So the pixel is bounded by (x - dx/2, y - dy/2) and (x + dx/2, y + dy/2).
+            //
+            // To break this pixel further into subpixels, start at (x-dx/2, y - dy/2), or the top
+            // left corner of the pixel.  To this add dx/2 divided by the number of x subpixels, and
+            // dy/2 divided by the number of y subpixels.  This determines the center of the top
+            // most subpixel.  From that point, add dx/number of x subpixels to reach each
+            // successive pixel.
 
-        // Determine the subpixel dx and dy values, these are used to
-        // shift the screen intersection within each pixel
-        double sdx = dx / (2 * scene->get_subpixel_sqrt());
-        double sdy = dy / (2 * scene->get_subpixel_sqrt());
+            // Determine the subpixel dx and dy values, these are used to
+            // shift the screen intersection within each pixel
+            double sdx = dx / (2 * scene->get_subpixel_sqrt());
+            double sdy = dy / (2 * scene->get_subpixel_sqrt());
 
-        // Determine the y-coordinate for the top most subpixel.
-        double sy = screen_intersection.y - (dy * 0.5) + (sdy * 0.5);
-        for (int i = 0; i < scene->get_subpixel_sqrt(); i++) {
+            // Determine the y-coordinate for the top most subpixel.
+            double sy = screen_intersection.y - (dy * 0.5) + (sdy * 0.5);
+            for (int i = 0; i < scene->get_subpixel_sqrt(); i++) {
 
-            // Determine the x-coordinate for the left most subpixel.
-            double sx = screen_intersection.x - (dx * 0.5) + (sdx * 0.5);
-            for (int j = 0; j < scene->get_subpixel_sqrt(); j++) {
-                double sy_jitter = sy + jitter(sdy);
-                double sx_jitter = sx + jitter(sdx);
+                // Determine the x-coordinate for the left most subpixel.
+                double sx = screen_intersection.x - (dx * 0.5) + (sdx * 0.5);
+                for (int j = 0; j < scene->get_subpixel_sqrt(); j++) {
+                    double sy_jitter = sy + jitter(sdy);
+                    double sx_jitter = sx + jitter(sdx);
 
-                // THIS IS NOT FOCAL LENGTH!  DON'T CHANGE BACK.
-                Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
+                    // THIS IS NOT FOCAL LENGTH!  DON'T CHANGE BACK.
+                    Point3D subpixel(sx_jitter, sy_jitter, screen_intersection.z);
 
-                // Trace the ray into the scene, recording the pixel's color value.
-                ColorRGB color;
-                primary_rays++;
-                secondary_rays += trace_ray(color, camera->ray_through(subpixel), 0);
-                colors.push_back(color);
+                    // Trace the ray into the scene, recording the pixel's color value.
+                    ColorRGB color;
+                    primary_rays++;
+                    secondary_rays += trace_ray(color, camera->ray_through(subpixel), 0);
+                    colors.push_back(color);
 
-                sx += sdx;
+                    sx += sdx;
+                }
+                sy += sdy;
             }
-            sy += sdy;
-        }
 
-        // Average all the colors to get the color value at the window.
-        double red, green, blue;
-        red = green = blue = 0.0;
-        vector<ColorRGB>::iterator iter, end;
-        for (iter = colors.begin(), end = colors.end(); iter != end; iter++) {
-            red   += iter->red();
-            green += iter->green();
-            blue  += iter->blue();
+            // Average all the colors to get the color value at the window.
+            double red, green, blue;
+            red = green = blue = 0.0;
+            vector<ColorRGB>::iterator iter, end;
+            for (iter = colors.begin(), end = colors.end(); iter != end; iter++) {
+                red   += iter->red();
+                green += iter->green();
+                blue  += iter->blue();
+            }
+            int colors_size = colors.size();
+            try {
+                color = ColorRGB(red/colors_size, green/colors_size, blue/colors_size);
+            }
+            catch(Exception e) {
+                color = ColorRGB(1,0,0);
+                log_info("%s", e.what());
+            }
         }
-        int colors_size = colors.size();
-        try {
-            color = ColorRGB(red/colors_size, green/colors_size, blue/colors_size);
+        //}}}
+
+        rt_info.incrementRays(primary_rays, secondary_rays);
+
+        //{{{
+        if(nthreads > 1) {
+            pthread_mutex_lock(&image_mutex);
+            img->pixelColor(x, y, color);
+            pthread_mutex_unlock(&image_mutex);
+
         }
-        catch(Exception e) {
-            color = ColorRGB(1,0,0);
-            log_info("%s", e.what());
+        else {
+            img->pixelColor(x, y, color);
         }
+        //}}}
+
+        screen_intersection.x += dx;
+
+        rt_info.incrementRenderedPixels();
     }
-
-    rt_info.incrementRays(primary_rays, secondary_rays);
-
-    if(args->num_threads > 1) {
-        pthread_mutex_lock(&image_mutex);
-        img->pixelColor(x, y, color);
-        pthread_mutex_unlock(&image_mutex);
-
-        // Release this thread's semaphore
-        sem_post(&thread_pool_semaphore);
-    }
-    else {
-        img->pixelColor(x, y, color);
-    }
-
+    //}}}
+    
+    // Release this thread's semaphore
+    sem_post(&thread_pool_semaphore);
     delete args, args = NULL;
 }
 //}}}
@@ -223,7 +243,7 @@ unsigned long trace_ray(ColorRGB &pixel, const Ray &ray, int depth) {
 /// @param data Image imformation that will be populated by tracing the rays.
 /// @param camera The origin of all rays shot into the scene.
 //{{{
-void trace_rays(Image * img, const Camera & camera, int num_threads) {
+void trace_rays(const Camera & camera, int num_threads) {
     Scene * scene = Scene::get_instance();
 
     // This defines the window that the camera is looking out of.  It is a
@@ -256,33 +276,27 @@ void trace_rays(Image * img, const Camera & camera, int num_threads) {
 
     for (int y = 0; y < scene->get_viewport_pixel_height(); ++y) {
         screen_intersection.x = start_x;
-        for (int x = 0; x < scene->get_viewport_pixel_width(); ++x) {
-            rt_info.incrementRenderedPixels();
 
-            struct thread_arg * arg = new thread_arg;
-            arg->screen_intersection = screen_intersection;
-            arg->img    = img;
-            arg->camera = &camera;
-            arg->dx     = dx;
-            arg->dy     = dy;
-            arg->x      = x;
-            arg->y      = y;
-            arg->num_threads = num_threads;
+        struct thread_arg * arg = new thread_arg;
+        arg->screen_intersection = screen_intersection;
+        arg->camera  = &camera;
+        arg->dx      = dx;
+        arg->dy      = dy;
+        arg->y       = y;
+        arg->num_threads = num_threads;
 
-            if(num_threads > 1) {
-                // See if there are threads to still use and block until there are.
-                sem_wait(&thread_pool_semaphore);
+        if(num_threads > 1) {
+            log_info("Tracing row %d", y);
+            // See if there are threads to still use and block until there are.
+            sem_wait(&thread_pool_semaphore);
 
-                // need:  camera, screen_intersection, dx, dy, img
-                pthread_t render_thread;
-                pthread_create(&render_thread, NULL, shoot_ray, (void *)arg);
-                pthread_detach(render_thread);
-            }
-            else {
-                shoot_ray((void *)arg);
-            }
-
-            screen_intersection.x += dx;
+            // need:  camera, screen_intersection, dx, dy
+            pthread_t render_thread;
+            pthread_create(&render_thread, NULL, shoot_ray, (void *)arg);
+            pthread_detach(render_thread);
+        }
+        else {
+            shoot_ray((void *)arg);
         }
 
         screen_intersection.y += dy;
@@ -449,9 +463,12 @@ int main(int argc, char ** argv) {
     pthread_create(&update_ui_thread, NULL, update_stats, NULL);
     pthread_detach(update_ui_thread);
 
+    imgblob = new struct rgb[rt_info.getTotalPixels() * sizeof(struct rgb)];
+    memset(imgblob, 0x0, rt_info.getTotalPixels() * sizeof(struct rgb));
+    trace_rays(scene->get_camera(), num_threads);
+
     // Create the Image object.
-    Image img(scene->get_geometry(), "red");
-    trace_rays(&img, scene->get_camera(), num_threads);
+    Image img(scene->get_viewport_pixel_width(), scene->get_viewport_pixel_height(), "RGB", StorageType::IntegerPixel, imgblob);
 
     // Wait until the semaphore is finished being used, indicating all threads
     // have ended.
@@ -464,6 +481,8 @@ int main(int argc, char ** argv) {
     log_info("Saving image...");
     img.write(outfname);
     log_info("Done saving image...");
+
+    delete [] imgblob;
 
     // Do post render stuff.
     time_t end_time = time(NULL);
